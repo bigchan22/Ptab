@@ -6,7 +6,7 @@
 # import os
 # import imports
 
-from imports import *
+from .imports import *
 
 def iter_UIO(n, connected=False):
     if n == 1:

@@ -1,5 +1,5 @@
-from imports import *
-from feature_functions import *
+from .imports import *
+from .feature_functions import *
 
 @dataclasses.dataclass(frozen=True)
 class GraphData:
@@ -108,3 +108,50 @@ def load_input_data(DATA_DIR):
       InputData(features=features, labels=ys, rows=rows, columns=cols, edge_types=edge_types),
       InputData(features=features_train, labels=ys_train, rows=rows_train, columns=cols_train, edge_types=edge_types_train),
       InputData(features=features_test, labels=ys_test, rows=rows_test, columns=cols_test, edge_types=edge_types_test))
+#@markdown As the graphs generally do not have the same number of nodes, and because
+#@markdown JAX relies on data shapes being fixed and known upfront, we batch
+#@markdown together a set of graphs into a large batch graph that contains each
+#@markdown graph as a disconnected component.
+def batch(features, rows, cols, ys, root_nodes):
+  """Converts a list of training examples into a batched single graph."""
+  batch_size = len(features)
+  max_features = max(f.shape[0] for f in features)
+  b_features = np.zeros((batch_size, max_features, features[0].shape[1]))
+  b_rows = []
+  b_cols = []
+  b_ys = np.zeros((batch_size, 1))
+  b_masks = np.zeros((batch_size, max_features, 1))
+  for i in range(batch_size):
+    b_features[i, :features[i].shape[0], :] = features[i]
+    b_rows.append(rows[i] + i * max_features)
+    b_cols.append(cols[i] + i * max_features)
+    b_ys[i, 0] = ys[i]
+    root_node = root_nodes[i]
+    b_masks[i, root_node, 0] = 1.0
+
+  b_features = b_features.reshape((-1, b_features.shape[-1]))
+  b_rows = np.concatenate(b_rows)
+  b_cols = np.concatenate(b_cols)
+
+  return b_features, b_rows, b_cols, b_ys, b_masks
+def batch_e(features, rows, cols, ys, edge_types):
+  """Converts a list of training examples into a batched single graph."""
+  batch_size = len(features)
+  max_features = max(f.shape[0] for f in features)
+  b_features = np.zeros((batch_size, max_features, features[0].shape[1]))
+  b_rows = []
+  b_cols = []
+  b_edge_types = []
+  b_ys = np.zeros((batch_size, 1))
+  for i in range(batch_size):
+    b_features[i, :features[i].shape[0], :] = features[i]
+    b_rows.append(rows[i] + i * max_features)
+    b_cols.append(cols[i] + i * max_features)
+    b_edge_types.append(edge_types[i] )
+    b_ys[i, 0] = ys[i]
+
+  b_features = b_features.reshape((-1, b_features.shape[-1]))
+  b_rows = np.concatenate(b_rows)
+  b_cols = np.concatenate(b_cols)
+  b_edge_types = np.concatenate(b_edge_types)
+  return b_features, b_rows, b_cols, b_ys, b_edge_types
