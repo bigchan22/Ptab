@@ -4,9 +4,9 @@ import os
 N = 5
 # partition_parts = [i for i in range(1,N+1)]
 num_layers = 3
-num_features = 128
+num_features = 64
 num_epochs = 300
-batch_size = 128
+batch_size = 64
 
 
 use_pretrained_weights = True

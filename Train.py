@@ -39,3 +39,4 @@ def print_accuracies(model,params_to_evaluate,
   print(f'Train accuracy: {train_accuracy:.3f} | '
         f'Test accuracy: {test_accuracy:.3f} | '
         f'Combined accuracy: {combined_accuracy:.3f}')
+  return test_accuracy

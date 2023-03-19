@@ -8,7 +8,7 @@ def message_stack(messages,rows,edge_types):
 #   print("shape",messages[rows[0]].shape)
 #   print(edge_types[0])
 #   print("shape",(messages[rows[0]])[edge_types[0]].shape)
-  return jnp.stack([messages[rows[i]][edge_types[i]] for i in range(len(rows))],axis = 0)
+  return jnp.stack([messages[rows[i]][edge_types[i]-1] for i in range(len(rows))],axis = 0)
 #   return jnp.stack([messages[edge_types == i].sum(axis=0) for i in range(self.num_edge_types)], axis=0)
 
 #

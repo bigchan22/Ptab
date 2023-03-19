@@ -9,7 +9,7 @@ import enum
 import haiku as hk
 import jax
 import jax.numpy as jnp
-
+import os
 
 # In[2]:
 
@@ -34,7 +34,7 @@ from Train import train,print_accuracies
 #@markdown * If you are running on a high memory machine (ie *not* on the free colab instance!) the input graph data can be loaded from a pickle (which is faster to load) and kept in memory (faster to re-use, but uses ~12Gb of memory). This makes no difference to training speed (it's only relevant for `generate_graph_data()` and `get_saliency_vectors()`).
 
 
-
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 use_pretrained_weights = True  #@param{type:"boolean"}
 hold_graphs_in_memory = False  #@param{type:"boolean"}
 
@@ -78,7 +78,7 @@ opt_init, opt_update = optax.adam(step_size)
 # In[5]:
 
 
-num_epochs = 10
+#num_epochs = 10
 trained_params = model.net.init(
     jax.random.PRNGKey(42),
     features=train_dataset.features[0],
@@ -148,7 +148,7 @@ for ep in range(1, num_epochs + 1):
 
     # Calculate accuracy across full dataset once per epoch
     print(datetime.datetime.now(), f"Epoch {ep:2d}       | ", end="")
-    print_accuracies(model,trained_params, test_dataset, train_dataset)
+    test_acc = print_accuracies(model,trained_params, test_dataset, train_dataset)
     if best_acc == None or best_acc < test_acc:
         best_acc = test_acc
         if save_trained_weights and best_acc > 0.6:
