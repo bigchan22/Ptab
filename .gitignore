@@ -1,4 +1,3 @@
 *.npz
-*.json
 *.ipynb
 .idea*
