@@ -173,12 +173,20 @@ def is_1row(shape):
     if len(shape) == 1: return True
     return False
 
+def is_2row(shape):
+    if len(shape) == 2: return True
+    return False
+
 def is_hook(shape):
     if len(shape) == 1 or shape[1] == 1: return True
     return False
 
 def is_2col(shape):
     if shape[0] == 2: return True
+    return False
+
+def is_3col(shape):
+    if shape[0] == 3: return True
     return False
 
 def is_good_P_1row(P, word):
@@ -262,6 +270,70 @@ def generate_data_PTabs(DIR_PATH,
 
     for i in range(len(indices)):
         file_path = os.path.join(DIR_PATH, f"graph_{i:05d}.npz")
+        sp.save_npz(file_path, graphs[indices[i]])
+    with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
+        json.dump(shuffled_labels, f)
+
+def generate_data_PTabs_v2(DIR_PATH,
+                        input_N,
+                        shape_checkers,
+                        connected=False,
+                        UPTO_N=False,
+                        json_path="./json/"):
+    with open(os.path.join(json_path, "Partitions.json")) as f:
+        Partitions = json.load(f)
+    with open(os.path.join(json_path, "PartitionIndex.json")) as f:
+        PartitionIndex = json.load(f)
+    with open(os.path.join(json_path, "TransitionMatrix.json")) as f:
+        TM = json.load(f)
+        
+    if UPTO_N:
+        N = 1
+    else:
+        N = input_N
+    graphs = []
+    labels = []
+    while N <= input_N:
+        n_str = str(N)
+        TM_n = np.matrix(TM[n_str])
+        for P in generate_UIO(N, connected=connected):
+            word_list = []
+            for word in itertools.permutations(range(1,N+1)):
+                word = list(word)
+                if word in word_list: continue
+                words = words_from_orbit(P, word)
+                word_list.extend(words)
+                
+                gs = dict()
+                Fs = []
+                for lamb in Partitions[n_str]:
+                    gs[str(lamb)] = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int8)
+                    Fs.append(0)
+                for word in words:
+                    shape = shape_of_word(P, word)
+                    D = P_Des(P, word)
+                    if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
+                    if shape == None: continue
+                    shape = str(shape)
+                    g = make_matrix_from_T(P, word)
+                    gs[shape] = sp.block_diag((gs[shape], g))
+                for k, lamb in enumerate(Partitions[n_str]):
+                    if gs[str(lamb)].size == 0: continue
+                    for shape_checker in shape_checkers:
+                        if shape_checker(lamb) == True:
+                            mult = 0
+                            for i in range(len(Partitions[n_str])):
+                                mult += TM[n_str][i][k] * Fs[i]
+                            graphs.append(gs[str(lamb)])
+                            labels.append(mult)
+                            break
+        N += 1
+    indices = np.arange(len(graphs))
+    np.random.shuffle(indices)
+    shuffled_labels = [int(labels[indices[i]]) for i in range(len(graphs))]
+
+    for i in range(len(indices)):
+        file_path = os.path.join(DIR_PATH, f"graph_{i:06d}.npz")
         sp.save_npz(file_path, graphs[indices[i]])
     with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
         json.dump(shuffled_labels, f)
