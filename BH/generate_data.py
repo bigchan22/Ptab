@@ -333,7 +333,7 @@ def generate_data_PTabs_v2(DIR_PATH,
     shuffled_labels = [int(labels[indices[i]]) for i in range(len(graphs))]
 
     for i in range(len(indices)):
-        file_path = os.path.join(DIR_PATH, f"graph_{i:06d}.npz")
+        file_path = os.path.join(DIR_PATH, f"graph_{i:05d}.npz")
         sp.save_npz(file_path, graphs[indices[i]])
     with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
         json.dump(shuffled_labels, f)

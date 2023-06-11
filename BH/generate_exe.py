@@ -1,4 +1,4 @@
-from .generate_data import *
+from generate_data import *
 from data_loader import *
 
 DIR_PATH = "/Data/Ptab/n=5"

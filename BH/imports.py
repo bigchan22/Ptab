@@ -15,12 +15,12 @@ import random
 import tempfile
 from typing import Sequence
 
-import haiku as hk
-import jax
-import jax.numpy as jnp
+#import haiku as hk
+#import jax
+#import jax.numpy as jnp
 import matplotlib
 import matplotlib.pyplot as plt
-import optax
+#i:wqmport optax
 import psutil
 import seaborn as sns
 

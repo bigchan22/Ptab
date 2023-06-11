@@ -1,8 +1,8 @@
 import functools
 import enum
-import haiku as hk
-import jax
-import jax.numpy as jnp
+#import haiku as hk
+#iimport jax
+#import jax.numpy as jnp
 def message_stack(messages,rows,edge_types):
 #   print("shape",messages.shape)
 #   print("shape",messages[rows[0]].shape)
