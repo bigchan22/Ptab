@@ -2,14 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f223322-1af2-4754-892c-faef9b307699" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mathematics_conjectures" beforeDir="false" afterPath="$PROJECT_DIR$/mathematics_conjectures" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mathematics_conjectures/CONTRIBUTING.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mathematics_conjectures/LICENSE" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mathematics_conjectures/README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mathematics_conjectures/knot_theory.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mathematics_conjectures/representation_theory.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/training_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/training_info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +77,7 @@
       <workItem from="1683882518345" duration="447000" />
       <workItem from="1683882990268" duration="599000" />
       <workItem from="1683884038928" duration="450000" />
+      <workItem from="1686270583271" duration="598000" />
     </task>
     <servers />
   </component>
