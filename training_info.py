@@ -3,7 +3,7 @@ import os
 
 # N = 5
 # partition_parts = [i for i in range(1,N+1)]
-num_layers = 3
+num_layers = 5
 num_features = 64
 num_epochs = 150
 batch_size = 64
@@ -15,7 +15,7 @@ save_trained_weights = False
 
 step_size = 0.001
 train_fraction = .8
-DIR_PATH = "/Data/Ptab/n=5_2row"
+DIR_PATH = "/Data/Ptab/n=7_2row"
 # DIR_PATH = '/root/Hwang/mathematics_conjectures'
 # GRAPH_DIR = os.path.join(DIR_PATH, f'Hwang/Data/N_{N}')
 PARAM_DIR = os.path.join(DIR_PATH, 'Parameters')
