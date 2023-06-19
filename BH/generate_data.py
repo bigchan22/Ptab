@@ -177,6 +177,10 @@ def is_2row(shape):
     if len(shape) == 2: return True
     return False
 
+def is_3row(shape):
+    if len(shape) == 3: return True
+    return False
+
 def is_hook(shape):
     if len(shape) == 1 or shape[1] == 1: return True
     return False
