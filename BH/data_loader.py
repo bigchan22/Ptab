@@ -87,22 +87,22 @@ def load_input_data(DATA_DIR):
   adjacencies = graph_data.adjacencies
   ys = graph_data.labels
   
-  rows = [np.array(sp.coo_matrix(a).row, dtype=np.int8) for a in adjacencies]
-  cols = [np.array(sp.coo_matrix(a).col, dtype=np.int8) for a in adjacencies]
-  edge_types = [np.array(sp.coo_matrix(a).data, dtype=np.int8) for a in adjacencies]
+  rows = [np.array(sp.coo_matrix(a).row, dtype=np.int16) for a in adjacencies]
+  cols = [np.array(sp.coo_matrix(a).col, dtype=np.int16) for a in adjacencies]
+  edge_types = [np.array(sp.coo_matrix(a).data, dtype=np.int16) for a in adjacencies]
 
   num_training = int(len(ys) * train_fraction)
 
   features_train = features[:num_training]
-  rows_train = [np.array(sp.coo_matrix(a).row, dtype=np.int8) for a in adjacencies[:num_training]]
-  cols_train = [np.array(sp.coo_matrix(a).col, dtype=np.int8) for a in adjacencies[:num_training]]
-  edge_types_train = [np.array(sp.coo_matrix(a).data, dtype=np.int8) for a in adjacencies[:num_training]]
+  rows_train = [np.array(sp.coo_matrix(a).row, dtype=np.int16) for a in adjacencies[:num_training]]
+  cols_train = [np.array(sp.coo_matrix(a).col, dtype=np.int16) for a in adjacencies[:num_training]]
+  edge_types_train = [np.array(sp.coo_matrix(a).data, dtype=np.int16) for a in adjacencies[:num_training]]
   ys_train = ys[:num_training]
 
   features_test = features[num_training:]
-  rows_test = [np.array(sp.coo_matrix(a).row, dtype=np.int8) for a in adjacencies[num_training:]]
-  cols_test = [np.array(sp.coo_matrix(a).col, dtype=np.int8) for a in adjacencies[num_training:]]
-  edge_types_test = [np.array(sp.coo_matrix(a).data, dtype=np.int8) for a in adjacencies[num_training:]]
+  rows_test = [np.array(sp.coo_matrix(a).row, dtype=np.int16) for a in adjacencies[num_training:]]
+  cols_test = [np.array(sp.coo_matrix(a).col, dtype=np.int16) for a in adjacencies[num_training:]]
+  edge_types_test = [np.array(sp.coo_matrix(a).data, dtype=np.int16) for a in adjacencies[num_training:]]
   ys_test = ys[num_training:]
   return (
       InputData(features=features, labels=ys, rows=rows, columns=cols, edge_types=edge_types),
