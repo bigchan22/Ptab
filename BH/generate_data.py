@@ -311,7 +311,7 @@ def generate_data_PTabs_v2(DIR_PATH,
                 gs = dict()
                 Fs = []
                 for lamb in Partitions[n_str]:
-                    gs[str(lamb)] = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int8)
+                    gs[str(lamb)] = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
                     Fs.append(0)
                 for word in words:
                     shape = shape_of_word(P, word)
