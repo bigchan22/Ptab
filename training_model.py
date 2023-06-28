@@ -202,5 +202,5 @@ for epoch in range(num_epochs):
     if accuracy > max_accuracy:
         max_accuracy = accuracy
         with open(MODEL_FILE, 'w') as f:
-            pickle.dump((model, max_accuracy))
+            pickle.dump((model, max_accuracy), f)
 
