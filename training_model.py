@@ -199,7 +199,7 @@ for epoch in range(num_epochs):
 
     print("Epoch [{}/{}], Accuracy: {:.2%}".format(epoch + 1, num_epochs, accuracy))
 
-    if accuracy > max_accuracy:
+    if accuracy > max_accuracy and save_trained_weights:
         max_accuracy = accuracy
         with open(MODEL_FILE, 'wb') as f:
             pickle.dump((model, max_accuracy), f)
