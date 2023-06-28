@@ -70,7 +70,7 @@ class InputData:
   edge_types: Sequence[EDGE_TYPE]
 
 
-def load_input_data(DATA_DIR):
+def load_input_data(DATA_DIR, train_fraction = 0.8):
   """Loads input data for the specified prediction problem.
 
   This loads a dataset that can be used with a GraphNet model.
@@ -79,7 +79,6 @@ def load_input_data(DATA_DIR):
     Three InputData instances with features, rows, cols and labels. They are the
     full/train/test set respectively.
   """
-  train_fraction = 0.8
 
   print(f"Generating data from the directory {DATA_DIR}")
   graph_data = generate_graph_data(DATA_DIR)
