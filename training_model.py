@@ -155,7 +155,7 @@ train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # model = pastGCN().to(device)
 if use_pretrained_weights:
-    with open(MODEL_FILE, 'r') as f:
+    with open(MODEL_FILE, 'rb') as f:
       model, max_accuracy = pickle.load(f)
 else:
     model = GCN_multi(graph_deg, depth).to(device)
@@ -201,6 +201,6 @@ for epoch in range(num_epochs):
 
     if accuracy > max_accuracy:
         max_accuracy = accuracy
-        with open(MODEL_FILE, 'w') as f:
+        with open(MODEL_FILE, 'wb') as f:
             pickle.dump((model, max_accuracy), f)
 
