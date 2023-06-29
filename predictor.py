@@ -34,6 +34,12 @@ class CustomDataset(Dataset):
              y=torch.from_numpy(np.array(self.labels[idx])))
 
 
+node_dim = num_features
+edge_dim = 8
+graph_deg = graph_deg
+depth = num_layers
+
+
 class GCN_single(torch.nn.Module):
     def __init__(self,num_edge_types,depth):
         super().__init__()
