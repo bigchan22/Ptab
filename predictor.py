@@ -165,6 +165,9 @@ def predict_tableau(P, word, show=True):
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     device ="cuda:0"
 
+    with open(MODEL_FILE, 'rb') as f:
+        model, acc = pickle.load(f)
+
     for batch in T_loader:
         batch.to(device)
         predicted = model(batch)
