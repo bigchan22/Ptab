@@ -1,5 +1,5 @@
 import os
-from feature_functions import *
+from BH.feature_functions import *
 
 graph_deg = 7
 num_layers = 7
