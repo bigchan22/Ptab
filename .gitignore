@@ -2,3 +2,7 @@
 .idea*
 *.pyc
 *.pth
+*.json
+*.pickle
+*.ipynb
+*.DS_Store
