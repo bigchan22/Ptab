@@ -1,11 +1,11 @@
 import os
-# from feature_functions import *
+from feature_functions import *
 
 graph_deg = 7
 num_layers = 7
 num_features = 64
 feature_list = {
-    'constant': (True, ),
+    'constant': (True, constant_feature),
     'column':   (False, ),
 }
 
