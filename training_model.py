@@ -13,6 +13,8 @@ import pickle
 from CustomDataset import *
 from GCN_model import *
 
+from torch_geometric.loader import DataLoader
+
 
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
