@@ -1,5 +1,6 @@
 import numpy as np
 import networkx as nx
+from imports import *
 
 def in_centrality_with_fixed_N(D):
     in_cent_feature = dict.fromkeys(D.nodes)
@@ -73,3 +74,71 @@ def normalized_longest_path_lengths(D):
     for key in norm_long_feature.keys():
         norm_long_feature[key] /= 6
     return norm_long_feature
+
+def column_indicator(D):
+    col_feature = dict()
+    for node in D.nodes:
+        col_feature[node] = -1
+    for C in nx.weakly_connected_components(D):
+        connected_D = D.subgraph(C)
+        in_degs = dict()
+        for node in C:
+            in_degs[node] = [0,0,0]
+        for u, v, wt in connected_D.edges.data('weight'):
+            if wt == EDGE_TYPE.SINGLE_ARROW:
+                in_degs[v][0] += 1
+            elif wt == EDGE_TYPE.DASHED_ARROW:
+                in_degs[v][1] += 1
+            elif wt == EDGE_TYPE.DOUBLE_ARROW:
+                in_degs[v][2] += 1
+
+        first_row = [node for node in in_degs.keys() if in_degs[node][0] == 0]
+
+        first_row_in_degs = dict()
+        for node in first_row:
+            first_row_in_degs[node] = [0,0,0]
+            for v, _, wt in connected_D.in_edges(node, True):
+                if not v in first_row: continue
+                wt = wt['weight']
+                if wt == EDGE_TYPE.SINGLE_ARROW:
+                    first_row_in_degs[node][0] += 1
+                elif wt == EDGE_TYPE.DASHED_ARROW:
+                    first_row_in_degs[node][1] += 1
+                elif wt == EDGE_TYPE.DOUBLE_ARROW:
+                    first_row_in_degs[node][2] += 1
+                
+        candidates = []
+        for node in first_row:
+            if first_row_in_degs[node][1] == 0:
+                candidates.append(node)
+        if len(candidates) == 0:
+            print("Something goes wrong!")
+            return
+        queue = [min(candidates)]
+        for node in queue:
+            candidates = []
+            for _, v, wt in connected_D.out_edges(node, True):
+                if not v in first_row: continue
+                wt = wt['weight']
+                if wt == EDGE_TYPE.DASHED_ARROW:
+                    first_row_in_degs[v][1] -= 1
+                elif wt == EDGE_TYPE.DOUBLE_ARROW:
+                    first_row_in_degs[v][2] -= 1
+            for v in first_row:
+                if v in queue: continue
+                if first_row_in_degs[v][1] == 0:
+                    candidates.append(v)
+            if candidates == []: break
+            queue.append(min(candidates))
+        for c in range(len(queue)):
+            node = queue[c]
+            col_queue = [node]
+            for v in col_queue:
+                col_feature[v] = c
+                for _, u, wt in connected_D.out_edges(v, True):
+                    wt = wt['weight']
+                    if wt == EDGE_TYPE.SINGLE_ARROW:
+                        in_degs[u][0] -= 1
+                        if in_degs[u][0] == 0:
+                            col_queue.append(u)
+    return col_feature
