@@ -1,9 +1,10 @@
 import torch
-from torch_geometric.loader import DataLoader
-from torch_geometric.data import Data
-from torch.utils.data import Dataset
+# from torch_geometric.loader import DataLoader
+# from torch_geometric.data import Data
+# from torch.utils.data import Dataset
 import torch.nn.functional as F
-from torch_geometric.nn import GATv2Conv,GCNConv
+# from torch_geometric.nn import GATv2Conv
+from torch_geometric.nn import GCNConv
 
 class GCN_single(torch.nn.Module):
     def __init__(self,num_edge_types, graph_deg, depth, node_dim, edge_dim=8):
