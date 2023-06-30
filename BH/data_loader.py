@@ -25,7 +25,7 @@ def convert_networkx_to_adjacency_input(graph):
     adjacency_matrix += sp.eye(adjacency_matrix.shape[0])
     return adjacency_matrix
 
-def generate_graph_data(DATA_DIR):
+def generate_graph_data(DATA_DIR, feature_list):
   """This generates a dataset for training a GraphNet model.
 
   Args:
@@ -43,11 +43,9 @@ def generate_graph_data(DATA_DIR):
   adjacencies = []
 
   for graph in iter_graph(DATA_DIR):
-    feat_dict = {
-        'constant': constant_feature(graph),
-        # 'in_centrality': nx.in_degree_centrality(graph),
-        # 'out_centrality': nx.out_degree_centrality(graph),
-    }
+    feat_dict = dict()
+    for feature in feature_list.keys():
+        feat_dict[feature] = feature_list[feature](graph)
 
     curr_feature = np.zeros((len(graph), len(feat_dict)))
 
@@ -70,7 +68,7 @@ class InputData:
   edge_types: Sequence[EDGE_TYPE]
 
 
-def load_input_data(DATA_DIR, train_fraction = 0.8):
+def load_input_data(DATA_DIR, feature_list = {'constant': constant_feature}, train_fraction = 0.8):
   """Loads input data for the specified prediction problem.
 
   This loads a dataset that can be used with a GraphNet model.
@@ -81,7 +79,7 @@ def load_input_data(DATA_DIR, train_fraction = 0.8):
   """
 
   print(f"Generating data from the directory {DATA_DIR}")
-  graph_data = generate_graph_data(DATA_DIR)
+  graph_data = generate_graph_data(DATA_DIR, feature_list)
   features = graph_data.features
   adjacencies = graph_data.adjacencies
   ys = graph_data.labels
