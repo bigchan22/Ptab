@@ -57,6 +57,7 @@ def predict_tableau(P, word, show=True):
 
     with open(MODEL_FILE, 'rb') as f:
         model, acc = pickle.load(f)
+        model.to(device)
 
     for batch in T_loader:
         batch.to(device)
@@ -106,6 +107,7 @@ def predict_orbit(P, word, shape_checkers, show=True):
 
     with open(MODEL_FILE, 'rb') as f:
         model, acc = pickle.load(f)
+        model.to(device)
 
     for batch in T_loader:
         batch.to(device)
