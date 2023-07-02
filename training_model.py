@@ -41,10 +41,15 @@ train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # model = pastGCN().to(device)
-if use_pretrained_weights:
-    with open(MODEL_FILE, 'rb') as f:
-      model, max_accuracy = pickle.load(f)
-else:
+if use_pretrained_weights == True:
+    try:
+        with open(MODEL_FILE, 'rb') as f:
+          model, max_accuracy = pickle.load(f)
+          model.to(device)
+    except:
+        print("There is no trained model")
+        use_pretrained_weights = False
+if use_pretrained_weights == False:
     model = GCN_multi(graph_deg, depth, node_dim).to(device)
     max_accuracy = 0
 # data = batch.to(device)
