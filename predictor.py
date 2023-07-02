@@ -52,14 +52,26 @@ def predict_tableau(P, word, show=True):
     T_dataset = CustomDataset(T_inputdata)
     T_loader = DataLoader(T_dataset, batch_size=1, shuffle=True)
 
+    print(T_dataset.rows)
+    print(T_dataset.cols)
+    print(T_dataset.edge_types)
+    print("-----------------------")
+
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     device ="cuda:0"
 
     with open(MODEL_FILE, 'rb') as f:
         model, acc = pickle.load(f)
+        model.to(device)
 
     for batch in T_loader:
         batch.to(device)
+        print(batch.edge_index)
+        print(batch.rows)
+        print(batch.cols)
+        print(batch.edge_types)
+        print("--------------------------")
+        
         predicted = model(batch)
         print(predicted)
         print("---------")
