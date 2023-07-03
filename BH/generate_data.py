@@ -193,6 +193,10 @@ def is_3col(shape):
     if shape[0] == 3: return True
     return False
 
+def is_43(shape):
+    if shape == [4,3]: return True
+    return False
+
 def is_good_P_1row(P, word):
     return not has_rl_P_min(P, word) and P_Des(P, word) == [len(word)]
 
