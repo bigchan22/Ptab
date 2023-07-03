@@ -200,6 +200,11 @@ def is_43(shape):
 def is_good_P_1row(P, word):
     return not has_rl_P_min(P, word) and P_Des(P, word) == [len(word)]
 
+def is_good_P_1row_2(P, word):
+    if not has_lr_P_max(P, word) and P_Des(P, word) == [len(word)]:
+        return True
+    return False
+
 def is_good_P_hook(P, word):
     sh = shape_of_word(P, word)
     arm = sh[0] - 1
