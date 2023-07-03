@@ -205,6 +205,22 @@ def is_61(shape):
     if shape == [6,1]: return True
     return False
 
+def is_511(shape):
+    if shape == [5,1,1]: return True
+    return False
+
+def is_4111(shape):
+    if shape == [4,1,1,1]: return True
+    return False
+
+def is_31111(shape):
+    if shape == [3,1,1,1,1]: return True
+    return False
+
+def is_211111(shape):
+    if shape == [2,1,1,1,1,1]: return True
+    return False
+
 def is_good_P_1row(P, word):
     return not has_rl_P_min(P, word) and P_Des(P, word) == [len(word)]
 
