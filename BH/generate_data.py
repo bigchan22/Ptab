@@ -197,6 +197,14 @@ def is_43(shape):
     if shape == [4,3]: return True
     return False
 
+def is_52(shape):
+    if shape == [5,2]: return True
+    return False
+
+def is_61(shape):
+    if shape == [6,1]: return True
+    return False
+
 def is_good_P_1row(P, word):
     return not has_rl_P_min(P, word) and P_Des(P, word) == [len(word)]
 
