@@ -254,6 +254,10 @@ def is_211111(shape):
     if shape == [2,1,1,1,1,1]: return True
     return False
 
+def any_shape(shape):
+    if shape == None: return False
+    return True
+
 def is_good_P_1row(P, word):
     return not has_rl_P_min(P, word) and P_Des(P, word) == [len(word)]
 
