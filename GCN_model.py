@@ -8,9 +8,9 @@ from torch_geometric.nn import GCNConv
 class GCN_single(torch.nn.Module):
     def __init__(self,num_edge_types, graph_deg, depth, node_dim, edge_dim=8):
         super().__init__()
-        self.num_edge_types= num_edge_types
+        self.num_edge_types = num_edge_types
         self.graph_deg = graph_deg
-        self.depth=depth
+        self.depth = depth
         self.node_dim = node_dim
         self.node_linear = torch.nn.Linear(1,self.node_dim)
         self.edge_linear = torch.nn.Linear(1,edge_dim)
@@ -38,28 +38,29 @@ class GCN_single(torch.nn.Module):
             mask1 = (edge_types == 1)
             edge_index1 = edge_index[:, mask1.squeeze()]
             x1 = self.conv1(x, edge_index1)
-            x1 = F.relu(x1)
+            # x1 = F.relu(x1)
             
             mask2 = (edge_types == 2)
             edge_index2 = edge_index[:, mask2.squeeze()]
             x2 = self.conv2(x, edge_index2)
-            x2 = F.relu(x2)
+            # x2 = F.relu(x2)
             
             mask3 = (edge_types == 3)
             edge_index3 = edge_index[:, mask3.squeeze()]
             x3 = self.conv3(x, edge_index3)
-            x3 = F.relu(x3)
+            # x3 = F.relu(x3)
             
             mask4 = (edge_types == 4)
             edge_index4 = edge_index[:, mask4.squeeze()]
             x4 = self.conv4(x, edge_index4)
-            x4 = F.relu(x4)
+            # x4 = F.relu(x4)
             
-            x = x1+x2+x3+x4
+            x = x1 + x2 + x3 + x4
             x = F.relu(x)
-        xx = torch.reshape(x,(-1, self.graph_deg, self.node_dim))
-        xxx,_ = torch.max(xx,dim=1)
+        xx = torch.reshape(x, (-1, self.graph_deg, self.node_dim))
+        xxx, _ = torch.max(xx, dim=1)
         xxx = self.out1(xxx)
+        xxx = F.relu(xxx)
         xxx = self.out2(xxx)
         
         return xxx
@@ -74,11 +75,11 @@ class GCN_multi(torch.nn.Module):
         self.node_dim = node_dim
         self.GCN_single = GCN_single(self.num_edge_types, self.graph_deg, self.depth, self.node_dim)        
 
-    def forward(self, data,T=1):
+    def forward(self, data, T=1):
         batch = data.batch
         batch = batch[::self.graph_deg]
         x = self.GCN_single(data)
-        x=torch.sigmoid(x/T)
+        x = torch.sigmoid(x/T)
         unique_batches = torch.unique(batch)
         
 #         sums_tensor = torch.zeros(len(unique_batches), requires_grad=True)
