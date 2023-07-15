@@ -57,6 +57,10 @@ if use_pretrained_weights == False:
 loss_function = torch.nn.CrossEntropyLoss()
 loss_function = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=step_size, weight_decay=5e-4)
+scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer=optimizer,
+                                        lr_lambda=lambda epoch: 0.95 ** epoch,
+                                        last_epoch=-1,
+                                        verbose=False)
 
 for epoch in range(num_epochs):
     # Training phase
@@ -70,6 +74,7 @@ for epoch in range(num_epochs):
         loss = loss_function(out, batch.y)
         loss.backward()
         optimizer.step()
+    scheduler.step()
     print(loss)
     
     # Evaluation phase
