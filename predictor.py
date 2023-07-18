@@ -26,7 +26,17 @@ def predict_tableau(P, word, show=True):
     if shape == None:
         print("The input tableau is not a P-tableau.")
         return
-    T = make_matrix_from_T(P, word)
+    direction_dict = {"F": Direction.FORWARD,
+                      "B": Direction.BACKWARD,
+                      "2": Direction.BOTH}
+    if directions == "":
+        direction1 = direction2 = direction3 = Direction.FORWARD
+    else:
+        direction1 = direction_dict[directions[0]]
+        direction2 = direction_dict[directions[1]]
+        direction3 = direction_dict[directions[2]]
+        
+    T = make_matrix_from_T(P, word, direction=(direction1, direction2, direction3))
     graph = nx.from_scipy_sparse_matrix(T, create_using=nx.DiGraph)
 
     feat_dict = dict()
