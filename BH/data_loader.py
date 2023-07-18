@@ -83,6 +83,9 @@ def load_input_data(DATA_DIR, feature_list = {'constant': constant_feature}, tra
   features = graph_data.features
   adjacencies = graph_data.adjacencies
   ys = graph_data.labels
+
+  for i in range(1, len(features), 20):
+      print(features[i])
   
   rows = [np.array(sp.coo_matrix(a).row, dtype=np.int16) for a in adjacencies]
   cols = [np.array(sp.coo_matrix(a).col, dtype=np.int16) for a in adjacencies]
