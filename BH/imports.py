@@ -29,3 +29,8 @@ class EDGE_TYPE():
   SINGLE_ARROW = 2
   DOUBLE_ARROW = 3
   DASHED_ARROW = 4
+  
+class Direction(enum.Enum):
+  FORWARD = enum.auto()
+  BACKWARD = enum.auto()
+  BOTH = enum.auto()

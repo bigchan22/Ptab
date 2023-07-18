@@ -286,7 +286,7 @@ def is_good_P_2col(P, word):
         r += 1
     return True
 
-def make_matrix_from_T(P, word_of_T):
+def make_matrix_from_T(P, word_of_T, direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
     n = len(P)
     row = []
     col = []
@@ -301,17 +301,32 @@ def make_matrix_from_T(P, word_of_T):
     for i in range(n):
         for j in range(i+1, n):
             if not is_P_compatible(P, word_of_T[i], word_of_T[j]):
-                row.append(word_of_T[i]-1)
-                col.append(word_of_T[j]-1)
-                edge_type.append(EDGE_TYPE.DASHED_ARROW)
+                if direction[0] == Direction.FORWARD or direction[0] == Direction.BOTH:
+                    row.append(word_of_T[i]-1)
+                    col.append(word_of_T[j]-1)
+                    edge_type.append(EDGE_TYPE.DASHED_ARROW)
+                if direction[0] == Direction.BACKWARD or direction[0] == Direction.BOTH:
+                    row.append(word_of_T[j]-1)
+                    col.append(word_of_T[i]-1)
+                    edge_type.append(EDGE_TYPE.DASHED_ARROW)
             elif col_index[i] == col_index[j]:
-                row.append(word_of_T[j]-1)
-                col.append(word_of_T[i]-1)
-                edge_type.append(EDGE_TYPE.SINGLE_ARROW)
+                if direction[1] == Direction.FORWARD or direction[1] == Direction.BOTH:
+                    row.append(word_of_T[j]-1)
+                    col.append(word_of_T[i]-1)
+                    edge_type.append(EDGE_TYPE.SINGLE_ARROW)
+                if direction[1] == Direction.BACKWARD or direction[1] == Direction.BOTH:
+                    row.append(word_of_T[i]-1)
+                    col.append(word_of_T[j]-1)
+                    edge_type.append(EDGE_TYPE.SINGLE_ARROW)
             else:
-                row.append(min(word_of_T[i], word_of_T[j])-1)
-                col.append(max(word_of_T[i], word_of_T[j])-1)
-                edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
+                if direction[2] == Direction.FORWARD or direction[2] == Direction.BOTH:
+                    row.append(min(word_of_T[i], word_of_T[j])-1)
+                    col.append(max(word_of_T[i], word_of_T[j])-1)
+                    edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
+                if direction[2] == Direction.BACKWARD or direction[2] == Direction.BOTH:
+                    row.append(max(word_of_T[i], word_of_T[j])-1)
+                    col.append(min(word_of_T[i], word_of_T[j])-1)
+                    edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
     return sp.coo_matrix((edge_type, (row,col)), shape=(n,n))
 
 def generate_data_PTabs(DIR_PATH,
@@ -353,7 +368,8 @@ def generate_data_PTabs_v2(DIR_PATH,
                         shape_checkers,
                         connected=False,
                         UPTO_N=False,
-                        json_path="./json/"):
+                        json_path="./json/",
+                        direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
     with open(os.path.join(json_path, "Partitions.json")) as f:
         Partitions = json.load(f)
     with open(os.path.join(json_path, "PartitionIndex.json")) as f:
@@ -389,7 +405,7 @@ def generate_data_PTabs_v2(DIR_PATH,
                     if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
                     if shape == None: continue
                     shape = str(shape)
-                    g = make_matrix_from_T(P, word)
+                    g = make_matrix_from_T(P, word, direction)
                     gs[shape] = sp.block_diag((gs[shape], g))
                 for k, lamb in enumerate(Partitions[n_str]):
                     if gs[str(lamb)].size == 0: continue
