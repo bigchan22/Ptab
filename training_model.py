@@ -94,7 +94,7 @@ for epoch in range(num_epochs):
     # Compute accuracy
     accuracy = correct / total
 
-    print("Epoch [{}/{}], Accuracy: {:.2%}, Loss: {}".format(epoch + 1, num_epochs, accuracy, float(loss.value())))
+    print("Epoch [{}/{}], Accuracy: {:.2%}, Loss: {}".format(epoch + 1, num_epochs, accuracy, float(loss.item())))
 
     if accuracy > max_accuracy and save_trained_weights:
         max_accuracy = accuracy
