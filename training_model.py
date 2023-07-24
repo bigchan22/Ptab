@@ -16,9 +16,8 @@ from GCN_model import *
 from torch_geometric.loader import DataLoader
 
 
-
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-device ="cuda:0"
+os.environ["CUDA_VISIBLE_DEVICES"] = GPU_NUM
+device = "cuda:" + GPU_NUM
 
 features = dict()
 for feat in feature_list.keys():
