@@ -21,7 +21,7 @@ from torch_geometric.loader import DataLoader
 # graph_deg = graph_deg
 # depth = num_layers
 
-def predict_tableau(P, word, show=True):
+def predict_tableau(P, word, MODEL_FILE=MODEL_FILE, directions=directions):
     shape = shape_of_word(P, word)
     if shape == None:
         print("The input tableau is not a P-tableau.")
