@@ -78,16 +78,26 @@ def predict_tableau(P, word, MODEL_FILE=MODEL_FILE, directions=directions):
 
 
 
-def predict_orbit(P, word, shape_checkers, show=True):
+def predict_orbit(P, word, shape_checkers, MODEL_FILE=MODEL_FILE, directions=directions):
     words = words_from_orbit(P, word)
     graphs = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
+
+    direction_dict = {"F": Direction.FORWARD,
+                      "B": Direction.BACKWARD,
+                      "2": Direction.BOTH}
+    if directions == "":
+        direction1 = direction2 = direction3 = Direction.FORWARD
+    else:
+        direction1 = direction_dict[directions[0]]
+        direction2 = direction_dict[directions[1]]
+        direction3 = direction_dict[directions[2]]
     
     for word in words:
         shape = shape_of_word(P, word)
         if shape == None: continue
         if all(shape_checker(shape)==False for shape_checker in shape_checkers):
             continue
-        T = make_matrix_from_T(P, word)
+        T = make_matrix_from_T(P, word, direction=(direction1, direction2, direction3))
         graphs = sp.block_diag((graphs, T))
     graphs = nx.from_scipy_sparse_matrix(graphs, create_using=nx.DiGraph)
     feat_dict = dict()
