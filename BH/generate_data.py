@@ -1,5 +1,4 @@
 # import json
-# import itertools
 # import numpy as np
 # import networkx as nx
 # import scipy.sparse as sp
@@ -286,6 +285,41 @@ def is_good_P_2col(P, word):
         r += 1
     return True
 
+def comb_to_shuffle(comb, A, B):
+    iterA = iter(A)
+    iterB = iter(B)
+    return [next(iterA) if i in comb else next(iterB) for i in range(len(A) + len(B))]
+
+def iter_shuffles(lists):
+    if len(lists) == 1:
+        yield lists[0]
+    elif len(lists) == 2:
+        for comb in itertools.combinations(range(len(lists[0]) + len(lists[1])), len(lists[0])):
+            yield comb_to_shuffle(comb, lists[0], lists[1])
+    else:
+        length_sum = sum(len(word) for word in lists)
+        for comb in itertools.combinations(range(length_sum), len(lists[0])):
+            for shuffled in iter_shuffles(lists[1:]):
+                yield comb_to_shuffle(comb, lists[0], shuffled)
+
+def cluster_vertices(P):
+    n = len(P)
+    arr = [0 for i in range(n)]
+    k = 0
+    for i in range(1,len(P)):
+        if P[i-1] != P[i]:
+            for j in range(P[i-1], P[i]):
+                arr[j] += i
+            k += 1
+        arr[i] += k
+    vertices = [[1]]
+    for i in range(1, len(P)):
+        if arr[i-1] == arr[i]:
+            vertices[-1].append(i+1)
+        else:
+            vertices.append([i+1])
+    return vertices
+
 def make_matrix_from_T(P, word_of_T, direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
     n = len(P)
     row = []
@@ -366,10 +400,11 @@ def generate_data_PTabs(DIR_PATH,
 def generate_data_PTabs_v2(DIR_PATH,
                         input_N,
                         shape_checkers,
-                        connected=False,
-                        UPTO_N=False,
-                        json_path="./json/",
-                        direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
+                        primitive = True,
+                        connected = False,
+                        UPTO_N = False,
+                        json_path = "./json/",
+                        direction = (Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
     with open(os.path.join(json_path, "Partitions.json")) as f:
         Partitions = json.load(f)
     with open(os.path.join(json_path, "PartitionIndex.json")) as f:
@@ -388,7 +423,12 @@ def generate_data_PTabs_v2(DIR_PATH,
         TM_n = np.matrix(TM[n_str])
         for P in generate_UIO(N, connected=connected):
             word_list = []
-            for word in itertools.permutations(range(1,N+1)):
+            if primitive:
+                iter_words = iter_shuffles(cluster_vertices(P))
+            else:
+                iter_words = itertools.permutations(range(1,N+1))
+
+            for word in iter_words:
                 word = list(word)
                 if word in word_list: continue
                 words = words_from_orbit(P, word)
