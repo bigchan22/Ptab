@@ -43,7 +43,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 if use_pretrained_weights == True:
     try:
         with open(MODEL_FILE, 'rb') as f:
-          model, max_accuracy = pickle.load(f)
+          model, max_accuracy, min_loss = pickle.load(f)
           model.to(device)
     except:
         print("There is no trained model")
@@ -51,6 +51,7 @@ if use_pretrained_weights == True:
 if use_pretrained_weights == False:
     model = GCN_multi(graph_deg, depth, node_dim).to(device)
     max_accuracy = 0
+    min_loss = 100
 # data = batch.to(device)
 # torch.nn.init.xavier_normal(model)
 loss_function = torch.nn.CrossEntropyLoss()
@@ -92,11 +93,13 @@ for epoch in range(num_epochs):
 
     # Compute accuracy
     accuracy = correct / total
+    loss = float(loss.item())
 
-    print("Epoch [{}/{}], Accuracy: {:.2%}, Loss: {:.15f}".format(epoch + 1, num_epochs, accuracy, float(loss.item())))
+    print("Epoch [{}/{}], Accuracy: {:.2%}, Loss: {:.15f}".format(epoch + 1, num_epochs, accuracy, loss))
 
-    if accuracy > max_accuracy and save_trained_weights:
+    if (accuracy > max_accuracy or (accuracy == max_accuracy and loss < min_loss)) and save_trained_weights:
         max_accuracy = accuracy
+        min_loss = loss
         with open(MODEL_FILE, 'wb') as f:
-            pickle.dump((model, max_accuracy), f)
+            pickle.dump((model, max_accuracy, min_loss), f)
 
