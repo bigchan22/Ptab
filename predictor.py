@@ -38,26 +38,18 @@ def compare_models(P, word, MODELS, cutoff = 0.7):
         print("The input tableau is not a P-tableau.")
         return
     for MODEL in MODELS:
-        pred_prob = predict_tableau(P, word, MODEL, find_direction(MODEL))
+        pred_prob = predict_tableau(P, word, MODEL)
         if pred_prob > cutoff: pred = "GOOD"
         elif pred_prob < 1-cutoff: pred = " BAD"
         else: pred = "    "
         print(f"{pred_prob:.5f} {pred} {MODEL.split('/')[-1][11:]}")
 
-def predict_tableau(P, word, MODEL_FILE=MODEL_FILE, directions=directions):
+def predict_tableau(P, word, MODEL_FILE=MODEL_FILE):
     shape = shape_of_word(P, word)
     if shape == None:
         print("The input tableau is not a P-tableau.")
         return
-    direction_dict = {"F": Direction.FORWARD,
-                      "B": Direction.BACKWARD,
-                      "2": Direction.BOTH}
-    if directions == "":
-        direction1 = direction2 = direction3 = Direction.FORWARD
-    else:
-        direction1 = direction_dict[directions[0]]
-        direction2 = direction_dict[directions[1]]
-        direction3 = direction_dict[directions[2]]
+    direction1, direction2, direction3 = find_direction(MODEL_FILE)
         
     T = make_matrix_from_T(P, word, direction=(direction1, direction2, direction3))
     graph = nx.from_scipy_sparse_matrix(T, create_using=nx.DiGraph)
@@ -89,7 +81,7 @@ def predict_tableau(P, word, MODEL_FILE=MODEL_FILE, directions=directions):
     device ="cuda:0"
 
     with open(MODEL_FILE, 'rb') as f:
-        model, acc = pickle.load(f)
+        model, acc, loss = pickle.load(f)
         model.to(device)
 
     for batch in T_loader:
