@@ -21,6 +21,29 @@ from torch_geometric.loader import DataLoader
 # graph_deg = graph_deg
 # depth = num_layers
 
+def find_direction(MODEL_FILE):
+    direction_dict = {"F": Direction.FORWARD,
+                      "B": Direction.BACKWARD,
+                      "2": Direction.BOTH}
+    for direction1 in direction_dict.keys():
+        for direction2 in direction_dict.keys():
+            for direction3 in direction_dict.keys():
+                if direction1+direction2+direction3 in MODEL_FILE:
+                    return (direction_dict[direction1], direction_dict[direction2], direction_dict[direction3])
+    return False
+
+def compare_models(P, word, MODELS, cutoff = 0.7):
+    shape = shape_of_word(P, word)
+    if shape == None:
+        print("The input tableau is not a P-tableau.")
+        return
+    for MODEL in MODELS:
+        pred_prob = predict_tableau(P, word, MODEL, find_direction(MODEL))
+        if pred_prob > cutoff: pred = "GOOD"
+        elif pred_prob < 1-cutoff: pred = " BAD"
+        else: pred = "    "
+        print(f"{pred_prob:.5f} {pred} {MODEL[11:-7]}")
+
 def predict_tableau(P, word, MODEL_FILE=MODEL_FILE, directions=directions):
     shape = shape_of_word(P, word)
     if shape == None:
@@ -74,7 +97,7 @@ def predict_tableau(P, word, MODEL_FILE=MODEL_FILE, directions=directions):
         predicted = model(batch)
         # print(predicted)
         # print("---------")
-    return predicted
+    return float(predicted[0])
 
 
 
