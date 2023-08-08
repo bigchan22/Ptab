@@ -42,7 +42,7 @@ def compare_models(P, word, MODELS, cutoff = 0.7):
         if pred_prob > cutoff: pred = "GOOD"
         elif pred_prob < 1-cutoff: pred = " BAD"
         else: pred = "    "
-        print(f"{pred_prob:.5f} {pred} {MODEL[11:-7]}")
+        print(f"{pred_prob:.5f} {pred} {MODEL.split('/')[-1][11:]}")
 
 def predict_tableau(P, word, MODEL_FILE=MODEL_FILE, directions=directions):
     shape = shape_of_word(P, word)
