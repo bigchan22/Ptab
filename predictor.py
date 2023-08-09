@@ -50,7 +50,7 @@ def predict_tableaux_around_tableau(P, word, MODEL, cutoff = 0.7):
         print("The input tableau is not a P-tableau.")
         return
     
-    print(f"SHAPE = {shape}")
+    print(f"T = {word}, SHAPE = {shape}, MODEL = {MODEL.split('/')[-1][11:-7]}")
 
     n = len(P)
     for Q in generate_UIO(n):
