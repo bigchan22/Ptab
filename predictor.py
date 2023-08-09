@@ -50,14 +50,15 @@ def predict_tableaux_around_tableau(P, word, MODEL, cutoff = 0.7):
         print("The input tableau is not a P-tableau.")
         return
     
+    print(f"SHAPE = {shape}")
+
     n = len(P)
     for Q in generate_UIO(n):
         diff = 0
         for i in range(n):
             if P[i] == Q[i]: continue
-            if P[i] - Q[i] in [1, -1]:
-                diff += 1
-            diff += 2
+            if P[i] - Q[i] in [1, -1]:diff += 1
+            else: diff += 2
         if diff >= 2: continue
         if shape_of_word(Q, word) != shape: continue
         pred_prob = predict_tableau(Q, word, MODEL)
