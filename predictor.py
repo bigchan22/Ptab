@@ -21,6 +21,18 @@ from torch_geometric.loader import DataLoader
 # graph_deg = graph_deg
 # depth = num_layers
 
+def load_models(show=True, MODEL_DIR=MODEL_DIR, keywords=[]):
+    MODEL_DIR = './trained_models'
+    MODELS = [os.path.join(MODEL_DIR, f) for f in os.listdir(MODEL_DIR)
+              if f.endswith('.pickle') and all(keyword in f for keyword in keywords)]
+    if show == True:
+        for i, MODEL in enumerate(MODELS):
+            with open(MODEL, 'rb') as file:
+                _, acc, _ = pickle.load(file)
+            MODEL = MODEL.split('parameters_')[-1].split('.')[0]
+            print(f'{i:3d} {acc:.4f} {MODEL}')
+    return MODELS
+
 def find_direction(MODEL_FILE):
     direction_dict = {"F": Direction.FORWARD,
                       "B": Direction.BACKWARD,
@@ -44,28 +56,27 @@ def compare_models(P, word, MODELS, cutoff = 0.7):
         else: pred = "    "
         print(f"{pred_prob:.5f} {pred} {MODEL.split('/')[-1][11:-7]}")
 
-def predict_tableaux_around_tableau(P, word, MODEL, cutoff = 0.7):
+def predict_tableaux_around_tableau(P, word, MODEL, diameter = 1, cutoff = 0.7):
     shape = shape_of_word(P, word)
     if shape == None:
         print("The input tableau is not a P-tableau.")
         return
     
-    print(f"T = {word}, SHAPE = {shape}, MODEL = {MODEL.split('/')[-1][11:-7]}")
+    print(f"T = {word}\nSHAPE = {shape}\nMODEL = {MODEL.split('/')[-1][11:-7]}")
 
     n = len(P)
     for Q in generate_UIO(n):
         diff = 0
         for i in range(n):
-            if P[i] == Q[i]: continue
-            if P[i] - Q[i] in [1, -1]:diff += 1
-            else: diff += 2
-        if diff >= 2: continue
+            if P[i] >= Q[i]: diff += P[i] - Q[i]
+            else: diff += Q[i] - P[i]
+        if diff > diameter: continue
         if shape_of_word(Q, word) != shape: continue
         pred_prob = predict_tableau(Q, word, MODEL)
         if pred_prob > cutoff: pred = "GOOD"
         elif pred_prob < 1-cutoff: pred = " BAD"
         else: pred = "    "
-        print(f"{pred_prob:.5f} {pred} {Q}")
+        print(f"{pred_prob:.5f} {pred} {Q} {diff}")
 
 def predict_tableau(P, word, MODEL_FILE=MODEL_FILE):
     shape = shape_of_word(P, word)
@@ -114,22 +125,11 @@ def predict_tableau(P, word, MODEL_FILE=MODEL_FILE):
         # print("---------")
     return float(predicted[0])
 
-
-
-def predict_orbit(P, word, shape_checkers, MODEL_FILE=MODEL_FILE, directions=directions):
+def predict_orbit(P, word, shape_checkers, MODEL_FILE=MODEL_FILE):
     words = words_from_orbit(P, word)
     graphs = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
+    direction1, direction2, direction3 = find_direction(MODEL_FILE)
 
-    direction_dict = {"F": Direction.FORWARD,
-                      "B": Direction.BACKWARD,
-                      "2": Direction.BOTH}
-    if directions == "":
-        direction1 = direction2 = direction3 = Direction.FORWARD
-    else:
-        direction1 = direction_dict[directions[0]]
-        direction2 = direction_dict[directions[1]]
-        direction3 = direction_dict[directions[2]]
-    
     for word in words:
         shape = shape_of_word(P, word)
         if shape == None: continue
@@ -172,4 +172,4 @@ def predict_orbit(P, word, shape_checkers, MODEL_FILE=MODEL_FILE, directions=dir
         predicted = model(batch)
         # print(predicted)
         # print("---------")
-    return predicted
+    return float(predicted[0])
