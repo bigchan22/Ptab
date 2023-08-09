@@ -42,7 +42,28 @@ def compare_models(P, word, MODELS, cutoff = 0.7):
         if pred_prob > cutoff: pred = "GOOD"
         elif pred_prob < 1-cutoff: pred = " BAD"
         else: pred = "    "
-        print(f"{pred_prob:.5f} {pred} {MODEL.split('/')[-1][11:]}")
+        print(f"{pred_prob:.5f} {pred} {MODEL.split('/')[-1][11:-7]}")
+
+def predict_tableaux_around_tableau(P, word, shape, MODEL, cutoff = 0.7):
+    if shape_of_word(P, word) != shape:
+        print(f"The input tableau is not of shape {shape}.")
+        return
+    
+    n = len(P)
+    for Q in generate_UIO(n):
+        diff = 0
+        for i in range(n):
+            if P[i] == Q[i]: continue
+            if P[i] - Q[i] in [1, -1]:
+                diff += 1
+            diff += 2
+        if diff >= 2: continue
+        if shape_of_word(Q, word) != shape: continue
+        pred_prob = predict_tableau(Q, word, MODEL)
+        if pred_prob > cutoff: pred = "GOOD"
+        elif pred_prob < 1-cutoff: pred = " BAD"
+        else: pred = "    "
+        print(f"{pred_prob:.5f} {pred} {Q}")
 
 def predict_tableau(P, word, MODEL_FILE=MODEL_FILE):
     shape = shape_of_word(P, word)
