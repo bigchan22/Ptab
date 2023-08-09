@@ -44,9 +44,10 @@ def compare_models(P, word, MODELS, cutoff = 0.7):
         else: pred = "    "
         print(f"{pred_prob:.5f} {pred} {MODEL.split('/')[-1][11:-7]}")
 
-def predict_tableaux_around_tableau(P, word, shape, MODEL, cutoff = 0.7):
-    if shape_of_word(P, word) != shape:
-        print(f"The input tableau is not of shape {shape}.")
+def predict_tableaux_around_tableau(P, word, MODEL, cutoff = 0.7):
+    shape = shape_of_word(P, word)
+    if shape == None:
+        print("The input tableau is not a P-tableau.")
         return
     
     n = len(P)
