@@ -72,7 +72,7 @@ def compare_models(P, word, MODELS, cutoff = 0.7):
         else: pred = "    "
         print(f"{pred_prob:.5f} {pred} {MODEL.split('/')[-1][11:-7]}")
 
-def check_inclusion_criterion(MODEL, shape_checker=any_shape, cutoff = 0.7):
+def check_inclusion_criterion(MODEL, shape_checker=any_shape, gap=0.5, cutoff=0.7):
     cnt_pair = 0
     cnt_correct = 0
     N = int(MODEL.split('parameters_')[-1][0])
@@ -94,7 +94,7 @@ def check_inclusion_criterion(MODEL, shape_checker=any_shape, cutoff = 0.7):
                 if Ps[P1][2] != Ps[P2][2]: continue
                 if is_included(P1, P2) == False: continue
                 cnt_pair += 1
-                if Ps[P1][0] < Ps[P2][0]: cnt_correct += 1
+                if Ps[P1][0]+gap < Ps[P2][0]: cnt_correct += 1
     return (cnt_correct / cnt_pair, cnt_pair, cnt_correct)
 
 def is_included(P1, P2):
