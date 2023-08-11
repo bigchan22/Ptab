@@ -25,8 +25,6 @@ from itertools import permutations as Perm
 # depth = num_layers
 
 def load_models(show=True, MODEL_DIR='./trained_models', keywords=[], cutoff=0.1):
-    MODELS = [os.path.join(MODEL_DIR, f) for f in os.listdir(MODEL_DIR)
-              if f.endswith('.pickle') and all(keyword in f for keyword in keywords)]
     MODELS = []
     
     for f in os.listdir(MODEL_DIR):
