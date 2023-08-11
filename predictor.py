@@ -27,15 +27,19 @@ from itertools import permutations as Perm
 def load_models(show=True, MODEL_DIR='./trained_models', keywords=[], cutoff=0.1):
     MODELS = [os.path.join(MODEL_DIR, f) for f in os.listdir(MODEL_DIR)
               if f.endswith('.pickle') and all(keyword in f for keyword in keywords)]
+    MODELS = []
     
-    for i, MODEL in enumerate(MODELS):
+    for f in os.listdir(MODEL_DIR):
+        if not f.endswith('.pickle'): continue
+        if not all(keyword in f for keyword in keywords): continue
+        MODEL = os.path.join(MODEL_DIR, f)
         with open(MODEL, 'rb') as file:
             _, acc, _ = pickle.load(file)
-            if acc < cutoff:
-                MODELS.remove(MODEL)
-            elif show == True:
-                MODEL = MODEL.split('parameters_')[-1].split('.')[0]
-                print(f'{i:3d} {acc:.4f} {MODEL}')
+            if acc > cutoff:
+                MODELS.append(MODEL)
+                if show == True:
+                    MODEL = MODEL.split('parameters_')[-1].split('.')[0]
+                    print(f'{len(MODELS)-1:3d} {acc:.4f} {MODEL}')
     return MODELS
 
 def find_direction(MODEL):
@@ -68,7 +72,7 @@ def compare_models(P, word, MODELS, cutoff = 0.7):
         else: pred = "    "
         print(f"{pred_prob:.5f} {pred} {MODEL.split('/')[-1][11:-7]}")
 
-def check_inclusion_criterion(MODEL, cutoff = 0.7):
+def check_inclusion_criterion(MODEL, shape_checker=any_shape, cutoff = 0.7):
     cnt_pair = 0
     cnt_correct = 0
     N = int(MODEL.split('parameters_')[-1][0])
@@ -78,6 +82,7 @@ def check_inclusion_criterion(MODEL, cutoff = 0.7):
         for P in generate_UIO(N):
             shape = shape_of_word(P, word)
             if shape == None: continue
+            if shape_checker(shape) == False: continue
             pred_prob = predict_tableau(P, word, MODEL)
             if pred_prob > cutoff: pred = 'GOOD'
             elif pred_prob < 1 - cutoff: pred = 'BAD'
