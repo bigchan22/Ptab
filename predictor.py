@@ -24,8 +24,7 @@ from itertools import permutations as Perm
 # graph_deg = graph_deg
 # depth = num_layers
 
-def load_models(show=True, MODEL_DIR=MODEL_DIR, keywords=[]):
-    MODEL_DIR = './trained_models'
+def load_models(show=True, MODEL_DIR='./trained_models', keywords=[]):
     MODELS = [os.path.join(MODEL_DIR, f) for f in os.listdir(MODEL_DIR)
               if f.endswith('.pickle') and all(keyword in f for keyword in keywords)]
     if show == True:
