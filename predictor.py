@@ -24,15 +24,18 @@ from itertools import permutations as Perm
 # graph_deg = graph_deg
 # depth = num_layers
 
-def load_models(show=True, MODEL_DIR='./trained_models', keywords=[]):
+def load_models(show=True, MODEL_DIR='./trained_models', keywords=[], cutoff=0.1):
     MODELS = [os.path.join(MODEL_DIR, f) for f in os.listdir(MODEL_DIR)
               if f.endswith('.pickle') and all(keyword in f for keyword in keywords)]
-    if show == True:
-        for i, MODEL in enumerate(MODELS):
-            with open(MODEL, 'rb') as file:
-                _, acc, _ = pickle.load(file)
-            MODEL = MODEL.split('parameters_')[-1].split('.')[0]
-            print(f'{i:3d} {acc:.4f} {MODEL}')
+    
+    for i, MODEL in enumerate(MODELS):
+        with open(MODEL, 'rb') as file:
+            _, acc, _ = pickle.load(file)
+            if acc < cutoff:
+                MODELS.remove(MODEL)
+            elif show == True:
+                MODEL = MODEL.split('parameters_')[-1].split('.')[0]
+                print(f'{i:3d} {acc:.4f} {MODEL}')
     return MODELS
 
 def find_direction(MODEL):
