@@ -34,3 +34,4 @@ class Direction(enum.Enum):
   FORWARD = enum.auto()
   BACKWARD = enum.auto()
   BOTH = enum.auto()
+  NONE = enum.auto()
