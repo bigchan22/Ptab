@@ -72,7 +72,7 @@ def compare_models(P, word, MODELS, cutoff = 0.7):
 
 def check_inclusion_criterion(MODEL, shape_checker=any_shape, gap=0.5, cutoff=0.7):
     cnt_pair = 0
-    cnt_correct = 0
+    cnt_incorrect = 0
     N = int(MODEL.split('parameters_')[-1][0])
     for perm in Perm([i+1 for i in range(N)]):
         word = list(perm)
@@ -92,8 +92,8 @@ def check_inclusion_criterion(MODEL, shape_checker=any_shape, gap=0.5, cutoff=0.
                 if Ps[P1][2] != Ps[P2][2]: continue
                 if is_included(P1, P2) == False: continue
                 cnt_pair += 1
-                if Ps[P1][0]+gap < Ps[P2][0]: cnt_correct += 1
-    return (cnt_correct / cnt_pair, cnt_pair, cnt_correct)
+                if Ps[P1][1] == 'GOOD' and Ps[P2][1] == 'BAD': cnt_incorrect += 1
+    return (1-(cnt_incorrect / cnt_pair), cnt_pair, cnt_pair-cnt_incorrect)
 
 def is_included(P1, P2):
     for i in range(len(P1)):
