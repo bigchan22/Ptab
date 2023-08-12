@@ -38,7 +38,7 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 train_dataset = CustomDataset(train_dataset)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # model = pastGCN().to(device)
 if use_pretrained_weights == True:
     try:
