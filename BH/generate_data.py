@@ -257,14 +257,11 @@ def any_shape(shape):
     if shape == None: return False
     return True
 
-def is_good_P_1row_A(P, word):
+def is_good_P_1row_F(P, word):
     return not has_lr_P_max(P, word) and P_Des(P, word) == [len(word)]
 
 def is_good_P_1row_B(P, word):
     return not has_rl_P_min(P, word) and P_Des(P, word) == [len(word)]
-
-def is_good_P_1row_C(P, word):
-    return P_Des(P, word+[word[0]]) == [len(word)+1]
 
 def is_good_P_hook(P, word):
     sh = shape_of_word(P, word)
