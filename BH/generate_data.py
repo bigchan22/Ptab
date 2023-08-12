@@ -516,7 +516,6 @@ def generate_data_PTabs_v3(DIR_PATH,
                     D = P_Des(P, word)
                     if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
                     if shape == None: continue
-                    shape = str(shape)
                     g = make_matrix_from_T(P, word)
                     chk = False
                     for (shape_checker, good_checker) in good_shape_checkers:
@@ -526,7 +525,7 @@ def generate_data_PTabs_v3(DIR_PATH,
                             else: labels.append(0)
                             chk = True
                             break
-                    if chk == False: gs[shape] = sp.block_diag((gs[shape], g))
+                    if chk == False: gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
                 for k, lamb in enumerate(Partitions[n_str]):
                     if gs[str(lamb)].size == 0: continue
                     for shape_checker in other_shape_checkers:
