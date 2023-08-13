@@ -128,10 +128,11 @@ def predict_tableau(P, word, MODEL):
     if shape == None:
         print("The input tableau is not a P-tableau.")
         return
-    direction1, direction2, direction3 = find_direction(MODEL)
+    # direction1, direction2, direction3 = find_direction(MODEL)
     features = find_feature(MODEL)
 
-    T = make_matrix_from_T(P, word, direction=(direction1, direction2, direction3))
+    # T = make_matrix_from_T(P, word, direction=(direction1, direction2, direction3))
+    T = make_matrix_from_T(P, word)
     graph = nx.from_scipy_sparse_matrix(T, create_using=nx.DiGraph)
 
     feat_dict = dict()
