@@ -49,7 +49,7 @@ def find_direction(MODEL):
             for direction3 in direction_dict.keys():
                 if direction1+direction2+direction3 in MODEL:
                     return (direction_dict[direction1], direction_dict[direction2], direction_dict[direction3])
-    return False
+    return (Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)
 
 def find_feature(MODEL):
     features = dict()
@@ -128,11 +128,10 @@ def predict_tableau(P, word, MODEL):
     if shape == None:
         print("The input tableau is not a P-tableau.")
         return
-    # direction1, direction2, direction3 = find_direction(MODEL)
+    direction1, direction2, direction3 = find_direction(MODEL)
     features = find_feature(MODEL)
 
-    # T = make_matrix_from_T(P, word, direction=(direction1, direction2, direction3))
-    T = make_matrix_from_T(P, word)
+    T = make_matrix_from_T(P, word, direction=(direction1, direction2, direction3))
     graph = nx.from_scipy_sparse_matrix(T, create_using=nx.DiGraph)
 
     feat_dict = dict()
