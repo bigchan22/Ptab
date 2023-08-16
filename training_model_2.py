@@ -4,8 +4,7 @@ import os
 
 from BH.data_loader import *
 from BH.generate_data import *
-from training_info import *
-# from Model_e import Model_e,Direction,Reduction
+from training_info_2 import *
 from Train import train,print_accuracies
 
 import pickle
@@ -49,7 +48,7 @@ if use_pretrained_weights == True:
         print("There is no trained model")
         use_pretrained_weights = False
 if use_pretrained_weights == False:
-    model = GCN_multi(graph_deg, depth, node_dim).to(device)
+    model = GCN_multi(graph_deg, depth, node_dim, direction).to(device)
     max_accuracy = 0
     min_loss = 100
 # data = batch.to(device)
