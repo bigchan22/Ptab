@@ -57,7 +57,7 @@ loss_function = torch.nn.CrossEntropyLoss()
 loss_function = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=step_size, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer=optimizer,
-                                        lr_lambda=lambda epoch: 0.98 ** epoch,
+                                        lr_lambda=lambda epoch: 0.993 ** epoch,
                                         last_epoch=-1,
                                         verbose=False)
 
