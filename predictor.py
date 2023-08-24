@@ -128,7 +128,9 @@ def predict_tableau(P, word, MODEL):
     if shape == None:
         print("The input tableau is not a P-tableau.")
         return
-    direction1, direction2, direction3 = find_direction(MODEL)
+    
+    # direction1, direction2, direction3 = find_direction(MODEL)
+    direction1, direction2, direction3 = Direction.FORWARD, Direction.FORWARD, Direction.FORWARD
     features = find_feature(MODEL)
 
     T = make_matrix_from_T(P, word, direction=(direction1, direction2, direction3))
@@ -173,7 +175,10 @@ def predict_tableau(P, word, MODEL):
 def predict_orbit(P, word, shape_checkers, MODEL):
     words = words_from_orbit(P, word)
     graphs = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
-    direction1, direction2, direction3 = find_direction(MODEL)
+    
+    # direction1, direction2, direction3 = find_direction(MODEL)
+    direction1, direction2, direction3 = Direction.FORWARD, Direction.FORWARD, Direction.FORWARD
+    
     features = find_feature(MODEL)
 
     for word in words:
