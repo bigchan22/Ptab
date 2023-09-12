@@ -7,13 +7,13 @@ from itertools import permutations as Perm
 
 def verify_1row(N, MODEL, cutoff=0.7, good_checker=is_good_P_1row_B):
   for P in generate_UIO(N, connected=False):
-    for perm in Perm([i+1 for i in range(N)]):
+    for perm in iter_shuffles(cluster_vertices(P)):
       word = list(perm)
       if shape_of_word(P, word) != [N]: continue
       pred = predict_tableau(P, word, MODEL)
       if (pred > cutoff and good_checker(P, word)) or (pred < 1-cutoff and not good_checker(P, word)):
         continue
-      print(f"{P} {word} {pred:.6lf} {good_checker(P, word)}")
+      print(f"{P} {word} {pred:.6f} {good_checker(P, word)}")
 
 def verify_disconnected_2row(N, MODEL, cutoff=0.7):
   for i in range(1, N):
@@ -21,8 +21,11 @@ def verify_disconnected_2row(N, MODEL, cutoff=0.7):
     for P1 in generate_UIO(i, connected=True):
       for P2 in generate_UIO(N-i, connected=True):
         P = [a for a in P1] + [a+i for a in P2]
-        for perm1 in Perm([a+1 for a in range(i)]):
-          for perm2 in Perm([a+1 for a in range(i, N)]):
+        for perm1 in iter_shuffles(cluster_vertices(P1)):
+          perm1 = list(perm1)
+          for perm2 in iter_shuffles(cluster_vertices(P2)):
+            temp = list(perm2)
+            perm2 = [a+i for a in temp]
             word = []
             if i <= N - i:
               for j in range(i):
@@ -41,4 +44,4 @@ def verify_disconnected_2row(N, MODEL, cutoff=0.7):
             pred = predict_tableau(P, word, MODEL)
             if (pred > cutoff and is_good_P_1row_B(P, perm1) and is_good_P_1row_B(P, perm2)) or (pred < 1-cutoff and not (is_good_P_1row_B(P, perm1) and is_good_P_1row_B(P, perm2))):
               continue
-            print(f"{P} {word} {pred:.6lf} {is_good_P_1row_B(P, perm1) and is_good_P_1row_B(P, perm2)}")
+            print(f"{P} {word} {pred:.6f} {is_good_P_1row_B(P, perm1) and is_good_P_1row_B(P, perm2)}")
