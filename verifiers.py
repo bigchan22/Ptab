@@ -5,6 +5,16 @@ from predictor import *
 
 from itertools import permutations as Perm
 
+def verify_1row(N, MODEL, cutoff=0.7, good_checker=is_good_P_1row_B):
+  for P in generate_UIO(N, connected=False):
+    for perm in Perm([i+1 for i in range(N)]):
+      word = list(perm)
+      if shape_of_word(P, word) != [N]: continue
+      pred = predict_tableau(P, word, MODEL)
+      if (pred > cutoff and good_checker(P, word)) or (pred < 1-cutoff and not good_checker(P, word)):
+        continue
+      print(f"{P} {word} {pred:.6lf} {is_good_P_1row_B(P, word)}")
+
 def verify_disconnected_2row(N, MODEL, cutoff=0.7):
   for i in range(1, N):
     print(f"{i}...")
@@ -26,7 +36,8 @@ def verify_disconnected_2row(N, MODEL, cutoff=0.7):
                 word.append(perm1[j])
               for j in range(N-i, i):
                 word.append(perm1[j])
-            if shape_of_word(P, word) == None: continue
+            shape = shape_of_word(P, word)
+            if shape == None or len(shape) != 2: continue
             pred = predict_tableau(P, word, MODEL)
             if (pred > cutoff and is_good_P_1row_B(P, perm1) and is_good_P_1row_B(P, perm2)) or (pred < 1-cutoff and not (is_good_P_1row_B(P, perm1) and is_good_P_1row_B(P, perm2))):
               continue
