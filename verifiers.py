@@ -13,7 +13,7 @@ def verify_1row(N, MODEL, cutoff=0.7, good_checker=is_good_P_1row_B):
       pred = predict_tableau(P, word, MODEL)
       if (pred > cutoff and good_checker(P, word)) or (pred < 1-cutoff and not good_checker(P, word)):
         continue
-      print(f"{P} {word} {pred:.6lf} {is_good_P_1row_B(P, word)}")
+      print(f"{P} {word} {pred:.6lf} {good_checker(P, word)}")
 
 def verify_disconnected_2row(N, MODEL, cutoff=0.7):
   for i in range(1, N):
