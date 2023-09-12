@@ -26,6 +26,7 @@ def verify_disconnected_2row(N, MODEL, cutoff=0.7):
                 word.append(perm1[j])
               for j in range(N-i, i):
                 word.append(perm1[j])
+            if shape_of_word(P, word) == None: continue
             pred = predict_tableau(P, word, MODEL)
             if (pred > cutoff and is_good_P_1row_B(P, perm1) and is_good_P_1row_B(P, perm2)) or (pred < 1-cutoff and not (is_good_P_1row_B(P, perm1) and is_good_P_1row_B(P, perm2))):
               continue
