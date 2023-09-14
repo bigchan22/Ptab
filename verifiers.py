@@ -89,7 +89,7 @@ def is_included(P1, P2):
             return False
     return True
 
-def verify_disconnected_bad_criterion(N, MODEL, cutoff = 0.7):
+def verify_disconnected_bad_criterion(MODEL, cutoff = 0.7):
   total_cnt = 0
   incorrect_cnt = 0
   N = int(MODEL.split('parameters_')[-1][0])
