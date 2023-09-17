@@ -107,7 +107,7 @@ def verify_disconnected_bad_criterion(MODEL, cutoff = 0.7):
       for i in range(len(conj)):
         for cnt in cnts: cnt.append(0)
         for j in range(conj[i]):
-          cnts[index[k]][-1] += 1
+          cnts[index[word[k]]][-1] += 1
           k += 1
       chk = True
       for cnt in cnts:
