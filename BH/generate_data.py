@@ -620,7 +620,7 @@ def generate_data_PTabs_v4(DIR_PATH,
                             labels.append(mult-pre_calculated[str(lamb)])
                             if mult < pre_calculated[str(lamb)]:
                                 print("mult < pre_calculated!!")
-                                print(P, word, lamb, mult, pre_calculated[str(lamb)]))
+                                print(P, word, lamb, mult, pre_calculated[str(lamb)])
                                 return
                             break
         N += 1
