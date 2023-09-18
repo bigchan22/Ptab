@@ -596,6 +596,7 @@ def generate_data_PTabs_v4(DIR_PATH,
                     D = P_Des(P, word)
                     if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
                     if shape == None: continue
+                    if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
                     g = make_matrix_from_T(P, word)
                     chk = check_disconnectedness_criterion(P, word, components, index, good_1row_checker)
                     if chk == 'UNKNOWN': gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
@@ -617,6 +618,10 @@ def generate_data_PTabs_v4(DIR_PATH,
                                 mult += TM[n_str][i][k] * Fs[i]
                             graphs.append(gs[str(lamb)])
                             labels.append(mult-pre_calculated[str(lamb)])
+                            if mult < pre_calculated[str(lamb)]:
+                                print("mult < pre_calculated!!")
+                                print(P, word, lamb, mult, pre_calculated[str(lamb)]))
+                                return
                             break
         N += 1
     indices = np.arange(len(graphs))
