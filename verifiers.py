@@ -121,6 +121,25 @@ def verify_disconnected_bad_criterion(MODEL, cutoff = 0.7):
           incorrect_cnt += 1
   return (total_cnt-incorrect_cnt, total_cnt)
 
+def verify_disconnectedness_criterion(MODEL, cutoff=0.7):
+  total_cnt = 0
+  incorrect_cnt = 0
+  N = int(MODEL.split('parameters_')[-1][0])
+  for P in generate_UIO(N, connected=False):
+    components = split_into_connected_components(P)
+    index = index_set_from_connected_components(components)
+    for perm in iter_shuffles(cluster_vertices(P)):
+      word = list(perm)
+      shape = shape_of_word(P, word)
+      if shape == None: continue
+      result = check_disconnectedness_criterion(P, word, components, index)
+      if result == 'UNKNOWN': continue
+      total_cnt += 1
+      pred = predict_tableau(P, word, MODEL)
+      if (result == 'GOOD' and pred <= cutoff) or (result == 'BAD' and pred >= 1-cutoff):
+        incorrect_cnt += 1
+  return (total_cnt-incorrect_cnt, total_cnt)
+
 def is_connected(P):
   for i in range(len(P)-1):
     if P[i] == i+1:
@@ -159,3 +178,30 @@ def is_non_increasing(seq):
     if seq[i-1] < seq[i]:
       return False
   return True
+
+def check_disconnectedness_criterion(P, word, components, index, good_1row_checker=is_good_P_1row_B):
+  shape = shape_of_word(P, word)
+  conj = conjugate(shape)
+  cnts = [[] for comp in components]
+  k = 0
+  for i in range(len(conj)):
+    for cnt in cnts: cnt.append(0)
+    for j in range(conj[i]):
+      cnts[index[word[k]]][-1] += 1
+      k += 1
+  chk = True
+  for cnt in cnts:
+    if is_non_increasing(cnt) == False:
+      chk = False
+      break
+  if chk == False:
+    return 'BAD'
+  for cnt in cnts:
+    if cnt[0] != 1:
+      return 'UNKNOWN'
+  splitted_words = [[] for comp in components]
+  for w in word:
+    splitted_words[index[w]].append(w)
+  if all(good_1row_checker(P, w) for w in splitted_words):
+    return 'GOOD'
+  return 'BAD'
