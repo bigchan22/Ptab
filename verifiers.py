@@ -205,3 +205,37 @@ def check_disconnectedness_criterion(P, word, components, index, good_1row_check
   if all(good_1row_checker(P, w) for w in splitted_words):
     return 'GOOD'
   return 'BAD'
+
+def verify_bad_2row_criterion(MODEL, cutoff=0.7):
+  total_cnt = 0
+  incorrect_cnt = 0
+  N = int(MODEL.split('parameters_')[-1][0])
+  for P in generate_UIO(N, connected=False):
+    for perm in iter_shuffles(cluster_vertices(P)):
+      word = list(perm)
+      shape = shape_of_word(P, word)
+      if shape == None: continue
+      if is_2row(shape) == False: continue
+      result = is_bad_P_2row(P, word)
+      if result == 'UNKNOWN': continue
+      total_cnt += 1
+      pred = predict_tableau(P, word, MODEL)
+      if (result == 'GOOD' and pred <= cutoff) or (result == 'BAD' and pred >= 1-cutoff):
+        incorrect_cnt += 1
+  return (total_cnt-incorrect_cnt, total_cnt)
+
+def is_bad_P_2row(P, word):
+    shape = shape_of_word(P, word)
+    word1 = []
+    word2 = []
+    word3 = []
+    for i in range(shape[1]):
+        word2.append(word[i*2])
+        word1.append(word[i*2+1])
+    for i in range(shape[1]*2, len(word)):
+        word3.append(word[i])
+    if is_good_P_1row_B(P, word1+word3) and is_good_P_1row_B(P, word2):
+      return 'UNKNOWN'
+    if is_good_P_1row_B(P, word1) and is_good_P_1row_B(P, word2+word3):
+      return 'UNKNOWN'
+    return 'BAD'
