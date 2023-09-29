@@ -89,7 +89,7 @@ def is_included(P1, P2):
             return False
     return True
 
-def verify_disconnected_bad_criterion(MODEL, cutoff = 0.7):
+def verify_disconnected_bad_criterion(MODEL, shape_checker=any_shape, cutoff = 0.7):
   total_cnt = 0
   incorrect_cnt = 0
   N = int(MODEL.split('parameters_')[-1][0])
@@ -101,6 +101,7 @@ def verify_disconnected_bad_criterion(MODEL, cutoff = 0.7):
       word = list(perm)
       shape = shape_of_word(P, word)
       if shape == None: continue
+      if shape_checker(shape) == False: continue
       conj = conjugate(shape)
       cnts = [[] for comp in components]
       k = 0
@@ -121,7 +122,7 @@ def verify_disconnected_bad_criterion(MODEL, cutoff = 0.7):
           incorrect_cnt += 1
   return (total_cnt-incorrect_cnt, total_cnt)
 
-def verify_disconnectedness_criterion(MODEL, cutoff=0.7):
+def verify_disconnectedness_criterion(MODEL, shape_checker=any_shape, cutoff=0.7):
   total_cnt = 0
   incorrect_cnt = 0
   N = int(MODEL.split('parameters_')[-1][0])
@@ -132,6 +133,7 @@ def verify_disconnectedness_criterion(MODEL, cutoff=0.7):
       word = list(perm)
       shape = shape_of_word(P, word)
       if shape == None: continue
+      if shape_checker(shape) == False: continue
       result = check_disconnectedness_criterion(P, word, components, index)
       if result == 'UNKNOWN': continue
       total_cnt += 1
