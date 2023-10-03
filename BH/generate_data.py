@@ -319,7 +319,7 @@ def cluster_vertices(P):
     return vertices
 
 def make_matrix_from_T(P, word_of_T, direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
-    n = len(P)
+    n = len(word_of_T)
     row = []
     col = []
     edge_type = []
