@@ -268,7 +268,7 @@ def is_good_P_hook(P, word):
     arm = sh[0] - 1
     n = len(word)
     for i in range(n-arm):
-        if is_good_P_1row(P, [word[i]]+word[n-arm:]):
+        if is_good_P_1row_B(P, [word[i]]+word[n-arm:]):
             return True
     return False
 
