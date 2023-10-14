@@ -544,7 +544,6 @@ def generate_data_PTabs_v3(DIR_PATH,
     with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
         json.dump(shuffled_labels, f)
 
-
 def generate_data_PTabs_v4(DIR_PATH,
                         input_N,
                         shape_checkers,
@@ -727,78 +726,167 @@ def generate_data_PTabs_v5(DIR_PATH,
     with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
         json.dump(shuffled_labels, f)
 
+def generate_data_PTabs_v6(DIR_PATH,
+                        input_N,
+                        shape_checkers,
+                        good_1row_checker=is_good_P_1row_B,
+                        primitive = True,
+                        connected = False,
+                        UPTO_N = False,
+                        json_path = "./json/",):
+    with open(os.path.join(json_path, "Partitions.json")) as f:
+        Partitions = json.load(f)
+    with open(os.path.join(json_path, "PartitionIndex.json")) as f:
+        PartitionIndex = json.load(f)
+    with open(os.path.join(json_path, "TransitionMatrix.json")) as f:
+        TM = json.load(f)
+
+    if UPTO_N:
+        N = 1
+    else:
+        N = input_N
+    graphs = []
+    labels = []
+    while N <= input_N:
+        n_str = str(N)
+        TM_n = np.matrix(TM[n_str])
+        for P in generate_UIO(N, connected=connected):
+            components = split_into_connected_components(P)
+            index = index_set_from_connected_components(components)
+            word_list = []
+            if primitive:
+                iter_words = iter_shuffles(cluster_vertices(P))
+            else:
+                iter_words = itertools.permutations(range(1,N+1))
+
+            for word in iter_words:
+                word = list(word)
+                if word in word_list: continue
+                words = words_from_orbit(P, word)
+                word_list.extend(words)
+                
+                gs = dict()
+                pre_calculated = dict()
+                Fs = []
+                for lamb in Partitions[n_str]:
+                    gs[str(lamb)] = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
+                    pre_calculated[str(lamb)] = 0
+                    Fs.append(0)
+                for word in words:
+                    shape = shape_of_word(P, word)
+                    D = P_Des(P, word)
+                    if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
+                    if shape == None: continue
+                    if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
+                    g = make_matrix_from_T(P, word)
+                    chk = check_inductive_disconnectedness_criterion(P, word, components, index)
+                    if chk == 'UNKNOWN':
+                        gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
+                    else:
+                        graphs.append(g)
+                        if chk == 'BAD': labels.append(0)
+                        elif chk == 'GOOD':
+                            labels.append(1)
+                            pre_calculated[str(shape)] += 1
+                        else:
+                            print("SOMETHING GOES WRONG!")
+                            return
+                for k, lamb in enumerate(Partitions[n_str]):
+                    if gs[str(lamb)].size == 0: continue
+                    for shape_checker in shape_checkers:
+                        if shape_checker(lamb) == True:
+                            mult = 0
+                            for i in range(len(Partitions[n_str])):
+                                mult += TM[n_str][i][k] * Fs[i]
+                            graphs.append(gs[str(lamb)])
+                            labels.append(mult-pre_calculated[str(lamb)])
+                            if mult < pre_calculated[str(lamb)]:
+                                print("mult < pre_calculated!!")
+                                print(P, word, lamb, mult, pre_calculated[str(lamb)])
+                                return
+                            break
+        N += 1
+    indices = np.arange(len(graphs))
+    np.random.shuffle(indices)
+    shuffled_labels = [int(labels[indices[i]]) for i in range(len(graphs))]
+
+    for i in range(len(indices)):
+        file_path = os.path.join(DIR_PATH, f"graph_{i:05d}.npz")
+        sp.save_npz(file_path, graphs[indices[i]])
+    with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
+        json.dump(shuffled_labels, f)
 
 
 
-#########################################
-##############  criterions ##############
-#########################################
+########################################
+############## criterions ##############
+########################################
 
 def check_disconnectedness_criterion(P, word, components, index, good_1row_checker=is_good_P_1row_B):
-  shape = shape_of_word(P, word)
-  conj = conjugate(shape)
-  cnts = [[] for comp in components]
-  k = 0
-  for i in range(len(conj)):
-    for cnt in cnts: cnt.append(0)
-    for j in range(conj[i]):
-      cnts[index[word[k]]][-1] += 1
-      k += 1
-  chk = True
-  for cnt in cnts:
-    if is_non_increasing(cnt) == False:
-      chk = False
-      break
-  if chk == False:
+    shape = shape_of_word(P, word)
+    conj = conjugate(shape)
+    cnts = [[] for comp in components]
+    k = 0
+    for i in range(len(conj)):
+        for cnt in cnts: cnt.append(0)
+        for j in range(conj[i]):
+            cnts[index[word[k]]][-1] += 1
+            k += 1
+    chk = True
+    for cnt in cnts:
+        if is_non_increasing(cnt) == False:
+            chk = False
+            break
+    if chk == False:
+        return 'BAD'
+    for cnt in cnts:
+        if cnt[0] != 1:
+            return 'UNKNOWN'
+    splitted_words = [[] for comp in components]
+    for w in word:
+        splitted_words[index[w]].append(w)
+    if all(good_1row_checker(P, w) for w in splitted_words):
+        return 'GOOD'
     return 'BAD'
-  for cnt in cnts:
-    if cnt[0] != 1:
-      return 'UNKNOWN'
-  splitted_words = [[] for comp in components]
-  for w in word:
-    splitted_words[index[w]].append(w)
-  if all(good_1row_checker(P, w) for w in splitted_words):
-    return 'GOOD'
-  return 'BAD'
 
 def is_connected(P):
-  for i in range(len(P)-1):
-    if P[i] == i+1:
-      return False
-  return True
+    for i in range(len(P)-1):
+        if P[i] == i+1:
+            return False
+    return True
 
 def split_into_connected_components(P):
-  components = [[]]
-  for i in range(len(P)-1):
-    components[-1].append(i+1)
-    if P[i] == i+1:
-      components.append([])
-  components[-1].append(len(P))
-  return components
+    components = [[]]
+    for i in range(len(P)-1):
+        components[-1].append(i+1)
+        if P[i] == i+1:
+            components.append([])
+    components[-1].append(len(P))
+    return components
 
 def index_set_from_connected_components(components):
-  N = max(max(component) for component in components)
-  index = [-1 for i in range(N+1)]
-  for i, component in enumerate(components):
-    for k in component:
-      index[k] = i
-  return index
+    N = max(max(component) for component in components)
+    index = [-1 for i in range(N+1)]
+    for i, component in enumerate(components):
+        for k in component:
+            index[k] = i
+    return index
 
 def conjugate(lamb):
-  conj = []
-  for i in range(1, lamb[0]+1):
-    cnt = 0
-    for part in lamb:
-      if part >= i:
-        cnt += 1
-    conj.append(cnt)
-  return conj
+    conj = []
+    for i in range(1, lamb[0]+1):
+        cnt = 0
+        for part in lamb:
+            if part >= i:
+                cnt += 1
+        conj.append(cnt)
+    return conj
 
 def is_non_increasing(seq):
-  for i in range(1, len(seq)):
-    if seq[i-1] < seq[i]:
-      return False
-  return True
+    for i in range(1, len(seq)):
+        if seq[i-1] < seq[i]:
+            return False
+    return True
 
 def check_bad_2row_criterion(P, word, good_1row_checker=is_good_P_1row_B):
     shape = shape_of_word(P, word)
@@ -811,7 +899,60 @@ def check_bad_2row_criterion(P, word, good_1row_checker=is_good_P_1row_B):
     for i in range(shape[1]*2, len(word)):
         word3.append(word[i])
     if good_1row_checker(P, word1+word3) and good_1row_checker(P, word2):
-      return 'UNKNOWN'
+        return 'UNKNOWN'
     if good_1row_checker(P, word1) and good_1row_checker(P, word2+word3):
-      return 'UNKNOWN'
+        return 'UNKNOWN'
     return 'BAD'
+
+def check_inductive_disconnectedness_criterion(P, word, components, index):
+    shape = shape_of_word(P, word)
+    conj = conjugate(shape)
+    k = len(word)
+    for c in reversed(range(shape[0])):
+        k -= conj[c]
+        res_P, res_word = restricted_P_word(P, word[k:])
+        if check_disconnectedness_criterion_for_inductive_argument(res_P, res_word, components, index) == False:
+            return "BAD"
+    return "UNKNOWN"
+
+def check_disconnectedness_criterion_for_inductive_argument(P, word, components, index):
+    shape = shape_of_word(P, word)
+    conj = conjugate(shape)
+
+    cnts = [[] for comp in components]
+    res_words = [[] for comp in components]
+
+    k = 0
+    for i in range(len(conj)):
+        for cnt in cnts: cnt.append(0)
+        for j in range(conj[i]):
+            cnts[index[word[k]]][-1] += 1
+            res_words[index[word[k]]].append(word[k])
+            k += 1
+    chk = True
+    for cnt in cnts:
+        if is_non_increasing(cnt) == False:
+            return False
+    for i in range(len(components)):
+        res_P, res_word = restricted_P_word(P, res_words[i])
+        res_shape = shape_of_word(res_P, res_word)
+        if res_shape == None or conjugate(cnts[i]) != res_shape:
+            return False
+    return True
+
+def restricted_P_word(P, word):
+    res_P = []
+    res_word = []
+    N = len(P)
+    n = len(word)
+    sorted_word = sorted(word)
+    for i in range(n):
+        j = i + 1
+        while j < n:
+            if P[sorted_word[i]-1] < sorted_word[j]:
+                break
+            j += 1
+        res_P.append(j)
+    for i in range(n):
+        res_word.append(sorted_word.index(word[i])+1)
+    return res_P, res_word
