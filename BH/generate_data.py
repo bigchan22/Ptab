@@ -218,6 +218,16 @@ def is_3col_less(shape):
     if shape[0] <= 3: return True
     return False
 
+def is_4col(shape):
+    if shape == None: return False
+    if shape[0] == 4: return True
+    return False
+
+def is_4col_less(shape):
+    if shape == None: return False
+    if shape[0] <= 4: return True
+    return False
+
 def is_43(shape):
     if shape == None: return False
     if shape == [4,3]: return True
