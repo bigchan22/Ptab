@@ -761,8 +761,6 @@ def generate_data_PTabs_v6(DIR_PATH,
         n_str = str(N)
         TM_n = np.matrix(TM[n_str])
         for P in generate_UIO(N, connected=connected):
-            components = split_into_connected_components(P)
-            index = index_set_from_connected_components(components)
             word_list = []
             if primitive:
                 iter_words = iter_shuffles(cluster_vertices(P))
@@ -789,7 +787,7 @@ def generate_data_PTabs_v6(DIR_PATH,
                     if shape == None: continue
                     if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
                     g = make_matrix_from_T(P, word)
-                    chk = check_inductive_disconnectedness_criterion(P, word, components, index)
+                    chk = check_inductive_disconnectedness_criterion(P, word)
                     if chk == 'UNKNOWN':
                         gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
                     else:
@@ -914,20 +912,23 @@ def check_bad_2row_criterion(P, word, good_1row_checker=is_good_P_1row_B):
         return 'UNKNOWN'
     return 'BAD'
 
-def check_inductive_disconnectedness_criterion(P, word, components, index):
+def check_inductive_disconnectedness_criterion(P, word):
     shape = shape_of_word(P, word)
     conj = conjugate(shape)
     k = len(word)
     for c in reversed(range(shape[0])):
         k -= conj[c]
         res_P, res_word = restricted_P_word(P, word[k:])
-        if check_disconnectedness_criterion_for_inductive_argument(res_P, res_word, components, index) == False:
+        if check_disconnectedness_criterion_for_inductive_argument(res_P, res_word) == False:
             return "BAD"
     return "UNKNOWN"
 
-def check_disconnectedness_criterion_for_inductive_argument(P, word, components, index):
+def check_disconnectedness_criterion_for_inductive_argument(P, word):
     shape = shape_of_word(P, word)
     conj = conjugate(shape)
+
+    components = split_into_connected_components(P)
+    index = index_set_from_connected_components(components)
 
     cnts = [[] for comp in components]
     res_words = [[] for comp in components]
