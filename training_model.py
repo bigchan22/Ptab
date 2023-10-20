@@ -20,13 +20,9 @@ from torch_geometric.loader import DataLoader
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 device ="cuda:0"
 
-features = dict()
-for feat in feature_list.keys():
-    if feature_list[feat][0] == True:
-        features[feat] = feature_list[feat][1]
 
 print("Loading input data...")
-full_dataset, train_dataset, test_dataset = load_input_data(DIR_PATH, features, train_fraction)
+full_dataset, train_dataset, test_dataset = load_input_data(DIR_PATH)
 
 node_dim = num_features
 edge_dim = 8
@@ -88,6 +84,7 @@ for epoch in range(num_epochs):
 
     if accuracy > max_accuracy and save_trained_weights:
         max_accuracy = accuracy
+        print(f"max accuray:{accuracy}")
         with open(MODEL_FILE, 'wb') as f:
             pickle.dump((model, max_accuracy), f)
 

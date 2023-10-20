@@ -57,12 +57,17 @@ def predict_tableau(P, word, show=True):
 
     with open(MODEL_FILE, 'rb') as f:
         model, acc = pickle.load(f)
-
+        model.to(device)
     for batch in T_loader:
         batch.to(device)
+        print(batch.batch)
+        print(batch.x)
+        print(batch.edge_index)
+        print(batch.edge_types)
         predicted = model(batch)
         print(predicted)
         print("---------")
+        return batch, predicted
 
 
 

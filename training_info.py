@@ -1,9 +1,9 @@
 import os
 # from feature_functions import *
 
-graph_deg = 7
+graph_deg = 6
 # partition_parts = [i for i in range(1,N+1)]
-num_layers = 7
+num_layers = 6
 num_features = 64
 num_epochs = 20
 batch_size = 32
@@ -12,12 +12,12 @@ feature_list = {
     'column':   (False, ),
 }
 
-use_pretrained_weights = True
+use_pretrained_weights = False
 save_trained_weights = True
 
 step_size = 0.0005
 train_fraction = .8
-DIR_PATH = "/Data/Ptab/n=7_2row"
+DIR_PATH = "/Data/Ptab/n=6"
 # DIR_PATH = '/root/Hwang/mathematics_conjectures'
 # GRAPH_DIR = os.path.join(DIR_PATH, f'Hwang/Data/N_{N}')
 MODEL_DIR = './trained_models'
