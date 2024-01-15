@@ -328,46 +328,46 @@ def cluster_vertices(P):
             vertices.append([i+1])
     return vertices
 
-def make_matrix_from_T(P, word_of_T, direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
-    n = len(word_of_T)
+def make_matrix_from_T(P, word, direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
+    n = len(word)
     row = []
     col = []
     edge_type = []
     
     col_index = [1]
     for i in range(1, n):
-        if is_P_less(P, word_of_T[i], word_of_T[i-1]):
+        if is_P_less(P, word[i], word[i-1]):
             col_index.append(col_index[-1])
         else:
             col_index.append(col_index[-1]+1)
     for i in range(n):
         for j in range(i+1, n):
-            if not is_P_compatible(P, word_of_T[i], word_of_T[j]):
+            if not is_P_compatible(P, word[i], word[j]):
                 if direction[0] == Direction.FORWARD or direction[0] == Direction.BOTH:
-                    row.append(word_of_T[i]-1)
-                    col.append(word_of_T[j]-1)
+                    row.append(word[i]-1)
+                    col.append(word[j]-1)
                     edge_type.append(EDGE_TYPE.DASHED_ARROW)
                 if direction[0] == Direction.BACKWARD or direction[0] == Direction.BOTH:
-                    row.append(word_of_T[j]-1)
-                    col.append(word_of_T[i]-1)
+                    row.append(word[j]-1)
+                    col.append(word[i]-1)
                     edge_type.append(EDGE_TYPE.DASHED_ARROW)
             elif col_index[i] == col_index[j]:
                 if direction[1] == Direction.FORWARD or direction[1] == Direction.BOTH:
-                    row.append(word_of_T[j]-1)
-                    col.append(word_of_T[i]-1)
+                    row.append(word[j]-1)
+                    col.append(word[i]-1)
                     edge_type.append(EDGE_TYPE.SINGLE_ARROW)
                 if direction[1] == Direction.BACKWARD or direction[1] == Direction.BOTH:
-                    row.append(word_of_T[i]-1)
-                    col.append(word_of_T[j]-1)
+                    row.append(word[i]-1)
+                    col.append(word[j]-1)
                     edge_type.append(EDGE_TYPE.SINGLE_ARROW)
             else:
                 if direction[2] == Direction.FORWARD or direction[2] == Direction.BOTH:
-                    row.append(min(word_of_T[i], word_of_T[j])-1)
-                    col.append(max(word_of_T[i], word_of_T[j])-1)
+                    row.append(min(word[i], word[j])-1)
+                    col.append(max(word[i], word[j])-1)
                     edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
                 if direction[2] == Direction.BACKWARD or direction[2] == Direction.BOTH:
-                    row.append(max(word_of_T[i], word_of_T[j])-1)
-                    col.append(min(word_of_T[i], word_of_T[j])-1)
+                    row.append(max(word[i], word[j])-1)
+                    col.append(min(word[i], word[j])-1)
                     edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
     return sp.coo_matrix((edge_type, (row,col)), shape=(n,n))
 
@@ -824,6 +824,94 @@ def generate_data_PTabs_v6(DIR_PATH,
     with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
         json.dump(shuffled_labels, f)
 
+def generate_data_PTabs_v7(DIR_PATH,
+                        input_N,
+                        shape_checkers,
+                        good_1row_checker=is_good_P_1row_B,
+                        primitive = True,
+                        connected = False,
+                        UPTO_N = False,
+                        json_path = "./json/",):
+    with open(os.path.join(json_path, "Partitions.json")) as f:
+        Partitions = json.load(f)
+    with open(os.path.join(json_path, "PartitionIndex.json")) as f:
+        PartitionIndex = json.load(f)
+    with open(os.path.join(json_path, "TransitionMatrix.json")) as f:
+        TM = json.load(f)
+
+    if UPTO_N:
+        N = 1
+    else:
+        N = input_N
+    graphs = []
+    labels = []
+    while N <= input_N:
+        n_str = str(N)
+        TM_n = np.matrix(TM[n_str])
+        for P in generate_UIO(N, connected=connected):
+            word_list = []
+            if primitive:
+                iter_words = iter_shuffles(cluster_vertices(P))
+            else:
+                iter_words = itertools.permutations(range(1,N+1))
+
+            for word in iter_words:
+                word = list(word)
+                if word in word_list: continue
+                words = words_from_orbit(P, word)
+                word_list.extend(words)
+                
+                gs = dict()
+                pre_calculated = dict()
+                Fs = []
+                for lamb in Partitions[n_str]:
+                    gs[str(lamb)] = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
+                    pre_calculated[str(lamb)] = 0
+                    Fs.append(0)
+                for word in words:
+                    shape = shape_of_word(P, word)
+                    D = P_Des(P, word)
+                    if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
+                    if shape == None: continue
+                    if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
+                    g = make_matrix_from_T(P, word)
+                    chk = check_inductive_disconnectedness_criterion(P, word)
+                    if chk == 'UNKNOWN':
+                        gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
+                    else:
+                        graphs.append(g)
+                        if chk == 'BAD': labels.append(0)
+                        elif chk == 'GOOD':
+                            labels.append(1)
+                            pre_calculated[str(shape)] += 1
+                        else:
+                            print("SOMETHING GOES WRONG!")
+                            return
+                for k, lamb in enumerate(Partitions[n_str]):
+                    if gs[str(lamb)].size == 0: continue
+                    for shape_checker in shape_checkers:
+                        if shape_checker(lamb) == True:
+                            mult = 0
+                            for i in range(len(Partitions[n_str])):
+                                mult += TM[n_str][i][k] * Fs[i]
+                            graphs.append(gs[str(lamb)])
+                            labels.append(mult-pre_calculated[str(lamb)])
+                            if mult < pre_calculated[str(lamb)]:
+                                print("mult < pre_calculated!!")
+                                print(P, word, lamb, mult, pre_calculated[str(lamb)])
+                                return
+                            break
+        N += 1
+    indices = np.arange(len(graphs))
+    np.random.shuffle(indices)
+    shuffled_labels = [int(labels[indices[i]]) for i in range(len(graphs))]
+
+    for i in range(len(indices)):
+        file_path = os.path.join(DIR_PATH, f"graph_{i:05d}.npz")
+        sp.save_npz(file_path, graphs[indices[i]])
+    with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
+        json.dump(shuffled_labels, f)
+
 
 
 ########################################
@@ -951,6 +1039,23 @@ def check_disconnectedness_criterion_for_inductive_argument(P, word):
             return False
     return True
 
+def check_2row_each_row_connected(P, word):
+    shape = shape_of_word(P, word)
+    T = PTab_from_word(P, word)
+    word1 = list(T[0][:shape[1]])
+    word2 = list(T[1])
+    word3 = list(T[0][shape[1]:])
+    if is_good_P_1row_B(P, word1+word3) and is_good_P_1row_B(P, word2): return 'UNKNOWN'
+    if is_good_P_1row_B(P, word1) and is_good_P_1row_B(P, word2+word3): return 'UNKNOWN'
+    return 'BAD'
+
+def check_all_each_row_connected(P, word):
+    shape = shape_of_word(P, word)
+    conj = conjugate(shape)
+    T = PTab_from_word(P, word)
+
+    
+
 def restricted_P_word(P, word):
     res_P = []
     res_word = []
@@ -967,3 +1072,52 @@ def restricted_P_word(P, word):
     for i in range(n):
         res_word.append(sorted_word.index(word[i])+1)
     return res_P, res_word
+
+def PTab_from_word(P, word):
+    shape = shape_of_word(P, word)
+    T = [[] for row in shape]
+    conj = conjugate(shape)
+    k = 0
+    for i in range(len(conj)):
+        for j in reversed(range(conj[i])):
+            T[j].append(word[k])
+            k += 1
+    return T
+
+def check_all_row_connected(P, word, direction='B'):
+    if direction == 'B': row_checker = is_good_P_1row_B
+    elif direction == 'F': row_checker = is_good_P_1row_F
+    else:
+        print("Check the parameter for 'direction'")
+        return
+
+    T = PTab_from_word(P, word)
+    shape = shape_of_word(P, word)
+    shape_of_pieces = []
+    pieces = [[] for i in range(len(shape))]
+    prev = 0
+    for k in reversed(range(len(shape))):
+        if shape[k] > prev:
+            shape_of_pieces.append(k+1)
+            for i in range(k+1):
+                pieces[i].append(T[i][prev:shape[k]])
+            prev = shape[k]
+    base_words = []
+    for i in range(len(pieces)):
+        base_words.append(list(pieces[i][0]))
+    if concatenating(P, shape_of_pieces, list(range(shape_of_pieces[0])), 1, pieces, base_words, row_checker) == True:
+        return True
+    return False
+
+def concatenating(P, shape_of_pieces, prev_block, k, pieces, prev_concatenated_words, good_1row_checker):
+    if k == len(shape_of_pieces):
+        for word in prev_concatenated_words:
+            if good_1row_checker(P, word) == False:
+                return False
+        return True
+    for block in itertools.combinations(prev_block, shape_of_pieces[k]):
+        concatenated_words = deepcopy(prev_concatenated_words)
+        for i, p in enumerate(block):
+            concatenated_words[p].extend(pieces[i][k])
+        if concatenating(P, shape_of_pieces, block, k+1, pieces, concatenated_words, good_1row_checker):
+            return True
