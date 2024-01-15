@@ -875,7 +875,7 @@ def generate_data_PTabs_v7(DIR_PATH,
                     if shape == None: continue
                     if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
                     g = make_matrix_from_T(P, word)
-                    chk = check_inductive_disconnectedness_criterion(P, word)
+                    chk = check_all_row_connected(P, word)
                     if chk == 'UNKNOWN':
                         gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
                     else:
@@ -1049,13 +1049,6 @@ def check_2row_each_row_connected(P, word):
     if is_good_P_1row_B(P, word1) and is_good_P_1row_B(P, word2+word3): return 'UNKNOWN'
     return 'BAD'
 
-def check_all_each_row_connected(P, word):
-    shape = shape_of_word(P, word)
-    conj = conjugate(shape)
-    T = PTab_from_word(P, word)
-
-    
-
 def restricted_P_word(P, word):
     res_P = []
     res_word = []
@@ -1106,8 +1099,8 @@ def check_all_row_connected(P, word, direction='B'):
     for i in range(len(pieces)):
         base_words.append(list(pieces[i][0]))
     if concatenating(P, shape_of_pieces, list(range(shape_of_pieces[0])), 1, pieces, base_words, row_checker) == True:
-        return True
-    return False
+        return 'UNKNOWN'
+    return 'BAD'
 
 def concatenating(P, shape_of_pieces, prev_block, k, pieces, prev_concatenated_words, good_1row_checker):
     if k == len(shape_of_pieces):
