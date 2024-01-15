@@ -6,6 +6,7 @@
 # import imports
 
 from .imports import *
+from copy import deepcopy
 
 def iter_UIO(n, connected=False):
     if n == 1:
