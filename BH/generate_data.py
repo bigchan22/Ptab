@@ -142,6 +142,36 @@ def words_from_orbit(P, word):
                     words.append(temp)
     return words
 
+def words_from_Blasiak_orbit(P, word):
+    words = [list(word)]
+    for word in words:
+        for i in range(1,len(word)-1):
+            if is_P_less(P, word[i], word[i-1]) and (not is_P_less(P, word[i+1], word[i-1])) and is_P_less(P, word[i], word[i+1]):
+                temp = word[:i-1] + [word[i-1],word[i+1],word[i]] + word[i+2:]
+                if not temp in words:
+                    words.append(temp)
+            if is_P_less(P, word[i+1], word[i-1]) and (not is_P_less(P, word[i], word[i-1])) and is_P_less(P, word[i+1], word[i]):
+                temp = word[:i-1] + [word[i-1],word[i+1],word[i]] + word[i+2:]
+                if not temp in words:
+                    words.append(temp)
+            if (not is_P_less(P, word[i+1], word[i-1])) and is_P_less(P, word[i+1], word[i]) and is_P_less(P, word[i-1], word[i]):
+                temp = word[:i-1] + [word[i],word[i-1],word[i+1]] + word[i+2:]
+                if not temp in words:
+                    words.append(temp)
+            if (not is_P_less(P, word[i+1], word[i])) and is_P_less(P, word[i+1], word[i-1]) and is_P_less(P, word[i], word[i-1]):
+                temp = word[:i-1] + [word[i],word[i-1],word[i+1]] + word[i+2:]
+                if not temp in words:
+                    words.append(temp)
+            if not is_P_compatible(P, word[i], word[i+1]) and not is_P_compatible(P, word[i+1], word[i-1]) and is_P_less(P, word[i], word[i-1]):
+                temp = word[:i-1] + [word[i+1],word[i-1],word[i]] + word[i+2:]
+                if not temp in words:
+                    words.append(temp)
+            if not is_P_compatible(P, word[i+1], word[i-1]) and not is_P_compatible(P, word[i-1], word[i]) and is_P_less(P, word[i+1], word[i]):
+                temp = word[:i-1] + [word[i],word[i+1],word[i-1]] + word[i+2:]
+                if not temp in words:
+                    words.append(temp)
+    return words
+
 def shape_of_word(P, word):
     shape = []
     n = len(word)
