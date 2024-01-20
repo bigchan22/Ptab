@@ -199,6 +199,40 @@ def shape_of_word(P, word):
         conj_shape.append(cnt)
     return conj_shape
 
+def s_expansion(P, words):
+    result = dict()
+    for word in words:
+        shape = shape_of_word(P, word)
+        if shape == None: continue
+        if str(shape) in result.items():
+            result[str(shape)] += 1
+        else:
+            result[str(shape)] = 1
+    return result
+
+def h_expansion(P, words):
+    n_str = str(len(P))
+    result = dict()
+    json_path = "./json/"
+    with open(os.path.join(json_path, "Partitions.json")) as f:
+        Partitions = json.load(f)
+    with open(os.path.join(json_path, "PartitionIndex.json")) as f:
+        PartitionIndex = json.load(f)
+    with open(os.path.join(json_path, "TransitionMatrix.json")) as f:
+        TM = json.load(f)
+
+    Fs = [0 for lam in Partitions[n_str]]
+    for word in words:
+        D = P_Des(P, word)
+        if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
+    for k, lamb in enumerate(Partitions[n_str]):
+        mult = 0
+        for i in range(len(Partitions[n_str])):
+            mult += TM[n_str][i][k] * Fs[i]
+        if mult != 0: result[str(lamb)] = mult
+    return result
+
+
 def is_1row(shape):
     if shape == None: return False
     if len(shape) == 1: return True
