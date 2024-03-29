@@ -137,9 +137,9 @@ def test_acc(MODELS):
     #             correct += (predicted == batch.y).sum().item()
                 correct += ((predicted - batch.y)**2<0.1).sum().item()
         accuracy = correct / total
-        loss = float(loss.item())
+        # loss = float(loss.item())
 
-        print("{}, Accuracy: {:.2%}, Loss: {:.15f}".format(i, accuracy, loss))
+        print("{}, Accuracy: {:.2%}, Loss: {:.15f}".format(i, accuracy))
     
 
 
