@@ -115,8 +115,7 @@ def test_acc(MODELS):
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=True)
 
     for i, MODEL in enumerate(MODELS):
-        MODEL_FILE = os.path.join(MODEL_DIR, MODEL)
-        with open(MODEL_FILE, 'rb') as f:
+        with open(MODEL, 'rb') as f:
             model_input = pickle.load(f)
             if len(model_input) == 3:
                 model, GPU_NUM = model_input[0], "0"
