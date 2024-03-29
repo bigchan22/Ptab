@@ -139,7 +139,7 @@ def test_acc(MODELS):
         accuracy = correct / total
         # loss = float(loss.item())
 
-        print("{}, Accuracy: {:.2%}, Loss: {:.15f}".format(i, accuracy))
+        print("{}, Accuracy: {:.2%}".format(i, accuracy))
     
 
 
