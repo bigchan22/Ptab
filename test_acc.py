@@ -20,15 +20,20 @@ def is_1row_graph(row, col, edge_type):
         return False
     return True
 
+def is_1row_graph(row, col, edge_type):
+    if EDGE_TYPE.SINGLE_ARROW in edge_type:
+        return False
+    return True
+
 def is_hook_graph(row, col, edge_type):
     parent = dict()
     for i in range(len(row)):
-        if edge_type[i] != EDGE_TYPE.SINGLE_ARROW: continue
-        r = row[i]
-        c = col[i]
-        parent[r] = c
-        if not c in parent.keys():
-            parent[c] = -1
+        if row[i] == 0: parent[col[i]] = -1
+        if col[i] == 0: parent[row[i]] = -1
+    for i in range(len(row)):
+        if not row[i] in parent.keys(): continue
+        if edge_type[i] == EDGE_TYPE.SINGLE_ARROW:
+            parent[row[i]] = col[i]
     cnt = dict()
     for node in parent.keys():
         if parent[node] == -1:
@@ -49,12 +54,12 @@ def is_hook_graph(row, col, edge_type):
 def is_2col_graph(row, col, edge_type):
     parent = dict()
     for i in range(len(row)):
-        if edge_type[i] != EDGE_TYPE.SINGLE_ARROW: continue
-        r = row[i]
-        c = col[i]
-        parent[r] = c
-        if not c in parent.keys():
-            parent[c] = -1
+        if row[i] == 0: parent[col[i]] = -1
+        if col[i] == 0: parent[row[i]] = -1
+    for i in range(len(row)):
+        if not row[i] in parent.keys(): continue
+        if edge_type[i] == EDGE_TYPE.SINGLE_ARROW:
+            parent[row[i]] = col[i]
     cnt = 0
     for node in parent.keys():
         if parent[node] == -1:
