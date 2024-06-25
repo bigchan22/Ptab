@@ -467,6 +467,62 @@ def make_matrix_from_T(P, word, direction=(Direction.FORWARD, Direction.FORWARD,
                     edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
     return sp.coo_matrix((edge_type, (row,col)), shape=(n,n))
 
+def make_matrix_from_T_v2(P, word, direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
+    n = len(word)
+    row = []
+    col = []
+    edge_type = []
+    
+    col_index = [1]
+    for i in range(1, n):
+        if is_P_less(P, word[i], word[i-1]):
+            col_index.append(col_index[-1])
+        else:
+            col_index.append(col_index[-1]+1)
+    for i in range(n):
+        for j in range(i+1, n):
+            if not is_P_compatible(P, word[i], word[j]):
+                if direction[0] == Direction.FORWARD or direction[0] == Direction.BOTH:
+                    row.append(word[i]-1)
+                    col.append(word[j]-1)
+                    edge_type.append(EDGE_TYPE.DASHED_ARROW)
+                if direction[0] == Direction.BACKWARD or direction[0] == Direction.BOTH:
+                    row.append(word[j]-1)
+                    col.append(word[i]-1)
+                    edge_type.append(EDGE_TYPE.DASHED_ARROW)
+            elif col_index[i] == col_index[j]:
+                if direction[1] == Direction.FORWARD or direction[1] == Direction.BOTH:
+                    row.append(word[j]-1)
+                    col.append(word[i]-1)
+                    edge_type.append(EDGE_TYPE.SINGLE_ARROW)
+                if direction[1] == Direction.BACKWARD or direction[1] == Direction.BOTH:
+                    row.append(word[i]-1)
+                    col.append(word[j]-1)
+                    edge_type.append(EDGE_TYPE.SINGLE_ARROW)
+            else:
+                if direction[2] == Direction.FORWARD or direction[2] == Direction.BOTH:
+                    row.append(min(word[i], word[j])-1)
+                    col.append(max(word[i], word[j])-1)
+                    edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
+                if direction[2] == Direction.BACKWARD or direction[2] == Direction.BOTH:
+                    row.append(max(word[i], word[j])-1)
+                    col.append(min(word[i], word[j])-1)
+                    edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
+    for a in range(1,n+1):
+        for c in range(a+1, n+1):
+            if not is_P_less(P, a, c): continue
+            chk = False
+            for b in range(a+1, c):
+                if not is_P_less(P, a, b) and not is_P_less(P, b, c):
+                    chk = True
+                    break
+            if chk == True:
+                row.append(a-1)
+                col.append(c-1)
+                edge_type.append(EDGE_TYPE.TRIPLE_ARROW)
+    return sp.coo_matrix((edge_type, (row,col)), shape=(n,n))
+
+
 def generate_data_PTabs(DIR_PATH,
                         input_N,
                         checkers,
@@ -1008,6 +1064,93 @@ def generate_data_PTabs_v7(DIR_PATH,
     with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
         json.dump(shuffled_labels, f)
 
+def generate_data_PTabs_v8(DIR_PATH,
+                        input_N,
+                        shape_checkers,
+                        good_checker,
+                        primitive = True,
+                        connected = False,
+                        UPTO_N = False,
+                        json_path = "./json/",):
+    with open(os.path.join(json_path, "Partitions.json")) as f:
+        Partitions = json.load(f)
+    with open(os.path.join(json_path, "PartitionIndex.json")) as f:
+        PartitionIndex = json.load(f)
+    with open(os.path.join(json_path, "TransitionMatrix.json")) as f:
+        TM = json.load(f)
+
+    if UPTO_N:
+        N = 1
+    else:
+        N = input_N
+    graphs = []
+    labels = []
+    while N <= input_N:
+        n_str = str(N)
+        TM_n = np.matrix(TM[n_str])
+        for P in generate_UIO(N, connected=connected):
+            word_list = []
+            if primitive:
+                iter_words = iter_shuffles(cluster_vertices(P))
+            else:
+                iter_words = itertools.permutations(range(1,N+1))
+
+            for word in iter_words:
+                word = list(word)
+                if word in word_list: continue
+                words = words_from_orbit(P, word)
+                word_list.extend(words)
+                
+                gs = dict()
+                pre_calculated = dict()
+                Fs = []
+                for lamb in Partitions[n_str]:
+                    gs[str(lamb)] = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
+                    pre_calculated[str(lamb)] = 0
+                    Fs.append(0)
+                for word in words:
+                    shape = shape_of_word(P, word)
+                    D = P_Des(P, word)
+                    if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
+                    if shape == None: continue
+                    if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
+                    g = make_matrix_from_T_v2(P, word)
+                    chk = good_checker(P, word)
+                    if chk == 'UNKNOWN':
+                        gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
+                    else:
+                        graphs.append(g)
+                        if chk == 'BAD': labels.append(0)
+                        elif chk == 'GOOD':
+                            labels.append(1)
+                            pre_calculated[str(shape)] += 1
+                        else:
+                            print("SOMETHING GOES WRONG!")
+                            return
+                for k, lamb in enumerate(Partitions[n_str]):
+                    if gs[str(lamb)].size == 0: continue
+                    for shape_checker in shape_checkers:
+                        if shape_checker(lamb) == True:
+                            mult = 0
+                            for i in range(len(Partitions[n_str])):
+                                mult += TM[n_str][i][k] * Fs[i]
+                            graphs.append(gs[str(lamb)])
+                            labels.append(mult-pre_calculated[str(lamb)])
+                            if mult < pre_calculated[str(lamb)]:
+                                print("mult < pre_calculated!!")
+                                print(P, word, lamb, mult, pre_calculated[str(lamb)])
+                                return
+                            break
+        N += 1
+    indices = np.arange(len(graphs))
+    np.random.shuffle(indices)
+    shuffled_labels = [int(labels[indices[i]]) for i in range(len(graphs))]
+
+    for i in range(len(indices)):
+        file_path = os.path.join(DIR_PATH, f"graph_{i:05d}.npz")
+        sp.save_npz(file_path, graphs[indices[i]])
+    with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
+        json.dump(shuffled_labels, f)
 
 
 ########################################
