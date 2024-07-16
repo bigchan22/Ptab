@@ -4,6 +4,5 @@
 *.pth
 *.json
 *.pickle
-*.ipynb
 *.DS_Store
 /tex/*
