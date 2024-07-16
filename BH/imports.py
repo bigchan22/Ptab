@@ -20,7 +20,7 @@ from typing import Sequence
 #import jax.numpy as jnp
 import matplotlib
 import matplotlib.pyplot as plt
-#i:wqmport optax
+#import optax
 import psutil
 import seaborn as sns
 
@@ -29,6 +29,7 @@ class EDGE_TYPE():
   SINGLE_ARROW = 2
   DOUBLE_ARROW = 3
   DASHED_ARROW = 4
+  TRIPLE_ARROW = 5
   
 class Direction(enum.Enum):
   FORWARD = enum.auto()
