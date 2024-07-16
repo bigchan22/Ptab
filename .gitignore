@@ -6,3 +6,4 @@
 *.pickle
 *.DS_Store
 /tex/*
+/__pycache__/
