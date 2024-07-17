@@ -4,6 +4,6 @@
 *.pth
 *.json
 *.pickle
-*.ipynb
 *.DS_Store
 /tex/*
+/__pycache__/

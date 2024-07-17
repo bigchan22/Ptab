@@ -5,7 +5,6 @@ import os
 from BH.data_loader import *
 from BH.generate_data import *
 from training_info import *
-# from Model_e import Model_e,Direction,Reduction
 from Train import train,print_accuracies
 
 import pickle
@@ -34,7 +33,7 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 train_dataset = CustomDataset(train_dataset)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # model = pastGCN().to(device)
 if use_pretrained_weights == True:
     try:
@@ -45,7 +44,7 @@ if use_pretrained_weights == True:
         print("There is no trained model")
         use_pretrained_weights = False
 if use_pretrained_weights == False:
-    model = GCN_multi(graph_deg, depth, node_dim).to(device)
+    model = GCN_multi(graph_deg, depth, node_dim, direction).to(device)
     max_accuracy = 0
     min_loss = 100
 # data = batch.to(device)
@@ -54,7 +53,7 @@ loss_function = torch.nn.CrossEntropyLoss()
 loss_function = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=step_size, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer=optimizer,
-                                        lr_lambda=lambda epoch: 0.98 ** epoch,
+                                        lr_lambda=lambda epoch: 0.993 ** epoch,
                                         last_epoch=-1,
                                         verbose=False)
 
