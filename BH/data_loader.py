@@ -1,5 +1,8 @@
-from .imports import *
-from .feature_functions import *
+import sys, os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from imports import *
+from feature_functions import *
 
 @dataclasses.dataclass(frozen=True)
 class GraphData:

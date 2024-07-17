@@ -6,7 +6,7 @@ GPU_NUM = "0"
 num_epochs = 1000
 batch_size = 64
 
-graph_deg = 7
+graph_deg = 6
 num_layers = graph_deg
 num_features = 64
 feature_list = {
@@ -21,7 +21,7 @@ UPTO = False
 direction = "FFB2"
 
 shape_indicator = {
-    'all_with_all_row_connectedness_criterion': (True, ),
+    'all_with_all_row_connectedness_criterion': (False, ),
     'all_with_inductive_connectedness_criterion': (False, ),
     '2row_less_with_all_row_connectedness_criterion': (False, ),
     '2row_less_with_inductive_connectedness_criterion': (False, ),

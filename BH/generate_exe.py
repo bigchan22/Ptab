@@ -1,8 +1,8 @@
 from data_loader import *
 from generate_data import *
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-
-N = 8
+N = 6
 
 directions = {"FORWARD": (Direction.FORWARD, 'F'),
              "BACKWARD": (Direction.BACKWARD, 'B'),
