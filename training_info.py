@@ -18,16 +18,29 @@ feature_list = {
 connected = False
 UPTO = False
 
-direction = "FFB2"
+direction = "2222"
 
 shape_indicator = {
     'all_with_all_row_connectedness_criterion': (False, ),
     'all_with_inductive_connectedness_criterion': (False, ),
+    '2row_less': (True, ),
     '2row_less_with_all_row_connectedness_criterion': (False, ),
     '2row_less_with_inductive_connectedness_criterion': (False, ),
     '3row_less_with_all_row_connectedness_criterion': (False, ),
     '3row_less_with_inductive_connectedness_criterion': (False, ),
 }
+
+shape= {
+    'all': (False, ),
+    'all': (False, ),
+    '2row_less': (True, ),
+    '3row_less': (False, ),
+}
+fileter_indicator = {
+    'with_all_row_connectedness_criterion':(False,), 
+    'with_inductive_connectedness_criterion':(False,),
+}
+
 
 use_pretrained_weights = False
 save_trained_weights = True
@@ -44,6 +57,9 @@ for key in shape_indicator:
         DIR_PATH += f'_{key}'
         MODEL_FILE += f'_{key}'
 
+if direction:
+    DIR_PATH += f'_{direction}'
+    MODEL_FILE += f'_{direction}'
 if connected == True:
     DIR_PATH += "_connected"
     MODEL_FILE += "_connected"
