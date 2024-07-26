@@ -1,3 +1,4 @@
+*.out
 *.npz
 .idea*
 *.pyc
@@ -7,3 +8,5 @@
 *.DS_Store
 /tex/*
 /__pycache__/
+/BH/__pycache__/
+BH/__pycache__/

@@ -566,77 +566,7 @@ def make_matrix_from_T_v2(P, word, direction=(Direction.FORWARD, Direction.FORWA
 ##      So, good_checker has to have three types of return values ('GOOD', 'BAD', 'UNKNOWN')
 ##      I implemented some good_checkers below this function.
 ## Three parameters (primitive, connected, UPTO_N) may be not important, and I recommend to set (True, False, False), respectively.
-def generate_data_PTabs_v2(DIR_PATH,
-                        input_N,
-                        shape_checkers,
-                        primitive = True,
-                        connected = False,
-                        UPTO_N = False,
-                        json_path = "./json/",
-                        direction = (Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
-    with open(os.path.join(json_path, "Partitions.json")) as f:
-        Partitions = json.load(f)
-    with open(os.path.join(json_path, "PartitionIndex.json")) as f:
-        PartitionIndex = json.load(f)
-    with open(os.path.join(json_path, "TransitionMatrix.json")) as f:
-        TM = json.load(f)
-        
-    if UPTO_N:
-        N = 1
-    else:
-        N = input_N
-    graphs = []
-    labels = []
-    while N <= input_N:
-        n_str = str(N)
-        TM_n = np.matrix(TM[n_str])
-        for P in generate_UIO(N, connected=connected):
-            word_list = []
-            if primitive:
-                iter_words = iter_shuffles(cluster_vertices(P))
-            else:
-                iter_words = itertools.permutations(range(1,N+1))
 
-            for word in iter_words:
-                word = list(word)
-                if word in word_list: continue
-                words = words_from_orbit(P, word)
-                word_list.extend(words)
-                
-                gs = dict()
-                Fs = []
-                for lamb in Partitions[n_str]:
-                    gs[str(lamb)] = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
-                    Fs.append(0)
-                for word in words:
-                    shape = shape_of_word(P, word)
-                    D = P_Des(P, word)
-                    if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
-                    if shape == None: continue
-                    shape = str(shape)
-                    g = make_matrix_from_T(P, word, direction)
-                    gs[shape] = sp.block_diag((gs[shape], g))
-                for k, lamb in enumerate(Partitions[n_str]):
-                    if gs[str(lamb)].size == 0: continue
-                    for shape_checker in shape_checkers:
-                        if shape_checker(lamb) == True:
-                            mult = 0
-                            for i in range(len(Partitions[n_str])):
-                                mult += TM[n_str][i][k] * Fs[i]
-                            graphs.append(gs[str(lamb)])
-                            labels.append(mult)
-                            break
-        N += 1
-    indices = np.arange(len(graphs))
-    np.random.shuffle(indices)
-    shuffled_labels = [int(labels[indices[i]]) for i in range(len(graphs))]
-
-    os.makedirs(DIR_PATH, exist_ok=True)
-    for i in range(len(indices)):
-        file_path = os.path.join(DIR_PATH, f"graph_{i:05d}.npz")
-        sp.save_npz(file_path, graphs[indices[i]])
-    with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
-        json.dump(shuffled_labels, f)
 
 
 def generate_data_PTabs_v8(DIR_PATH,
@@ -814,7 +744,7 @@ def check_bad_2row_criterion(P, word, good_1row_checker=is_good_P_1row_B):
         return 'UNKNOWN'
     return 'BAD'
 
-def check_inductive_disconnectedness_criterion(P, word):
+def check_inductive_disconnectedness_criterion(P, word):####'with_inductive_connectedness_criterion':(False,),
     shape = shape_of_word(P, word)
     conj = conjugate(shape)
     k = len(word)
@@ -891,7 +821,7 @@ def PTab_from_word(P, word):
             k += 1
     return T
 
-def check_all_row_connected(P, word, direction='B'):
+def check_all_row_connected(P, word, direction='B'):  ###'with_all_row_connectedness_criterion':(False,), 
     if direction == 'B': row_checker = is_good_P_1row_B
     elif direction == 'F': row_checker = is_good_P_1row_F
     else:

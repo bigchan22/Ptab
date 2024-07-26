@@ -6,13 +6,13 @@ GPU_NUM = "0"
 num_epochs = 1000
 batch_size = 64
 
-graph_deg = 6
+graph_deg = 7
 num_layers = graph_deg
 num_features = 64
 feature_list = {
     'constant':    (False, constant_feature),
     'column':      (False, column_indicator),
-    'norm_column': (True, normalized_column_indicator),
+    'norm_column': (True, normalized_column_indicator), #   Feauture
     'norm_column_rev': (False, normalized_column_rev_indicator),
 }
 connected = False
@@ -22,8 +22,8 @@ direction = "2222"
 
 shape_indicator = {
     'all_with_all_row_connectedness_criterion': (False, ),
-    'all_with_inductive_connectedness_criterion': (False, ),
-    '2row_less': (True, ),
+    'all_with_inductive_connectedness_criterion': (True, ),
+    '2row_less': (False, ),
     '2row_less_with_all_row_connectedness_criterion': (False, ),
     '2row_less_with_inductive_connectedness_criterion': (False, ),
     '3row_less_with_all_row_connectedness_criterion': (False, ),
@@ -31,12 +31,11 @@ shape_indicator = {
 }
 
 shape= {
-    'all': (False, ),
-    'all': (False, ),
+    'all': (False, ),# 3개다 
     '2row_less': (True, ),
     '3row_less': (False, ),
 }
-fileter_indicator = {
+filter_indicator = {
     'with_all_row_connectedness_criterion':(False,), 
     'with_inductive_connectedness_criterion':(False,),
 }
@@ -57,9 +56,7 @@ for key in shape_indicator:
         DIR_PATH += f'_{key}'
         MODEL_FILE += f'_{key}'
 
-if direction:
-    DIR_PATH += f'_{direction}'
-    MODEL_FILE += f'_{direction}'
+
 if connected == True:
     DIR_PATH += "_connected"
     MODEL_FILE += "_connected"
@@ -75,5 +72,5 @@ for key in feature_list.keys():
     if feature_list[key][0] == True:
         MODEL_FILE += f'_{key}'
 MODEL_FILE += f'_{direction}'
-MODEL_FILE += '_v3.pickle'
+MODEL_FILE += '.pickle'
 
