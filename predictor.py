@@ -161,16 +161,10 @@ def predict_tableau(P, word, MODEL):
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     device ="cuda:0"
 
-<<<<<<< HEAD
-    with open(MODEL_FILE, 'rb') as f:
-        model, acc = pickle.load(f)
-        model.to(device)
-=======
     with open(MODEL, 'rb') as f:
         model, acc, loss = pickle.load(f)
         model.to(device)
 
->>>>>>> ad77f66ec75141a48e589d13e1d09d0baf7ddbe2
     for batch in T_loader:
         batch.to(device)
         print(batch.batch)

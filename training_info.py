@@ -18,7 +18,7 @@ feature_list = {
 connected = False
 UPTO = False
 
-direction = "2222"
+direction = "222"
 
 shape_indicator = {
     'all_with_all_row_connectedness_criterion': (False, ),

@@ -92,17 +92,17 @@ class GCN_single(torch.nn.Module):
                 x_sum += x4
 
             #######################
-            
-            mask5 = (edge_types == 5)
-            edge_index5 = edge_index[:, mask5.squeeze()]
-            if self.direction[3] == 'F' or self.direction[3] == '2':
-                x5 = self.conv5(x, edge_index5)
-                x_sum += x5
-            if self.direction[3] == 'B' or self.direction[3] == '2':
-                edge_index5_b = torch.zeros_like(edge_index5) 
-                edge_index5_b[index] = edge_index5
-                x5 = self.conv5_b(x, edge_index5_b)
-                x_sum += x5
+            if len(self.direction) > 3:
+                mask5 = (edge_types == 5)
+                edge_index5 = edge_index[:, mask5.squeeze()]
+                if self.direction[3] == 'F' or self.direction[3] == '2':
+                    x5 = self.conv5(x, edge_index5)
+                    x_sum += x5
+                if self.direction[3] == 'B' or self.direction[3] == '2':
+                    edge_index5_b = torch.zeros_like(edge_index5) 
+                    edge_index5_b[index] = edge_index5
+                    x5 = self.conv5_b(x, edge_index5_b)
+                    x_sum += x5
 
             #######################
             
