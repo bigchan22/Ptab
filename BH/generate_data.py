@@ -618,6 +618,43 @@ def generate_data_PTabs_v7(DIR_PATH,
                     if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
                     if shape == None: continue
                     if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
+                    g = make_matrix_from_T(P, word)
+                    chk = check_all_row_connected(P, word)
+                    if chk == 'UNKNOWN':
+                        gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
+                    else:
+                        graphs.append(g)
+                        if chk == 'BAD': labels.append(0)
+                        elif chk == 'GOOD':
+                            labels.append(1)
+                            pre_calculated[str(shape)] += 1
+                        else:
+                            print("SOMETHING GOES WRONG!")
+                            return
+                for k, lamb in enumerate(Partitions[n_str]):
+                    if gs[str(lamb)].size == 0: continue
+                    for shape_checker in shape_checkers:
+                        if shape_checker(lamb) == True:
+                            mult = 0
+                            for i in range(len(Partitions[n_str])):
+                                mult += TM[n_str][i][k] * Fs[i]
+                            graphs.append(gs[str(lamb)])
+                            labels.append(mult-pre_calculated[str(lamb)])
+                            if mult < pre_calculated[str(lamb)]:
+                                print("mult < pre_calculated!!")
+                                print(P, word, lamb, mult, pre_calculated[str(lamb)])
+                                return
+                            break
+        N += 1
+    indices = np.arange(len(graphs))
+    np.random.shuffle(indices)
+    shuffled_labels = [int(labels[indices[i]]) for i in range(len(graphs))]
+
+    for i in range(len(indices)):
+        file_path = os.path.join(DIR_PATH, f"graph_{i:05d}.npz")
+        sp.save_npz(file_path, graphs[indices[i]])
+    with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
+        json.dump(shuffled_labels, f)
 
 def generate_data_PTabs_v8(DIR_PATH,
                         input_N,
