@@ -7,3 +7,10 @@
 *.DS_Store
 /tex/*
 /__pycache__/
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.synctex.gz
