@@ -568,6 +568,56 @@ def make_matrix_from_T_v2(P, word, direction=(Direction.FORWARD, Direction.FORWA
 ## Three parameters (primitive, connected, UPTO_N) may be not important, and I recommend to set (True, False, False), respectively.
 
 
+def generate_data_PTabs_v7(DIR_PATH,
+                        input_N,
+                        shape_checkers,
+                        good_1row_checker=is_good_P_1row_B,
+                        primitive = True,
+                        connected = False,
+                        UPTO_N = False,
+                        json_path = "./json/",):
+    with open(os.path.join(json_path, "Partitions.json")) as f:
+        Partitions = json.load(f)
+    with open(os.path.join(json_path, "PartitionIndex.json")) as f:
+        PartitionIndex = json.load(f)
+    with open(os.path.join(json_path, "TransitionMatrix.json")) as f:
+        TM = json.load(f)
+
+    if UPTO_N:
+        N = 1
+    else:
+        N = input_N
+    graphs = []
+    labels = []
+    while N <= input_N:
+        n_str = str(N)
+        TM_n = np.matrix(TM[n_str])
+        for P in generate_UIO(N, connected=connected):
+            word_list = []
+            if primitive:
+                iter_words = iter_shuffles(cluster_vertices(P))
+            else:
+                iter_words = itertools.permutations(range(1,N+1))
+
+            for word in iter_words:
+                word = list(word)
+                if word in word_list: continue
+                words = words_from_orbit(P, word)
+                word_list.extend(words)
+                
+                gs = dict()
+                pre_calculated = dict()
+                Fs = []
+                for lamb in Partitions[n_str]:
+                    gs[str(lamb)] = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
+                    pre_calculated[str(lamb)] = 0
+                    Fs.append(0)
+                for word in words:
+                    shape = shape_of_word(P, word)
+                    D = P_Des(P, word)
+                    if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
+                    if shape == None: continue
+                    if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
 
 def generate_data_PTabs_v8(DIR_PATH,
                         input_N,
