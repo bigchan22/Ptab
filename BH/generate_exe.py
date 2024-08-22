@@ -1,7 +1,7 @@
 from data_loader import *
 from generate_data import *
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
+use_ppath = True
 N = 7
 
 directions = {"FORWARD": (Direction.FORWARD, 'F'),
@@ -31,13 +31,25 @@ for shape in shapes.keys():
     for connect in connectedness.keys():
         for filter in filters.keys():
             DIR_PATH = f"/Data/Ptab/n={N}_{shapes[shape][1]}_{filters[filter][1]}_{connectedness[connect][1]}"
-            print(DIR_PATH)
             os.makedirs(DIR_PATH, exist_ok=True)
-            generate_data_PTabs_v8(DIR_PATH,
-                                   N,
-                                   [shapes[shape][0]],
-                                   filters[filter][0],
-                                   primitive=True,
-                                   connected=connectedness[connect][0]
-                                  )
-
+            if use_ppath:
+                DIR_PATH += f"_ppath"
+                print(DIR_PATH)
+                os.makedirs(DIR_PATH, exist_ok=True)
+                generate_data_PTabs_v8(DIR_PATH,
+                                       N,
+                                       [shapes[shape][0]],
+                                       filters[filter][0],
+                                       primitive=True,
+                                       connected=connectedness[connect][0]
+                                      )
+            else:
+                print(DIR_PATH)
+                os.makedirs(DIR_PATH, exist_ok=True)
+                generate_data_PTabs_v7(DIR_PATH,
+                                       N,
+                                       [shapes[shape][0]],
+                                       filters[filter][0],
+                                       primitive=True,
+                                       connected=connectedness[connect][0]
+                                      )

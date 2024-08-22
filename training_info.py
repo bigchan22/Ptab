@@ -1,10 +1,11 @@
 import os
 from BH.feature_functions import *
 
-GPU_NUM = "0"
-
+GPU_NUM = "1"
 num_epochs = 1000
 batch_size = 64
+
+use_ppath = False
 
 graph_deg = 7
 num_layers = graph_deg
@@ -21,8 +22,8 @@ UPTO = False
 direction = "222"
 
 shape_indicator = {
-    'all_with_all_row_connectedness_criterion': (False, ),
-    'all_with_inductive_connectedness_criterion': (True, ),
+    'all_with_all_row_connectedness_criterion': (True, ),
+    'all_with_inductive_connectedness_criterion': (False, ),
     '2row_less': (False, ),
     '2row_less_with_all_row_connectedness_criterion': (False, ),
     '2row_less_with_inductive_connectedness_criterion': (False, ),
@@ -66,8 +67,10 @@ elif connected == False:
 if UPTO == True:
     DIR_PATH += "_UPTO"
     MODEL_FILE += "_UPTO"
+if use_ppath:
+    DIR_PATH += "_ppath"    
+    MODEL_FILE += "_ppath"
     
-
 for key in feature_list.keys():
     if feature_list[key][0] == True:
         MODEL_FILE += f'_{key}'
