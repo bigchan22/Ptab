@@ -495,6 +495,50 @@ def make_matrix_from_T(P, word, direction=(Direction.FORWARD, Direction.FORWARD,
                     edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
     return sp.coo_matrix((edge_type, (row,col)), shape=(n,n))
 
+
+def make_matrix_from_T_col_info(P, word, direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
+    n = len(word)
+    row = []
+    col = []
+    edge_type = []
+    
+    col_index = [1]
+    for i in range(1, n):
+        if is_P_less(P, word[i], word[i-1]):
+            col_index.append(col_index[-1])
+        else:
+            col_index.append(col_index[-1]+1)
+    for i in range(n):
+        for j in range(i+1, n):
+            if not is_P_compatible(P, word[i], word[j]):
+                if direction[0] == Direction.FORWARD or direction[0] == Direction.BOTH:
+                    row.append(word[i]-1)
+                    col.append(word[j]-1)
+                    edge_type.append(EDGE_TYPE.DASHED_ARROW)
+                if direction[0] == Direction.BACKWARD or direction[0] == Direction.BOTH:
+                    row.append(word[j]-1)
+                    col.append(word[i]-1)
+                    edge_type.append(EDGE_TYPE.DASHED_ARROW)
+            elif col_index[i] == col_index[j]:
+                if direction[1] == Direction.FORWARD or direction[1] == Direction.BOTH:
+                    row.append(word[j]-1)
+                    col.append(word[i]-1)
+                    edge_type.append(EDGE_TYPE.SINGLE_ARROW)
+                if direction[1] == Direction.BACKWARD or direction[1] == Direction.BOTH:
+                    row.append(word[i]-1)
+                    col.append(word[j]-1)
+                    edge_type.append(EDGE_TYPE.SINGLE_ARROW)
+            else:
+                if direction[2] == Direction.FORWARD or direction[2] == Direction.BOTH:
+                    row.append(word[i]-1)
+                    col.append(word[j]-1)
+                    edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
+                if direction[2] == Direction.BACKWARD or direction[2] == Direction.BOTH:
+                    row.append(word[j]-1)
+                    col.append(word[i]-1)
+                    edge_type.append(EDGE_TYPE.DOUBLE_ARROW)
+    return sp.coo_matrix((edge_type, (row,col)), shape=(n,n))
+
 ## Given a poset P and a word (which is a column word of some P-tableau), return the graph model of the input tableau as a scipy matrix.
 ## The additional parameter 'direction' determines directions of edges, but at this moment, we do not use this parameter.
 ## This version of make_matrix_from_T is new, which means that the matrix has 4 types of edges

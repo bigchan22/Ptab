@@ -1,27 +1,27 @@
 from data_loader import *
 from generate_data import *
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-use_ppath = True
-N = 7
+use_ppath = False
+N = 8
 
-directions = {"FORWARD": (Direction.FORWARD, 'F'),
-             "BACKWARD": (Direction.BACKWARD, 'B'),
-             "BOTH": (Direction.BOTH, '2'),
-             }
+#directions = {"FORWARD": (Direction.FORWARD, 'F'),
+#             "BACKWARD": (Direction.BACKWARD, 'B'),
+#             "BOTH": (Direction.BOTH, '2'),
+#             }
 
 shapes = {
-          "2row_less": (is_2row_less, "2row_less"),
-          "3row_less": (is_3row_less, "3row_less"),
+#         "2row_less": (is_2row_less, "2row_less"),
+#          "3row_less": (is_3row_less, "3row_less"),
           "all": (any_shape, "all"),
 #           "hook": (is_hook, "hook"),
 #           "3col_less": (is_3col_less, "3col_less"),
          }
 filters ={
-    "with_all_row_connectedness_criterion":(check_all_row_connected,"with_all_row_connectedness_criterion"), 
+#    "with_all_row_connectedness_criterion":(check_all_row_connected,"with_all_row_connectedness_criterion"), 
     'with_inductive_connectedness_criterion':(check_inductive_disconnectedness_criterion,'with_inductive_connectedness_criterion'),
 }
 connectedness = {
-                "connected": (True, "connected"),
+#                "connected": (True, "connected"),
                  "disconnected": (False, "disconnected")
                 }
 
