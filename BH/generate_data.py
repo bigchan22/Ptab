@@ -612,7 +612,7 @@ def make_matrix_from_T_v2(P, word, direction=(Direction.FORWARD, Direction.FORWA
 ## Three parameters (primitive, connected, UPTO_N) may be not important, and I recommend to set (True, False, False), respectively.
 
 
-def generate_data_PTabs_v7(DIR_PATH,
+def generate_data_PTabs(DIR_PATH,
                         input_N,
                         shape_checkers,
                         good_1row_checker=is_good_P_1row_B,
@@ -700,7 +700,7 @@ def generate_data_PTabs_v7(DIR_PATH,
     with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
         json.dump(shuffled_labels, f)
 
-def generate_data_PTabs_v8(DIR_PATH,
+def generate_data_PTabs_ppath(DIR_PATH,
                         input_N,
                         shape_checkers,
                         good_checker,

@@ -36,7 +36,7 @@ for shape in shapes.keys():
                 DIR_PATH += f"_ppath"
                 print(DIR_PATH)
                 os.makedirs(DIR_PATH, exist_ok=True)
-                generate_data_PTabs_v8(DIR_PATH,
+                generate_data_PTabs_ppath(DIR_PATH,
                                        N,
                                        [shapes[shape][0]],
                                        filters[filter][0],
@@ -46,7 +46,7 @@ for shape in shapes.keys():
             else:
                 print(DIR_PATH)
                 os.makedirs(DIR_PATH, exist_ok=True)
-                generate_data_PTabs_v7(DIR_PATH,
+                generate_data_PTabs(DIR_PATH,
                                        N,
                                        [shapes[shape][0]],
                                        filters[filter][0],
