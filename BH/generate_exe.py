@@ -3,7 +3,7 @@ from generate_data import *
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 use_ppath = False
 N = 8
-
+column_info = "column_direction"
 #directions = {"FORWARD": (Direction.FORWARD, 'F'),
 #             "BACKWARD": (Direction.BACKWARD, 'B'),
 #             "BOTH": (Direction.BOTH, '2'),
@@ -31,6 +31,8 @@ for shape in shapes.keys():
     for connect in connectedness.keys():
         for filter in filters.keys():
             DIR_PATH = f"/Data/Ptab/n={N}_{shapes[shape][1]}_{filters[filter][1]}_{connectedness[connect][1]}"
+            if not column_info == 'original':
+                DIR_PATH = DIR_PATH + f"{column_info}"
             os.makedirs(DIR_PATH, exist_ok=True)
             if use_ppath:
                 DIR_PATH += f"_ppath"
@@ -51,5 +53,6 @@ for shape in shapes.keys():
                                        [shapes[shape][0]],
                                        filters[filter][0],
                                        primitive=True,
-                                       connected=connectedness[connect][0]
+                                       connected=connectedness[connect][0],
+                                       column_info=column_info
                                       )

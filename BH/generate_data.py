@@ -619,7 +619,8 @@ def generate_data_PTabs(DIR_PATH,
                         primitive = True,
                         connected = False,
                         UPTO_N = False,
-                        json_path = "./json/",):
+                        json_path = "./json/",
+                        column_info = 'original'):
     with open(os.path.join(json_path, "Partitions.json")) as f:
         Partitions = json.load(f)
     with open(os.path.join(json_path, "PartitionIndex.json")) as f:
@@ -662,7 +663,13 @@ def generate_data_PTabs(DIR_PATH,
                     if D in Partitions[n_str]: Fs[Partitions[n_str].index(D)] += 1
                     if shape == None: continue
                     if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
-                    g = make_matrix_from_T(P, word)
+                    if column_info == "original":
+                        g = make_matrix_from_T(P, word)
+                    elif column_info == "column_direction":
+                        g = make_matrix_from_T_col_info(P, word)
+                    elif column_info == "column_direc_column_same":
+                        g = make_matrix_from_T_col_info(P, word,
+                                                        direction=(Direction.FORWARD, Direction.BOTH, Direction.FORWARD))
                     chk = check_all_row_connected(P, word)
                     if chk == 'UNKNOWN':
                         gs[str(shape)] = sp.block_diag((gs[str(shape)], g))

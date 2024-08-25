@@ -7,7 +7,7 @@ batch_size = 64
 
 use_ppath = False
 
-graph_deg = 7
+graph_deg = 8
 num_layers = graph_deg
 num_features = 64
 feature_list = {
@@ -22,8 +22,8 @@ UPTO = False
 direction = "222"
 
 shape_indicator = {
-    'all_with_all_row_connectedness_criterion': (True, ),
-    'all_with_inductive_connectedness_criterion': (False, ),
+    'all_with_all_row_connectedness_criterion': (False, ),
+    'all_with_inductive_connectedness_criterion': (True, ),
     '2row_less': (False, ),
     '2row_less_with_all_row_connectedness_criterion': (False, ),
     '2row_less_with_inductive_connectedness_criterion': (False, ),
