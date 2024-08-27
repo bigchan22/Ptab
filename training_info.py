@@ -1,11 +1,12 @@
 import os
 from BH.feature_functions import *
 
-GPU_NUM = "1"
+GPU_NUM = "0"
 num_epochs = 1000
 batch_size = 64
 
 use_ppath = False
+column_info = "column_direction"
 
 graph_deg = 8
 num_layers = graph_deg
@@ -67,6 +68,9 @@ elif connected == False:
 if UPTO == True:
     DIR_PATH += "_UPTO"
     MODEL_FILE += "_UPTO"
+if not column_info == "original":
+    DIR_PATH += column_info
+    MODEL_FILE += column_info
 if use_ppath:
     DIR_PATH += "_ppath"    
     MODEL_FILE += "_ppath"
