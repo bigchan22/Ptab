@@ -2,8 +2,10 @@ from data_loader import *
 from generate_data import *
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 use_ppath = False
-N = 8
+N = 5
 column_info = "column_direction"
+column_info = "column_direction"
+column_info = "original"
 #directions = {"FORWARD": (Direction.FORWARD, 'F'),
 #             "BACKWARD": (Direction.BACKWARD, 'B'),
 #             "BOTH": (Direction.BOTH, '2'),
@@ -21,8 +23,8 @@ filters ={
     'with_inductive_connectedness_criterion':(check_inductive_disconnectedness_criterion,'with_inductive_connectedness_criterion'),
 }
 connectedness = {
-#                "connected": (True, "connected"),
-                 "disconnected": (False, "disconnected")
+                "connected": (True, "connected"),
+#                 "disconnected": (False, "disconnected")
                 }
 
 

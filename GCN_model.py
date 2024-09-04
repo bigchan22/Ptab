@@ -140,7 +140,7 @@ class GCN_multi(torch.nn.Module):
 #             sums_tensor[i] = x[batch == ub].sum()
 
             
-            # Loop over unique batches and sum elements of 'x' within each batch
+        # Loop over unique batches and sum elements of 'x' within each batch
         sum_list = [x[batch == ub].sum() for ub in unique_batches]
 
         # Stack list of sums to create a tensor
@@ -156,3 +156,68 @@ class GCN_multi(torch.nn.Module):
 #         sums_tensor = torch.tensor(sums)
         
         return sums_tensor
+class GCN_multi_conv(torch.nn.Module):
+    def __init__(self, graph_deg, depth, node_dim, direction):
+        super().__init__()
+        self.num_edge_types = 5
+        self.depth = depth
+        self.graph_deg = graph_deg
+        self.node_dim = node_dim
+        self.direction = direction 
+        self.GCN_single = GCN_single(self.num_edge_types, self.graph_deg, self.depth, self.node_dim, self.direction)
+
+    def forward(self, data, T=1):
+        batch = data.batch
+        batch = batch[::self.graph_deg]
+        x = self.GCN_single(data)
+#         x = torch.sigmoid(x/T)
+        device = batch.device
+        A = x.view(-1)
+        ri = batch.view(-1)
+        batch_size = batch[-1]+1
+
+        # Count occurrences of each row index in ri to determine column sizes
+        row_counts = torch.bincount(ri, minlength=batch_size)
+
+        # Determine the maximum number of columns needed
+        max_columns = row_counts.max().item()
+
+        # Initialize tensor B with -inf to indicate empty values
+        B = torch.full((batch_size, max_columns), -float('inf'),device=device)
+
+        # Create an empty tensor to keep track of the next available column index for each row
+        col_indices = torch.zeros_like(ri)
+
+        # Use row_counts to generate column indices
+        for i in range(batch_size):
+            col_indices[ri == i] = torch.arange(row_counts[i],device=device)
+
+        # Place the values from A into B using advanced indexing
+        B[ri, col_indices] = A
+        B = torch.sigmoid(B/T)
+        B_complement = 1 - B
+
+        # Stack B and B_complement along a new dimension
+        # This creates a new tensor with shape (64, max_columns, 2)
+        stacked_tensor = torch.stack((B_complement,B), dim=-1)
+        result = stacked_tensor[:,0,:]
+        for i in range(1, stacked_tensor.size(1)):
+            # Extract the next slice to serve as the kernel, which has shape (1, 1, 64, 2)
+            kernel_2d = stacked_tensor[:,i,:].unsqueeze(1)
+            kernel_2d_flipped = torch.flip(kernel_2d, dims=[-1])
+
+            # Reshape the input for Conv1d: treat each row as a separate channel
+            input_for_conv1d = result.unsqueeze(0)  # Shape becomes (1, H, W)
+
+            # Apply Conv1d with groups=H to perform independent convolution on each row
+            # in_channels = H (number of rows), out_channels = H (each row produces its own output),
+            # groups=H ensures each row is convolved with its own corresponding kernel row
+            result = F.conv1d(input_for_conv1d, kernel_2d_flipped, groups=batch_size, padding=1)
+
+            # Remove the extra dimension to get the final result
+            result = result.squeeze()
+
+        # The final result will be in `result`
+
+
+        return result
