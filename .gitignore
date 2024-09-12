@@ -10,3 +10,10 @@
 /__pycache__/
 /BH/__pycache__/
 BH/__pycache__/
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.synctex.gz
