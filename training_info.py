@@ -1,13 +1,17 @@
 import os
 from BH.feature_functions import *
 
-GPU_NUM = "0"
+GPU_NUM = "1"
 num_epochs = 1000
-batch_size = 64
+batch_size = 8192
+
+# GCN_multi_stack = "sum"
+GCN_multi_stack = "conv"
 
 use_ppath = False
-column_info = "column_direction"
-
+#column_info = "column_direction"
+column_info = "column_direc_column_same"
+# column_info = "original"
 graph_deg = 8
 num_layers = graph_deg
 num_features = 64
@@ -79,5 +83,7 @@ for key in feature_list.keys():
     if feature_list[key][0] == True:
         MODEL_FILE += f'_{key}'
 MODEL_FILE += f'_{direction}'
+if GCN_multi_stack == "conv":
+    MODEL_FILE += f'_{GCN_multi_stack}'
 MODEL_FILE += '.pickle'
 

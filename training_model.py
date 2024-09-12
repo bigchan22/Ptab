@@ -44,13 +44,18 @@ if use_pretrained_weights == True:
         print("There is no trained model")
         use_pretrained_weights = False
 if use_pretrained_weights == False:
-    model = GCN_multi(graph_deg, depth, node_dim, direction).to(device)
+    if GCN_multi_stack == "conv":
+        model = GCN_multi_conv(graph_deg, depth, node_dim, direction).to(device)
+    if GCN_multi_stack == 'sum':    
+        model = GCN_multi(graph_deg, depth, node_dim, direction).to(device)
     max_accuracy = 0
     min_loss = 100
 # data = batch.to(device)
 # torch.nn.init.xavier_normal(model)
-loss_function = torch.nn.CrossEntropyLoss()
-loss_function = torch.nn.MSELoss()
+if GCN_multi_stack == "conv":
+    loss_function = torch.nn.NLLLoss()
+if GCN_multi_stack == 'sum':
+    loss_function = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=step_size, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer=optimizer,
                                         lr_lambda=lambda epoch: 0.993 ** epoch,
@@ -65,8 +70,12 @@ for epoch in range(num_epochs):
         optimizer.zero_grad()
         out = model(batch)
         
-        batch.y = batch.y.float()
-        loss = loss_function(out, batch.y)
+        if GCN_multi_stack == "sum":
+            batch.y = batch.y.float()
+            loss = loss_function(out, batch.y)
+        if GCN_multi_stack == "conv":
+            log_probs = torch.log(torch.clamp(out, min=1e-9))
+            loss = loss_function(log_probs, batch.y)
         loss.backward()
         optimizer.step()
     scheduler.step()
@@ -81,11 +90,17 @@ for epoch in range(num_epochs):
             batch.to(device)
             outputs = model(batch)
 #             _,predicted = torch.max(outputs.data, 1)
-            predicted = outputs
-            total += batch.y.size(0)
-#             correct += (predicted == batch.y).sum().item()
-            correct += ((predicted - batch.y)**2<0.1).sum().item()
-
+            if GCN_multi_stack=="sum":
+                predicted = outputs
+                total += batch.y.size(0)
+    #             correct += (predicted == batch.y).sum().item()
+                correct += ((predicted - batch.y)**2<0.1).sum().item()
+            if GCN_multi_stack=="conv":
+#                 print(outputs.data.shape)
+                _, predicted = torch.max(outputs.data, 1)
+                total += batch.y.size(0)
+    #             correct += (predicted == batch.y).sum().item()
+                correct += (predicted == batch.y).sum().item()
     # Compute accuracy
     accuracy = correct / total
     loss = float(loss.item())
