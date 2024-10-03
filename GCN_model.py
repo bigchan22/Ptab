@@ -4,11 +4,11 @@ import torch
 import torch.nn.functional as F
 # from torch_geometric.nn import GATv2Conv
 from torch_geometric.nn import GCNConv
-class GCN_single_need_debug(torch.nn.Module):
+class GCN_single(torch.nn.Module):
     def __init__(self,num_edge_types, graph_deg, depth, node_dim, direction, edge_dim=8):
         super().__init__()
         self.num_edge_types = num_edge_types
-        self.graph_deg = graph_deg
+#         self.graph_deg = graph_deg
         self.depth = depth
         self.node_dim = node_dim
         self.direction = direction
@@ -107,15 +107,23 @@ class GCN_single_need_debug(torch.nn.Module):
             
             x = F.relu(x_sum)
         batch = data.batch
+        device = batch.device
         batch_size = len(data.y)
         row_counts = torch.bincount(batch, minlength=batch_size)
-        max_columns = row_counts.max().item()
-        col_indices = torch.zeros_like(batch)    
-        for i in range(batch_size):
-            col_indices[batch.batch == i] = torch.arange(row_counts[i],device=device)
-        xx = torch.full((batch_size, max_columns,node_dim), 0,device=device)
-        xx[batch,col_index,:] = x
+        num_graphs_per_batch = torch.div(row_counts, data.graph_sizes, rounding_mode='floor')
+        num_graphs = int(torch.sum(row_counts/data.graph_sizes))
+        max_columns = data.graph_sizes.max().item()
+        graph_offset = torch.cumsum(num_graphs_per_batch, dim=0) - num_graphs_per_batch
         
+        
+        row_index = torch.cat([torch.arange(n_g,device=device).repeat_interleave(g_s) + offset
+                               for n_g, g_s, offset in zip(num_graphs_per_batch, data.graph_sizes, graph_offset)])
+        # Compute column indices for each batch
+        col_index = torch.cat([torch.arange(g_s, device= device).repeat(n_g) for n_g, g_s in zip(num_graphs_per_batch, data.graph_sizes)])
+        
+        xx = torch.full((num_graphs, max_columns, self.node_dim), 0. , device = device)
+        
+        xx[row_index, col_index, :] = x.view(-1, self.node_dim)
         
         #xx = torch.reshape(x, (-1, self.graph_deg, self.node_dim))
 
@@ -126,7 +134,7 @@ class GCN_single_need_debug(torch.nn.Module):
         
         return xxx
 #         return F.log_softmax(xxx, dim=1)
-class GCN_single(torch.nn.Module):
+class GCN_single_old(torch.nn.Module):
     def __init__(self,num_edge_types, graph_deg, depth, node_dim, direction, edge_dim=8):
         super().__init__()
         self.num_edge_types = num_edge_types
@@ -282,14 +290,21 @@ class GCN_multi_conv(torch.nn.Module):
         super().__init__()
         self.num_edge_types = 5
         self.depth = depth
-        self.graph_deg = graph_deg
+#         self.graph_deg = graph_deg
         self.node_dim = node_dim
         self.direction = direction 
-        self.GCN_single = GCN_single(self.num_edge_types, self.graph_deg, self.depth, self.node_dim, self.direction)
+        self.GCN_single = GCN_single(self.num_edge_types, graph_deg, self.depth, self.node_dim, self.direction)
 
     def forward(self, data, T=1):
         batch = data.batch
-        batch = batch[::self.graph_deg]
+        device = batch.device
+        batch_size = len(data.y)
+        row_counts = torch.bincount(batch, minlength=batch_size)
+        num_graphs_per_batch = torch.div(row_counts, data.graph_sizes, rounding_mode='floor')
+        
+        batch = torch.cat([torch.zeros(num_graphs_per_batch[i],dtype=int,device = device)+i for i in range(batch_size)])
+        
+#         batch = batch[::self.graph_deg]
         x = self.GCN_single(data)
 #         x = torch.sigmoid(x/T)
         device = batch.device
