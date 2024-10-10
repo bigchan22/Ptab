@@ -1,7 +1,7 @@
 import os
 from BH.feature_functions import *
 
-GPU_NUM = "0"
+GPU_NUM = "1"
 num_epochs = 1000
 batch_size = 8192
 
@@ -12,9 +12,9 @@ use_ppath = False
 #column_info = "column_direction"
 #column_info = "column_direc_column_same"
 column_info = "original"
-graph_deg = 7
+graph_deg = 8
 #num_layers = graph_deg
-num_layers = 1
+num_layers = 4
 num_features = 256
 feature_list = {
     'constant':    (True, constant_feature),
@@ -23,7 +23,7 @@ feature_list = {
     'norm_column_rev': (False, normalized_column_rev_indicator),
 }
 connected = True
-UPTO = False
+UPTO = True
 
 direction = "222"
 

@@ -2,7 +2,7 @@ from data_loader import *
 from generate_data import *
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 use_ppath = False
-N = 7
+N = 8
 UPTO = True
 column_info = "column_direction"
 column_info = "column_direction"
@@ -34,6 +34,8 @@ for shape in shapes.keys():
     for connect in connectedness.keys():
         for filter in filters.keys():
             DIR_PATH = f"/Data/Ptab/n={N}_{shapes[shape][1]}_{filters[filter][1]}_{connectedness[connect][1]}"
+            if UPTO == True:
+                DIR_PATH += "_UPTO"
             if not column_info == 'original':
                 DIR_PATH = DIR_PATH + f"{column_info}"
             os.makedirs(DIR_PATH, exist_ok=True)
