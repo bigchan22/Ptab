@@ -4,13 +4,13 @@ import os
 
 from BH.data_loader import *
 from BH.generate_data import *
-from training_info_2 import *
+from training_info import *
 from Train import train,print_accuracies
 
 import pickle
 
 from CustomDataset import *
-from GCN_model_2 import *
+from GCN_model import *
 
 from torch_geometric.loader import DataLoader
 
@@ -68,20 +68,24 @@ def is_2col_graph(row, col, edge_type):
         return True
     return False
 
-def test_acc(MODELS):
+def test_acc(MODELS, DATA_PATH = None):
     features = {'norm_column': (True, normalized_column_indicator),}
     for feat in feature_list.keys():
         if feature_list[feat][0] == True:
             features[feat] = feature_list[feat][1]
 
-    MODEL = MODELS[0]
-    MODEL_DIR = MODEL[:MODEL[4:].index('/')+4]
-    graph_deg = MODEL[28]
-    underbar_list = list(filter(lambda i: MODEL[i] == '_', range(len(MODEL))))
-    a = underbar_list[4]
-    b = underbar_list[-4]
-    DIR_PATH = f'/Data/Ptab/n={graph_deg}' + MODEL[a:b]
+    
+    if DATA_PATH:
+        DIR_PATH = DATA_PATH
+    else:
 
+        MODEL = MODELS[0]
+        MODEL_DIR = MODEL[:MODEL[4:].index('/')+4]
+        graph_deg = MODEL[28]
+        underbar_list = list(filter(lambda i: MODEL[i] == '_', range(len(MODEL))))
+        a = underbar_list[4]
+        b = underbar_list[-4]
+        DIR_PATH = f'/Data/Ptab/n={graph_deg}' + MODEL[a:b]
     print("Loading test data...")
 
     graph_data = generate_graph_data(DIR_PATH, features)

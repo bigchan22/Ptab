@@ -1,8 +1,11 @@
 from data_loader import *
 from generate_data import *
+import time
+print('start_time', time.strftime('%c'))
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 use_ppath = False
-N = 8
+N = 9
 UPTO = True
 column_info = "column_direction"
 column_info = "column_direction"
@@ -15,9 +18,9 @@ column_info = "original"
 shapes = {
 #         "2row_less": (is_2row_less, "2row_less"),
 #          "3row_less": (is_3row_less, "3row_less"),
-          "all": (any_shape, "all"),
+#          "all": (any_shape, "all"),
 #           "hook": (is_hook, "hook"),
-#           "3col_less": (is_3col_less, "3col_less"),
+           "3col_less": (is_3col_less, "3col_less"),
          }
 filters ={
 #    "with_all_row_connectedness_criterion":(check_all_row_connected,"with_all_row_connectedness_criterion"), 
@@ -63,3 +66,5 @@ for shape in shapes.keys():
                                        column_info=column_info,
                                        UPTO_N = UPTO
                                       )
+
+print('start_time', time.strftime('%c'))

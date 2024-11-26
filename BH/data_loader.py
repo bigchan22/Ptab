@@ -56,6 +56,7 @@ def generate_graph_data(DATA_DIR, feature_list):
   for graph in iter_graph(DATA_DIR):
     feat_dict = dict()
     for feature in feature_list.keys():
+        print(feature)
         feat_dict[feature] = feature_list[feature](graph)
 
     curr_feature = np.zeros((len(graph), len(feat_dict)))
