@@ -1,9 +1,10 @@
 # import functools
 # import enum
 import os
-
+from training_info import feature_list
 from BH.data_loader import *
 from BH.generate_data import *
+from BH.feature_functions import constant_feature, column_indicator, normalized_column_indicator, normalized_column_rev_indicator
 from predictor_info import *
 # from Model_e import Model_e,Direction,Reduction
 # from Train import train,print_accuracies
@@ -51,8 +52,16 @@ def find_direction(MODEL):
                     return (direction_dict[direction1], direction_dict[direction2], direction_dict[direction3])
     return (Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)
 
-def find_feature(MODEL):
+def find_feature(MODEL):    
+    feature_dict = {
+    'constant':    (True, constant_feature),
+    'column':      (False, column_indicator),
+    'norm_column': (False, normalized_column_indicator), #   Feauture
+    'norm_column_rev': (False, normalized_column_rev_indicator),
+    }
+    
     features = dict()
+    
     for key in feature_dict.keys():
         if 'ted_'+key in MODEL:
             features[key] = feature_dict[key]
@@ -209,8 +218,9 @@ def predict_orbit(P, word, shape_checkers, MODEL):
     rows = [np.array(sp.coo_matrix(a).row, dtype=np.int16) for a in adjacencies]
     cols = [np.array(sp.coo_matrix(a).col, dtype=np.int16) for a in adjacencies]
     edge_types = [np.array(sp.coo_matrix(a).data, dtype=np.int16) for a in adjacencies]
-
-    T_inputdata = InputData(features=features, labels=ys, rows=rows, columns=cols, edge_types=edge_types)
+    graph_sizes = []
+    
+    T_inputdata = InputData(features=features, labels=ys, rows=rows, columns=cols, edge_types=edge_types, )
     T_dataset = CustomDataset(T_inputdata)
     T_loader = DataLoader(T_dataset, batch_size=1, shuffle=True)
 

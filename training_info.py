@@ -10,19 +10,20 @@ GCN_multi_stack = "conv"
 
 use_ppath = False
 #column_info = "column_direction"
-column_info = "column_direc_column_same"
-# column_info = "original"
+#column_info = "column_direc_column_same"
+column_info = "original"
 graph_deg = 8
-num_layers = graph_deg
-num_features = 64
+#num_layers = graph_deg
+num_layers = 4
+num_features = 256
 feature_list = {
-    'constant':    (False, constant_feature),
+    'constant':    (True, constant_feature),
     'column':      (False, column_indicator),
-    'norm_column': (True, normalized_column_indicator), #   Feauture
+    'norm_column': (False, normalized_column_indicator), #   Feauture
     'norm_column_rev': (False, normalized_column_rev_indicator),
 }
-connected = False
-UPTO = False
+connected = True
+UPTO = True
 
 direction = "222"
 
@@ -32,8 +33,8 @@ shape_indicator = {
     '2row_less': (False, ),
     '2row_less_with_all_row_connectedness_criterion': (False, ),
     '2row_less_with_inductive_connectedness_criterion': (False, ),
-    '3row_less_with_all_row_connectedness_criterion': (False, ),
-    '3row_less_with_inductive_connectedness_criterion': (False, ),
+    '3col_less_with_all_row_connectedness_criterion': (False, ),
+    '3col_less_with_inductive_connectedness_criterion': (False, ),
 }
 
 shape= {

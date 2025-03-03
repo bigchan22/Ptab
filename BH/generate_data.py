@@ -634,6 +634,7 @@ def generate_data_PTabs(DIR_PATH,
         N = input_N
     graphs = []
     labels = []
+    graph_sizes = []
     while N <= input_N:
         n_str = str(N)
         TM_n = np.matrix(TM[n_str])
@@ -675,9 +676,12 @@ def generate_data_PTabs(DIR_PATH,
                         gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
                     else:
                         graphs.append(g)
-                        if chk == 'BAD': labels.append(0)
+                        if chk == 'BAD': 
+                            labels.append(0)
+                            graph_sizes.append(N)
                         elif chk == 'GOOD':
                             labels.append(1)
+                            graph_sizes.append(N)
                             pre_calculated[str(shape)] += 1
                         else:
                             print("SOMETHING GOES WRONG!")
@@ -691,6 +695,7 @@ def generate_data_PTabs(DIR_PATH,
                                 mult += TM[n_str][i][k] * Fs[i]
                             graphs.append(gs[str(lamb)])
                             labels.append(mult-pre_calculated[str(lamb)])
+                            graph_sizes.append(N)
                             if mult < pre_calculated[str(lamb)]:
                                 print("mult < pre_calculated!!")
                                 print(P, word, lamb, mult, pre_calculated[str(lamb)])
@@ -700,12 +705,15 @@ def generate_data_PTabs(DIR_PATH,
     indices = np.arange(len(graphs))
     np.random.shuffle(indices)
     shuffled_labels = [int(labels[indices[i]]) for i in range(len(graphs))]
-
+    shuffled_graph_sizes = [int(graph_sizes[indices[i]]) for i in range(len(graphs))]
+    
     for i in range(len(indices)):
         file_path = os.path.join(DIR_PATH, f"graph_{i:05d}.npz")
         sp.save_npz(file_path, graphs[indices[i]])
     with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
         json.dump(shuffled_labels, f)
+    with open(os.path.join(DIR_PATH, f"graph_sizes.json"), 'w') as f:
+        json.dump(shuffled_graph_sizes, f)
 
 def generate_data_PTabs_ppath(DIR_PATH,
                         input_N,
