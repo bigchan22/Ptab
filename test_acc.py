@@ -1,16 +1,9 @@
-import functools
-import enum
-import os
-
-from BH.data_loader import *
-from BH.generate_data import *
 from training_info import *
-from Train import train,print_accuracies
 
 import pickle
 
 from CustomDataset import *
-from GCN_model import *
+from models.architectures.GCN_model import *
 
 from torch_geometric.loader import DataLoader
 

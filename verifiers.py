@@ -1,6 +1,3 @@
-from BH.data_loader import *
-from BH.generate_data import *
-from predictor_info import *
 from predictor import *
 
 from itertools import permutations as Perm

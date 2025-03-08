@@ -4,6 +4,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from imports import *
 from feature_functions import *
 
+
 @dataclasses.dataclass(frozen=True)
 class GraphData:
   features: Sequence[np.ndarray]
@@ -11,30 +12,33 @@ class GraphData:
   adjacencies: Sequence[sp.csr_matrix]
   graph_sizes: Sequence[np.ndarray]
 
+
 @functools.lru_cache()
 def read_labels(DATA_DIR):
-    with open(os.path.join(DATA_DIR, "labels.json")) as f:
-        return json.load(f)
+  with open(os.path.join(DATA_DIR, "labels.json")) as f:
+    return json.load(f)
+
 
 def read_graph_sizes(DATA_DIR):
-    with open(os.path.join(DATA_DIR, "graph_sizes.json")) as f:
-        return json.load(f)
+  with open(os.path.join(DATA_DIR, "graph_sizes.json")) as f:
+    return json.load(f)
 
-    
-    
+
 def iter_graph(DATA_DIR):
-#     NUM_GRAPHS = len([f for f in os.listdir(DATA_DIR) if f.startswith("graph_")])
-    NUM_GRAPHS = len([f for f in os.listdir(DATA_DIR) if f.endswith(".npz")])# After adding graph_size
-    for i in range(NUM_GRAPHS):
-        filename = os.path.join(DATA_DIR, f"graph_{i:05d}.npz")
-        yield nx.from_scipy_sparse_matrix(
-            sp.load_npz(filename), create_using=nx.DiGraph)
+  #     NUM_GRAPHS = len([f for f in os.listdir(DATA_DIR) if f.startswith("graph_")])
+  NUM_GRAPHS = len([f for f in os.listdir(DATA_DIR) if f.endswith(".npz")])  # After adding graph_size
+  for i in range(NUM_GRAPHS):
+    filename = os.path.join(DATA_DIR, f"graph_{i:05d}.npz")
+    yield nx.from_scipy_sparse_matrix(
+      sp.load_npz(filename), create_using=nx.DiGraph)
+
 
 def convert_networkx_to_adjacency_input(graph):
-    adjacency_matrix = nx.to_scipy_sparse_array(graph, format='coo')
-    # adjacency_matrix = nx.to_scipy_sparse_matrix(graph, format='coo')
-    adjacency_matrix += sp.eye(adjacency_matrix.shape[0])
-    return adjacency_matrix
+  adjacency_matrix = nx.to_scipy_sparse_array(graph, format='coo')
+  # adjacency_matrix = nx.to_scipy_sparse_matrix(graph, format='coo')
+  adjacency_matrix += sp.eye(adjacency_matrix.shape[0])
+  return adjacency_matrix
+
 
 def generate_graph_data(DATA_DIR, feature_list):
   """This generates a dataset for training a GraphNet model.
@@ -56,19 +60,19 @@ def generate_graph_data(DATA_DIR, feature_list):
   for graph in iter_graph(DATA_DIR):
     feat_dict = dict()
     for feature in feature_list.keys():
-        print(feature)
-        feat_dict[feature] = feature_list[feature](graph)
+      print(feature)
+      feat_dict[feature] = feature_list[feature](graph)
 
     curr_feature = np.zeros((len(graph), len(feat_dict)))
 
     for n, node in enumerate(graph.nodes):
       for i, (name, value) in enumerate(feat_dict.items()):
-        curr_feature[n,i] = value[node]
+        curr_feature[n, i] = value[node]
 
     features.append(curr_feature)
     adjacencies.append(convert_networkx_to_adjacency_input(graph))
 
-  return GraphData(features=features, labels=ys, adjacencies=adjacencies, graph_sizes = gss)
+  return GraphData(features=features, labels=ys, adjacencies=adjacencies, graph_sizes=gss)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -81,7 +85,7 @@ class InputData:
   graph_sizes: Sequence[np.ndarray]
 
 
-def load_input_data(DATA_DIR, feature_list = {'constant': constant_feature}, train_fraction = 0.8):
+def load_input_data(DATA_DIR, feature_list={'constant': constant_feature}, train_fraction=0.8):
   """Loads input data for the specified prediction problem.
 
   This loads a dataset that can be used with a GraphNet model.
@@ -97,8 +101,7 @@ def load_input_data(DATA_DIR, feature_list = {'constant': constant_feature}, tra
   adjacencies = graph_data.adjacencies
   ys = graph_data.labels
   gss = graph_data.graph_sizes
-    
-  
+
   rows = [np.array(sp.coo_matrix(a).row, dtype=np.int16) for a in adjacencies]
   cols = [np.array(sp.coo_matrix(a).col, dtype=np.int16) for a in adjacencies]
   edge_types = [np.array(sp.coo_matrix(a).data, dtype=np.int16) for a in adjacencies]
@@ -119,15 +122,17 @@ def load_input_data(DATA_DIR, feature_list = {'constant': constant_feature}, tra
   ys_test = ys[num_training:]
   gss_test = gss[num_training:]
   return (
-      InputData(features=features, labels=ys, rows=rows, columns=cols, edge_types=edge_types, graph_sizes=gss),
-      InputData(features=features_train, labels=ys_train, rows=rows_train, columns=cols_train, 
-                edge_types=edge_types_train,graph_sizes=gss_train),
-      InputData(features=features_test, labels=ys_test, rows=rows_test, columns=cols_test, 
-                edge_types=edge_types_test,graph_sizes=gss_test))
-#@markdown As the graphs generally do not have the same number of nodes, and because
-#@markdown JAX relies on data shapes being fixed and known upfront, we batch
-#@markdown together a set of graphs into a large batch graph that contains each
-#@markdown graph as a disconnected component.
+    InputData(features=features, labels=ys, rows=rows, columns=cols, edge_types=edge_types, graph_sizes=gss),
+    InputData(features=features_train, labels=ys_train, rows=rows_train, columns=cols_train,
+              edge_types=edge_types_train, graph_sizes=gss_train),
+    InputData(features=features_test, labels=ys_test, rows=rows_test, columns=cols_test,
+              edge_types=edge_types_test, graph_sizes=gss_test))
+
+
+# @markdown As the graphs generally do not have the same number of nodes, and because
+# @markdown JAX relies on data shapes being fixed and known upfront, we batch
+# @markdown together a set of graphs into a large batch graph that contains each
+# @markdown graph as a disconnected component.
 def batch(features, rows, cols, ys, root_nodes):
   """Converts a list of training examples into a batched single graph."""
   batch_size = len(features)
@@ -150,6 +155,8 @@ def batch(features, rows, cols, ys, root_nodes):
   b_cols = np.concatenate(b_cols)
 
   return b_features, b_rows, b_cols, b_ys, b_masks
+
+
 def batch_e(features, rows, cols, ys, edge_types):
   """Converts a list of training examples into a batched single graph."""
   batch_size = len(features)
@@ -163,7 +170,7 @@ def batch_e(features, rows, cols, ys, edge_types):
     b_features[i, :features[i].shape[0], :] = features[i]
     b_rows.append(rows[i] + i * max_features)
     b_cols.append(cols[i] + i * max_features)
-    b_edge_types.append(edge_types[i] )
+    b_edge_types.append(edge_types[i])
     b_ys[i, 0] = ys[i]
 
   b_features = b_features.reshape((-1, b_features.shape[-1]))

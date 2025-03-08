@@ -1,5 +1,4 @@
-import os
-from BH.feature_functions import *
+from src.data.feature_functions import *
 
 GPU_NUM = "1"
 num_epochs = 1000
@@ -55,7 +54,7 @@ step_size = 0.001
 train_fraction = .8
 
 DIR_PATH = f'/Data/Ptab/n={graph_deg}'
-MODEL_DIR = './trained_models'
+MODEL_DIR = 'models/trained_models'
 MODEL_FILE = os.path.join(MODEL_DIR, f'parameters_{graph_deg}_{num_layers}_{num_features}')
 
 for key in shape_indicator:

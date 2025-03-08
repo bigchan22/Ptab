@@ -15,24 +15,26 @@ import random
 import tempfile
 from typing import Sequence
 
-#import haiku as hk
-#import jax
-#import jax.numpy as jnp
+# import haiku as hk
+# import jax
+# import jax.numpy as jnp
 import matplotlib
 import matplotlib.pyplot as plt
-#import optax
+# import optax
 import psutil
 import seaborn as sns
 
+
 class EDGE_TYPE():
-  SELF_LOOP = 1
-  SINGLE_ARROW = 2
-  DOUBLE_ARROW = 3
-  DASHED_ARROW = 4
-  TRIPLE_ARROW = 5
-  
+    SELF_LOOP = 1
+    SINGLE_ARROW = 2
+    DOUBLE_ARROW = 3
+    DASHED_ARROW = 4
+    TRIPLE_ARROW = 5
+
+
 class Direction(enum.Enum):
-  FORWARD = enum.auto()
-  BACKWARD = enum.auto()
-  BOTH = enum.auto()
-  NONE = enum.auto()
+    FORWARD = enum.auto()
+    BACKWARD = enum.auto()
+    BOTH = enum.auto()
+    NONE = enum.auto()

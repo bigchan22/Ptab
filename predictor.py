@@ -1,10 +1,5 @@
 # import functools
 # import enum
-import os
-from training_info import feature_list
-from BH.data_loader import *
-from BH.generate_data import *
-from BH.feature_functions import constant_feature, column_indicator, normalized_column_indicator, normalized_column_rev_indicator
 from predictor_info import *
 # from Model_e import Model_e,Direction,Reduction
 # from Train import train,print_accuracies
@@ -12,7 +7,6 @@ from predictor_info import *
 import pickle
 
 from CustomDataset import *
-from GCN_model import *
 
 from torch_geometric.loader import DataLoader
 

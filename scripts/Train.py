@@ -1,7 +1,7 @@
 #import optax
 import numpy as np
 # from Load_Data import batch
-from BH.data_loader import batch_e
+from src.data import batch_e
 def train(loss_val_gr,opt_update,params, opt_state, features, rows, cols, ys, masks):
   curr_loss, gradient = loss_val_gr(params, features, rows, cols, ys, masks)
   updates, opt_state = opt_update(gradient, opt_state)

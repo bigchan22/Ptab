@@ -1,5 +1,4 @@
-import os
-from BH.feature_functions import *
+from src.data.feature_functions import *
 
 graph_deg = 7
 num_layers = 7
@@ -9,7 +8,7 @@ feature_list = {
     'column':   (False, ),
 }
 
-MODEL_DIR = './trained_models'
+MODEL_DIR = 'models/trained_models'
 #MODEL_FILE = os.path.join(MODEL_DIR, f'parameters_{graph_deg}_{num_layers}_{num_features}')
 MODEL_FILE = os.path.join(MODEL_DIR, 'parameters_8_1_1024_all_with_inductive_connectedness_criterion_connected_UPTO_constant_222_conv.pickle')
 

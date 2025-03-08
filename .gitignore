@@ -8,5 +8,5 @@
 *.DS_Store
 /tex/*
 /__pycache__/
-/BH/__pycache__/
-BH/__pycache__/
+/src/data/__pycache__/
+src/data/__pycache__/
