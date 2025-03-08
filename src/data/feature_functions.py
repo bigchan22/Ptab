@@ -1,6 +1,6 @@
 import numpy as np
 import networkx as nx
-from imports import *
+from imports import EDGE_TYPE
 
 
 def in_centrality_with_fixed_N(D):

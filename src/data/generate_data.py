@@ -1,12 +1,19 @@
 # import json
-# import numpy as np
+import itertools
+import json
+import os
+from copy import deepcopy
+
+import numpy as np
+import scipy.sparse as sp
+
+from imports import Direction, EDGE_TYPE
+
+
 # import networkx as nx
 # import scipy.sparse as sp
 # import os
 # import imports
-
-from imports import *
-from copy import deepcopy
 
 
 def iter_UIO(n, connected=False):
@@ -160,7 +167,7 @@ def words_from_orbit(P, word):
             if word[i] < word[i - 1] < word[i + 1] and is_P_less(P, word[i], word[i + 1]) and not is_P_less(P, word[i],
                                                                                                             word[
                                                                                                                 i - 1]) and not is_P_less(
-                    P, word[i - 1], word[i + 1]):
+                P, word[i - 1], word[i + 1]):
                 temp = word[:i - 1] + [word[i], word[i + 1], word[i - 1]] + word[i + 2:]
                 if not temp in words:
                     words.append(temp)
@@ -168,7 +175,7 @@ def words_from_orbit(P, word):
                                                                                                             word[i - 1],
                                                                                                             word[
                                                                                                                 i + 1]) and not is_P_less(
-                    P, word[i + 1], word[i]):
+                P, word[i + 1], word[i]):
                 temp = word[:i - 1] + [word[i + 1], word[i - 1], word[i]] + word[i + 2:]
                 if not temp in words:
                     words.append(temp)
@@ -721,7 +728,7 @@ def generate_data_PTabs(DIR_PATH,
                         primitive=True,
                         connected=False,
                         UPTO_N=False,
-                        json_path="./json/",
+                        json_path="src/data/json/",
                         column_info='original'):
     with open(os.path.join(json_path, "Partitions.json")) as f:
         Partitions = json.load(f)
@@ -773,7 +780,7 @@ def generate_data_PTabs(DIR_PATH,
                     elif column_info == "column_direc_column_same":
                         g = make_matrix_from_T_col_info(P, word,
                                                         direction=(
-                                                        Direction.FORWARD, Direction.BOTH, Direction.FORWARD))
+                                                            Direction.FORWARD, Direction.BOTH, Direction.FORWARD))
                     chk = check_all_row_connected(P, word)
                     if chk == 'UNKNOWN':
                         gs[str(shape)] = sp.block_diag((gs[str(shape)], g))
@@ -826,7 +833,7 @@ def generate_data_PTabs_ppath(DIR_PATH,
                               primitive=True,
                               connected=False,
                               UPTO_N=False,
-                              json_path="./json/", ):
+                              json_path="src/data/json/", ):
     with open(os.path.join(json_path, "Partitions.json")) as f:
         Partitions = json.load(f)
     with open(os.path.join(json_path, "PartitionIndex.json")) as f:

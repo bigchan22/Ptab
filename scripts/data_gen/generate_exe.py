@@ -1,15 +1,18 @@
-from data_loader import *
-from generate_data import *
+import os
 import time
+
+# from src.data.data_loader import
+from src.data.generate_data import check_inductive_disconnectedness_criterion, is_3col_less, generate_data_PTabs_ppath, \
+    generate_data_PTabs
 
 print('start_time', time.strftime('%c'))
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 use_ppath = False
-N = 9
+N = 4
 UPTO = True
-column_info = "column_direction"
-column_info = "column_direction"
+# column_info = "column_direction"
+# column_info = "column_direction"
 column_info = "original"
 # directions = {"FORWARD": (Direction.FORWARD, 'F'),
 #             "BACKWARD": (Direction.BACKWARD, 'B'),
@@ -26,7 +29,7 @@ shapes = {
 filters = {
     #    "with_all_row_connectedness_criterion":(check_all_row_connected,"with_all_row_connectedness_criterion"),
     'with_inductive_connectedness_criterion': (
-    check_inductive_disconnectedness_criterion, 'with_inductive_connectedness_criterion'),
+        check_inductive_disconnectedness_criterion, 'with_inductive_connectedness_criterion'),
 }
 connectedness = {
     "connected": (True, "connected"),

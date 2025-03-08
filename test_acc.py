@@ -13,10 +13,12 @@ def is_1row_graph(row, col, edge_type):
         return False
     return True
 
+
 def is_1row_graph(row, col, edge_type):
     if EDGE_TYPE.SINGLE_ARROW in edge_type:
         return False
     return True
+
 
 def is_hook_graph(row, col, edge_type):
     parent = dict()
@@ -44,6 +46,7 @@ def is_hook_graph(row, col, edge_type):
         return True
     return False
 
+
 def is_2col_graph(row, col, edge_type):
     parent = dict()
     for i in range(len(row)):
@@ -61,19 +64,19 @@ def is_2col_graph(row, col, edge_type):
         return True
     return False
 
-def test_acc(MODELS, DATA_PATH = None):
-    features = {'norm_column': (True, normalized_column_indicator),}
+
+def test_acc(MODELS, DATA_PATH=None):
+    features = {'norm_column': (True, normalized_column_indicator), }
     for feat in feature_list.keys():
         if feature_list[feat][0] == True:
             features[feat] = feature_list[feat][1]
 
-    
     if DATA_PATH:
         DIR_PATH = DATA_PATH
     else:
 
         MODEL = MODELS[0]
-        MODEL_DIR = MODEL[:MODEL[4:].index('/')+4]
+        MODEL_DIR = MODEL[:MODEL[4:].index('/') + 4]
         graph_deg = MODEL[28]
         underbar_list = list(filter(lambda i: MODEL[i] == '_', range(len(MODEL))))
         a = underbar_list[4]
@@ -111,8 +114,8 @@ def test_acc(MODELS, DATA_PATH = None):
         ys_test.append(ys[i])
     ys_test = np.array(ys_test)
 
-
-    test_dataset = InputData(features=features_test, labels=ys_test, rows=rows_test, columns=cols_test, edge_types=edge_types_test)
+    test_dataset = InputData(features=features_test, labels=ys_test, rows=rows_test, columns=cols_test,
+                             edge_types=edge_types_test)
     test_dataset = CustomDataset(test_dataset)
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=True)
 
@@ -133,16 +136,12 @@ def test_acc(MODELS, DATA_PATH = None):
             for batch in test_loader:
                 batch.to(device)
                 outputs = model(batch)
-    #             _,predicted = torch.max(outputs.data, 1)
+                #             _,predicted = torch.max(outputs.data, 1)
                 predicted = outputs
                 total += batch.y.size(0)
-    #             correct += (predicted == batch.y).sum().item()
-                correct += ((predicted - batch.y)**2<0.1).sum().item()
+                #             correct += (predicted == batch.y).sum().item()
+                correct += ((predicted - batch.y) ** 2 < 0.1).sum().item()
         accuracy = correct / total
         # loss = float(loss.item())
 
         print("{}, Accuracy: {:.2%}".format(i, accuracy))
-    
-
-
-

@@ -9,10 +9,8 @@ from models.architectures.GCN_model import *
 
 from torch_geometric.loader import DataLoader
 
-
 os.environ["CUDA_VISIBLE_DEVICES"] = GPU_NUM
 device = "cuda:" + GPU_NUM
-
 
 print("Loading input data...")
 full_dataset, train_dataset, test_dataset = load_input_data(DIR_PATH)
@@ -33,15 +31,15 @@ train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 if use_pretrained_weights == True:
     try:
         with open(MODEL_FILE, 'rb') as f:
-          model, max_accuracy, min_loss = pickle.load(f)
-          model.to(device)
+            model, max_accuracy, min_loss = pickle.load(f)
+            model.to(device)
     except:
         print("There is no trained model")
         use_pretrained_weights = False
 if use_pretrained_weights == False:
     if GCN_multi_stack == "conv":
         model = GCN_multi_conv(graph_deg, depth, node_dim, direction).to(device)
-    if GCN_multi_stack == 'sum':    
+    if GCN_multi_stack == 'sum':
         model = GCN_multi(graph_deg, depth, node_dim, direction).to(device)
     max_accuracy = 0
     min_loss = 100
@@ -53,9 +51,9 @@ if GCN_multi_stack == 'sum':
     loss_function = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=step_size, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer=optimizer,
-                                        lr_lambda=lambda epoch: 0.993 ** epoch,
-                                        last_epoch=-1,
-                                        verbose=False)
+                                              lr_lambda=lambda epoch: 0.993 ** epoch,
+                                              last_epoch=-1,
+                                              verbose=False)
 
 for epoch in range(num_epochs):
     # Training phase
@@ -64,7 +62,7 @@ for epoch in range(num_epochs):
         batch.to(device)
         optimizer.zero_grad()
         out = model(batch)
-        
+
         if GCN_multi_stack == "sum":
             batch.y = batch.y.float()
             loss = loss_function(out, batch.y)
@@ -74,8 +72,8 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
     scheduler.step()
-#    print(loss)
-    
+    #    print(loss)
+
     # Evaluation phase
     model.eval()
     correct = 0
@@ -84,17 +82,17 @@ for epoch in range(num_epochs):
         for batch in test_loader:
             batch.to(device)
             outputs = model(batch)
-#             _,predicted = torch.max(outputs.data, 1)
-            if GCN_multi_stack=="sum":
+            #             _,predicted = torch.max(outputs.data, 1)
+            if GCN_multi_stack == "sum":
                 predicted = outputs
                 total += batch.y.size(0)
-    #             correct += (predicted == batch.y).sum().item()
-                correct += ((predicted - batch.y)**2<0.1).sum().item()
-            if GCN_multi_stack=="conv":
-#                 print(outputs.data.shape)
+                #             correct += (predicted == batch.y).sum().item()
+                correct += ((predicted - batch.y) ** 2 < 0.1).sum().item()
+            if GCN_multi_stack == "conv":
+                #                 print(outputs.data.shape)
                 _, predicted = torch.max(outputs.data, 1)
                 total += batch.y.size(0)
-    #             correct += (predicted == batch.y).sum().item()
+                #             correct += (predicted == batch.y).sum().item()
                 correct += (predicted == batch.y).sum().item()
     # Compute accuracy
     accuracy = correct / total
@@ -107,4 +105,3 @@ for epoch in range(num_epochs):
         min_loss = loss
         with open(MODEL_FILE, 'wb') as f:
             pickle.dump((model, max_accuracy, min_loss), f)
-
