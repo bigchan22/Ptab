@@ -2,7 +2,7 @@ from training_info import *
 
 import pickle
 
-from CustomDataset import *
+from src.CustomDataset import *
 from models.architectures.GCN_model import *
 
 from torch_geometric.loader import DataLoader

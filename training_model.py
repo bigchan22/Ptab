@@ -1,11 +1,12 @@
 # from data.data_loader import *
 # from data.generate_data import *
+from src.data.data_loader import load_input_data
 from training_info import *
-
+import torch
 import pickle
 
-from CustomDataset import *
-from models.architectures.GCN_model import *
+from src.CustomDataset import CustomDataset
+from models.architectures.GCN_model import GCN_multi,GCN_multi_conv
 
 from torch_geometric.loader import DataLoader
 

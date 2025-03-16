@@ -1,4 +1,5 @@
-from src.data.feature_functions import *
+import os
+from src.data.feature_functions import constant_feature,column_indicator, normalized_column_indicator, normalized_column_rev_indicator
 
 GPU_NUM = "1"
 num_epochs = 1000
@@ -57,17 +58,17 @@ MODEL_DIR = 'models/trained_models'
 MODEL_FILE = os.path.join(MODEL_DIR, f'parameters_{graph_deg}_{num_layers}_{num_features}')
 
 for key in shape_indicator:
-    if shape_indicator[key][0] == True:
+    if shape_indicator[key][0]:
         DIR_PATH += f'_{key}'
         MODEL_FILE += f'_{key}'
 
-if connected == True:
+if connected:
     DIR_PATH += "_connected"
     MODEL_FILE += "_connected"
-elif connected == False:
+elif connected:
     DIR_PATH += "_disconnected"
     MODEL_FILE += "_disconnected"
-if UPTO == True:
+if UPTO:
     DIR_PATH += "_UPTO"
     MODEL_FILE += "_UPTO"
 if not column_info == "original":
@@ -78,7 +79,7 @@ if use_ppath:
     MODEL_FILE += "_ppath"
 
 for key in feature_list.keys():
-    if feature_list[key][0] == True:
+    if feature_list[key][0]:
         MODEL_FILE += f'_{key}'
 MODEL_FILE += f'_{direction}'
 if GCN_multi_stack == "conv":

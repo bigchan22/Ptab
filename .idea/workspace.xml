@@ -5,22 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f223322-1af2-4754-892c-faef9b307699" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/data_gen/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/data_gen/config_data_generation.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/data/criterion.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/data/shapes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CustomDataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/CustomDataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/architectures/GCN_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/architectures/GCN_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Debugging-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Debugging-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CustomDataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomDataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Debugging.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Debugging.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/predictor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/predictor_exe.py" beforeDir="false" afterPath="$PROJECT_DIR$/predictor_exe.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/predictor_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/predictor_info.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/Train.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/generate_exe.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/data_gen/generate_exe.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/data_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/feature_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/feature_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/data_gen/generate_exe.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/data_gen/generate_exe.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data/generate_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/generate_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/input_test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/input_test.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_acc.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_acc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/training_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/training_info.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/training_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/training_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/verifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/verifiers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,8 +38,10 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
   <component name="ProjectId" id="2N07dlPlPXZ3x23606kgxjhHtkr" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -49,63 +49,73 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/root/Min/Ptab/scripts/data_gen",
+    "git-widget-placeholder": "min",
+    "last_opened_file_path": "/home/chanhomin/Ptab/Ptab/src/data/criterion.py",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RdControllerToolWindowsLayoutState" isNewUi="false">
+  <component name="RdControllerToolWindowsLayoutState" isNewUi="true">
     <layout>
-      <window_info id="Commit_Guest" />
-      <window_info id="Space Code Reviews" order="0" />
-      <window_info id="Bookmarks" order="1" side_tool="true" />
-      <window_info id="Pull Requests" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="3" visible="true" weight="0.14792033" />
-      <window_info id="Commit" order="4" />
-      <window_info id="Learn" order="5" show_stripe_button="false" />
-      <window_info id="Structure" order="6" side_tool="true" weight="0.18216154" />
-      <window_info anchor="bottom" id="Find" show_stripe_button="false" weight="0.32966226" />
+      <window_info id="Bookmarks" side_tool="true" />
+      <window_info id="Merge Requests" />
+      <window_info id="Commit_Guest" show_stripe_button="false" />
+      <window_info id="Pull Requests" />
+      <window_info id="Learn" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26801407" />
+      <window_info id="Commit" order="1" weight="0.25" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="TypeScript" />
+      <window_info anchor="bottom" id="TODO" />
+      <window_info anchor="bottom" id="HfCacheToolWindow" />
+      <window_info anchor="bottom" id="File Transfer" />
+      <window_info anchor="bottom" id="Find" />
       <window_info anchor="bottom" id="Version Control" order="0" />
-      <window_info anchor="bottom" id="Python Packages" order="1" />
-      <window_info anchor="bottom" id="File Transfer" order="2" />
-      <window_info anchor="bottom" id="Database Changes" order="3" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Python Console" order="4" />
-      <window_info anchor="bottom" id="Problems View" order="5" weight="0.3295699" />
-      <window_info anchor="bottom" id="Terminal" order="6" weight="0.3295699" />
-      <window_info anchor="bottom" id="TypeScript" order="7" />
-      <window_info anchor="bottom" id="Endpoints" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Services" order="9" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Run" order="10" visible="true" weight="0.3295699" />
-      <window_info anchor="bottom" id="Dependency Checker" order="10" />
-      <window_info anchor="right" id="documentation.v2" side_tool="true" />
-      <window_info anchor="right" id="Database" order="0" />
-      <window_info anchor="right" id="SciView" order="1" />
-      <window_info anchor="right" id="Notifications" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Problems" order="1" />
+      <window_info anchor="bottom" id="Problems View" order="2" weight="0.3295699" />
+      <window_info anchor="bottom" id="Terminal" order="3" weight="0.3295699" />
+      <window_info anchor="bottom" id="Services" order="4" />
+      <window_info anchor="bottom" id="Python Packages" order="5" weight="0.1" />
+      <window_info anchor="bottom" id="Python Console" order="6" weight="0.1" />
+      <window_info anchor="right" id="Endpoints" />
+      <window_info anchor="right" id="documentation.v2" show_stripe_button="false" side_tool="true" />
+      <window_info anchor="right" id="Coverage" side_tool="true" />
+      <window_info anchor="right" id="SciView" />
+      <window_info anchor="right" content_ui="combo" id="Notifications" order="0" weight="0.25" />
+      <window_info anchor="right" id="AIAssistant" order="1" weight="0.25" />
+      <window_info anchor="right" id="Database" order="2" weight="0.25" />
+      <window_info anchor="right" id="Gradle" order="3" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="4" weight="0.25" />
+      <window_info anchor="right" id="Plots" order="5" weight="0.1" />
     </layout>
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/data" />
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/scripts/data_gen" />
       <recent name="$PROJECT_DIR$/scripts" />
-      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/logs" />
-      <recent name="$PROJECT_DIR$/models/architectures" />
     </key>
   </component>
   <component name="RunManager" selected="Python.Unnamed">
     <configuration name="Unnamed (1)" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Ptab" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/mpnn/bin/python" />
-      <option name="SDK_NAME" value="mpnn" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -122,13 +132,13 @@
     </configuration>
     <configuration name="Unnamed" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Ptab" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="/usr/bin/python3.8" />
-      <option name="SDK_NAME" value="Python 3.8" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -145,6 +155,7 @@
     </configuration>
     <configuration name="generate_exe" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Ptab" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -176,6 +187,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-d159365566ee-JavaScript-PY-251.23774.37" />
+        <option value="bundled-python-sdk-a606e5e558ee-f4058bf5e88f-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.23774.37" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -204,6 +223,7 @@
       <workItem from="1741073590813" duration="599000" />
       <workItem from="1741394286124" duration="598000" />
       <workItem from="1741419836067" duration="5815000" />
+      <workItem from="1742109777784" duration="13348000" />
     </task>
     <task id="LOCAL-00001" summary="Project structure edit">
       <option name="closed" value="true" />

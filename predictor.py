@@ -6,7 +6,7 @@ from predictor_info import *
 
 import pickle
 
-from CustomDataset import *
+from src.CustomDataset import *
 
 from torch_geometric.loader import DataLoader
 
