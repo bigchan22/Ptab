@@ -37,7 +37,7 @@ def iter_graph(DATA_DIR):
     NUM_GRAPHS = len([f for f in os.listdir(DATA_DIR) if f.endswith(".npz")])  # After adding graph_size
     for i in range(NUM_GRAPHS):
         filename = os.path.join(DATA_DIR, f"graph_{i:05d}.npz")
-        yield nx.from_scipy_sparse_matrix(
+        yield nx.from_scipy_sparse_array(
             sp.load_npz(filename), create_using=nx.DiGraph)
 
 
@@ -68,7 +68,7 @@ def generate_graph_data(DATA_DIR, feature_list):
     for graph in iter_graph(DATA_DIR):
         feat_dict = dict()
         for feature in feature_list.keys():
-            print(feature)
+            # print(feature)
             feat_dict[feature] = feature_list[feature](graph)
 
         curr_feature = np.zeros((len(graph), len(feat_dict)))

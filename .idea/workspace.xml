@@ -5,20 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f223322-1af2-4754-892c-faef9b307699" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/data_gen/config_data_generation.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/data/criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/data/shapes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/data/Data_gen_utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/data/json/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Debugging-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Debugging-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CustomDataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/CustomDataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Debugging.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Debugging.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/predictor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Date_gen.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/data_gen/config_data_generation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/data_gen/config_data_generation.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/data_gen/generate_exe.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/data_gen/generate_exe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/criterion.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/criterion.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data/generate_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/generate_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/input_test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/input_test.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_acc.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_acc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/training_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/training_info.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/training_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/training_model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,30 +33,30 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2N07dlPlPXZ3x23606kgxjhHtkr" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "min",
-    "last_opened_file_path": "/home/chanhomin/Ptab/Ptab/src/data/criterion.py",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;min&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/chanhomin/Ptab/Ptab/src/data/json&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RdControllerToolWindowsLayoutState" isNewUi="true">
     <layout>
       <window_info id="Bookmarks" side_tool="true" />
@@ -69,7 +64,7 @@
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
       <window_info id="Learn" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26801407" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" />
       <window_info id="Commit" order="1" weight="0.25" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
@@ -81,7 +76,7 @@
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="Problems" order="1" />
       <window_info anchor="bottom" id="Problems View" order="2" weight="0.3295699" />
-      <window_info anchor="bottom" id="Terminal" order="3" weight="0.3295699" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" />
       <window_info anchor="bottom" id="Services" order="4" />
       <window_info anchor="bottom" id="Python Packages" order="5" weight="0.1" />
       <window_info anchor="bottom" id="Python Console" order="6" weight="0.1" />
@@ -99,11 +94,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/scripts/data_gen" />
+      <recent name="$PROJECT_DIR$/config" />
+      <recent name="$PROJECT_DIR$/src/data/json" />
       <recent name="$PROJECT_DIR$/src/data" />
       <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/scripts/data_gen" />
-      <recent name="$PROJECT_DIR$/scripts" />
-      <recent name="$PROJECT_DIR$/logs" />
     </key>
   </component>
   <component name="RunManager" selected="Python.Unnamed">
@@ -223,7 +218,9 @@
       <workItem from="1741073590813" duration="599000" />
       <workItem from="1741394286124" duration="598000" />
       <workItem from="1741419836067" duration="5815000" />
-      <workItem from="1742109777784" duration="13348000" />
+      <workItem from="1742109777784" duration="13781000" />
+      <workItem from="1742133537250" duration="3719000" />
+      <workItem from="1742220624734" duration="1477000" />
     </task>
     <task id="LOCAL-00001" summary="Project structure edit">
       <option name="closed" value="true" />

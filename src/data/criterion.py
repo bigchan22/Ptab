@@ -1,4 +1,4 @@
-from src.data import shape_of_word, concatenating, has_lr_P_max, P_Des, has_rl_P_min, is_P_compatible
+from src.data.Data_gen_utils import is_P_compatible, P_Des, has_rl_P_min, has_lr_P_max, shape_of_word, concatenating
 
 
 def is_good_P_1row_B(P, word):

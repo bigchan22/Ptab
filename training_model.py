@@ -26,18 +26,18 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
 train_dataset = CustomDataset(train_dataset)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-
+print("finished loading input data")
 # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # model = pastGCN().to(device)
-if use_pretrained_weights == True:
+if use_pretrained_weights:
     try:
         with open(MODEL_FILE, 'rb') as f:
             model, max_accuracy, min_loss = pickle.load(f)
             model.to(device)
     except:
-        print("There is no trained model")
+        print("There is no trained_models model")
         use_pretrained_weights = False
-if use_pretrained_weights == False:
+if not use_pretrained_weights:
     if GCN_multi_stack == "conv":
         model = GCN_multi_conv(graph_deg, depth, node_dim, direction).to(device)
     if GCN_multi_stack == 'sum':

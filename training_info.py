@@ -2,7 +2,7 @@ import os
 from src.data.feature_functions import constant_feature,column_indicator, normalized_column_indicator, normalized_column_rev_indicator
 
 GPU_NUM = "1"
-num_epochs = 1000
+num_epochs = 10
 batch_size = 8192
 
 # GCN_multi_stack = "sum"
@@ -28,8 +28,8 @@ UPTO = True
 direction = "222"
 
 shape_indicator = {
-    'all_with_all_row_connectedness_criterion': (False,),
-    'all_with_inductive_connectedness_criterion': (True,),
+    'all_with_all_row_connectedness_criterion': (True,),
+    'all_with_inductive_connectedness_criterion': (False,),
     '2row_less': (False,),
     '2row_less_with_all_row_connectedness_criterion': (False,),
     '2row_less_with_inductive_connectedness_criterion': (False,),
@@ -53,7 +53,7 @@ save_trained_weights = True
 step_size = 0.001
 train_fraction = .8
 
-DIR_PATH = f'/Data/Ptab/n={graph_deg}'
+DIR_PATH = f'Data/n={graph_deg}'
 MODEL_DIR = 'models/trained_models'
 MODEL_FILE = os.path.join(MODEL_DIR, f'parameters_{graph_deg}_{num_layers}_{num_features}')
 

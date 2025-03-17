@@ -1,6 +1,8 @@
 import os
-import time
+import shutil
 import sys
+import time
+
 import yaml
 
 # Compute the project root relative to this script (adjust ".." as needed)
@@ -9,12 +11,13 @@ sys.path.insert(0, project_root)
 
 from src.data.generate_data import  generate_data_PTabs_ppath, generate_data_PTabs
 from src.data.shapes import is_2row_less, is_3row_less, is_hook, is_3col_less, any_shape
-from src.data import check_all_row_connected
+from src.data.criterion import check_all_row_connected
 from src.data.criterion import check_inductive_disconnectedness_criterion
 
 print('start_time', time.strftime('%c'))
-
-with open("config_data_generation.yaml", "r") as file:
+script_dir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(script_dir, "config_data_generation.yaml")
+with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 
 N = config["N"]
@@ -85,3 +88,4 @@ for shape in config['shapes']:
                 )
 
 print('end_time', time.strftime('%c'))
+shutil.copy(config_path, DIR_PATH)
