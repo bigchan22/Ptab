@@ -1,16 +1,21 @@
 # import functools
 # import enum
-from predictor_info import *
-# from Model_e import Model_e,Direction,Reduction
-# from Train import train,print_accuracies
-
 import pickle
+from itertools import permutations as Perm
 
-from src.CustomDataset import *
-
+import scipy.sparse as sp
 from torch_geometric.loader import DataLoader
 
-from itertools import permutations as Perm
+from predictor_info import *
+from src.CustomDataset import CustomDataset
+from src.data.Data_gen_utils import shape_of_word, generate_UIO, words_from_orbit, Direction
+from src.data.data_loader import convert_networkx_to_adjacency_input, InputData
+from src.data.generate_data import make_matrix_from_T
+from src.data.shapes import any_shape
+
+
+# from Model_e import Model_e,Direction,Reduction
+# from Train import train,print_accuracies
 
 
 # node_dim = num_features
@@ -18,7 +23,7 @@ from itertools import permutations as Perm
 # graph_deg = graph_deg
 # depth = num_layers
 
-def load_models(show=True, MODEL_DIR='./trained_models', keywords=[], cutoff=0.1):
+def load_models(show=True, MODEL_DIR='./models/trained_models', keywords=[], cutoff=0.1):
     MODELS = []
 
     for f in os.listdir(MODEL_DIR):
@@ -58,7 +63,7 @@ def find_feature(MODEL):
     features = dict()
 
     for key in feature_dict.keys():
-        if 'ted_' + key in MODEL:
+        if key in MODEL:
             features[key] = feature_dict[key]
     return features
 
@@ -149,16 +154,16 @@ def predict_tableau(P, word, MODEL):
         print("The input tableau is not a P-tableau.")
         return
 
-    # direction1, direction2, direction3 = find_direction(MODEL)
-    direction1, direction2, direction3 = Direction.FORWARD, Direction.FORWARD, Direction.FORWARD
+    direction1, direction2, direction3 = find_direction(MODEL)
+    # direction1, direction2, direction3 = Direction.FORWARD, Direction.FORWARD, Direction.FORWARD
     features = find_feature(MODEL)
 
     T = make_matrix_from_T(P, word, direction=(direction1, direction2, direction3))
-    graph = nx.from_scipy_sparse_matrix(T, create_using=nx.DiGraph)
+    graph = nx.from_scipy_sparse_array(T, create_using=nx.DiGraph)
 
     feat_dict = dict()
     for key, value in features.items():
-        feat_dict[key] = value(graph)
+        feat_dict[key] = value[1](graph)
 
     feature = np.zeros((len(graph), len(feat_dict)))
 
@@ -173,8 +178,10 @@ def predict_tableau(P, word, MODEL):
     rows = [np.array(sp.coo_matrix(a).row, dtype=np.int16) for a in adjacencies]
     cols = [np.array(sp.coo_matrix(a).col, dtype=np.int16) for a in adjacencies]
     edge_types = [np.array(sp.coo_matrix(a).data, dtype=np.int16) for a in adjacencies]
-
-    T_inputdata = InputData(features=features, labels=ys, rows=rows, columns=cols, edge_types=edge_types)
+    graphs_sizes = [len(graph.nodes)]
+    print(len(graph.nodes))
+    # T_inputdata = InputData(features=features, labels=ys, rows=rows, columns=cols, edge_types=edge_types)
+    T_inputdata = InputData(features=features, labels=ys, rows=rows, columns=cols, edge_types=edge_types, graph_sizes=graphs_sizes)
     T_dataset = CustomDataset(T_inputdata)
     T_loader = DataLoader(T_dataset, batch_size=1, shuffle=True)
 

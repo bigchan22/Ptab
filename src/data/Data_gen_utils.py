@@ -1,3 +1,4 @@
+import enum
 import itertools
 import json
 import os
@@ -408,3 +409,18 @@ def concatenating(P, shape_of_pieces, prev_block, k, pieces, prev_concatenated_w
             concatenated_words[p].extend(pieces[i][k])
         if concatenating(P, shape_of_pieces, block, k + 1, pieces, concatenated_words, good_1row_checker):
             return True
+
+
+class EDGE_TYPE():
+    SELF_LOOP = 1
+    SINGLE_ARROW = 2
+    DOUBLE_ARROW = 3
+    DASHED_ARROW = 4
+    TRIPLE_ARROW = 5
+
+
+class Direction(enum.Enum):
+    FORWARD = enum.auto()
+    BACKWARD = enum.auto()
+    BOTH = enum.auto()
+    NONE = enum.auto()

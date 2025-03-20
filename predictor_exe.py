@@ -1,4 +1,5 @@
-from predictor import *
+from predictor import load_models, check_inclusion_criterion
+from src.data.shapes import is_2row_less
 
 MODEL_LIST = load_models(show=False, keywords=['7_7', 'disconnected', '64'], cutoff=0.991)
 MODELS = [MODEL for MODEL in MODEL_LIST if (not 'hook' in MODEL) and (not '3col' in MODEL) and (not 'rev' in MODEL)]

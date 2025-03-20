@@ -7,7 +7,7 @@ import dataclasses
 import numpy as np
 import networkx as nx
 
-from imports import EDGE_TYPE
+from src.data.Data_gen_utils import EDGE_TYPE
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from feature_functions import constant_feature

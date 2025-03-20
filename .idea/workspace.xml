@@ -5,15 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f223322-1af2-4754-892c-faef9b307699" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/data/Data_gen_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/data/json/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notebooks/experiments/predictor.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Ptab.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Ptab.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Date_gen.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/data_gen/config_data_generation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/data_gen/config_data_generation.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/data_gen/generate_exe.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/data_gen/generate_exe.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/criterion.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/criterion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/predictor-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/predictor-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/predictor.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/predictor.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/predictor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/predictor_exe.py" beforeDir="false" afterPath="$PROJECT_DIR$/predictor_exe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/predictor_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/predictor_info.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/Data_gen_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/Data_gen_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/data_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/feature_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/feature_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data/generate_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/generate_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/imports.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/training_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/training_info.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +29,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="Jupyter Notebook" />
       </list>
     </option>
   </component>
@@ -41,22 +47,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;min&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/chanhomin/Ptab/Ptab/src/data/json&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "min",
+    "last_opened_file_path": "/home/chanhomin/Ptab/Ptab/src/data/Data_gen_utils.py",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RdControllerToolWindowsLayoutState" isNewUi="true">
     <layout>
       <window_info id="Bookmarks" side_tool="true" />
@@ -64,7 +73,7 @@
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
       <window_info id="Learn" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.33011132" />
       <window_info id="Commit" order="1" weight="0.25" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
@@ -73,10 +82,11 @@
       <window_info anchor="bottom" id="HfCacheToolWindow" />
       <window_info anchor="bottom" id="File Transfer" />
       <window_info anchor="bottom" id="Find" />
+      <window_info anchor="bottom" id="Jupyter" />
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="Problems" order="1" />
-      <window_info anchor="bottom" id="Problems View" order="2" weight="0.3295699" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" />
+      <window_info active="true" anchor="bottom" id="Problems View" order="2" visible="true" weight="0.31344086" />
+      <window_info anchor="bottom" id="Terminal" order="3" weight="0.31344086" />
       <window_info anchor="bottom" id="Services" order="4" />
       <window_info anchor="bottom" id="Python Packages" order="5" weight="0.1" />
       <window_info anchor="bottom" id="Python Console" order="6" weight="0.1" />
@@ -101,7 +111,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Unnamed">
+  <component name="RunManager" selected="Python.Unnamed (2)">
     <configuration name="Unnamed (1)" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Ptab" />
       <option name="ENV_FILES" value="" />
@@ -111,6 +121,29 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="$USER_HOME$/anaconda3/envs/mpnn/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unnamed (2)" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Ptab" />
+      <option name="ENV_FILES" value="$USER_HOME$/anaconda3/envs/mpnn/bin/python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -172,21 +205,17 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.Unnamed (2)" />
       <item itemvalue="Python.Unnamed" />
       <item itemvalue="Python.Unnamed (1)" />
       <item itemvalue="Python.generate_exe" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.generate_exe" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-d159365566ee-JavaScript-PY-251.23774.37" />
-        <option value="bundled-python-sdk-a606e5e558ee-f4058bf5e88f-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.23774.37" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-PY-251.23774.123" />
+        <option value="bundled-python-sdk-ca4504e94489-d9c5bdb153f4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.23774.123" />
       </set>
     </attachedChunks>
   </component>
@@ -221,6 +250,10 @@
       <workItem from="1742109777784" duration="13781000" />
       <workItem from="1742133537250" duration="3719000" />
       <workItem from="1742220624734" duration="1477000" />
+      <workItem from="1742391903853" duration="960000" />
+      <workItem from="1742423489531" duration="180000" />
+      <workItem from="1742423680715" duration="970000" />
+      <workItem from="1742425039428" duration="7358000" />
     </task>
     <task id="LOCAL-00001" summary="Project structure edit">
       <option name="closed" value="true" />
@@ -254,6 +287,10 @@
     <MESSAGE value="Project structure edit" />
     <option name="LAST_COMMIT_MESSAGE" value="Project structure edit" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Ptab$generate_exe.coverage" NAME="generate_exe Coverage Results" MODIFIED="1741432765276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

@@ -2,7 +2,7 @@ import os
 from src.data.feature_functions import constant_feature,column_indicator, normalized_column_indicator, normalized_column_rev_indicator
 
 GPU_NUM = "1"
-num_epochs = 10
+num_epochs = 100
 batch_size = 8192
 
 # GCN_multi_stack = "sum"

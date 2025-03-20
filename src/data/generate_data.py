@@ -6,9 +6,8 @@ import os
 import numpy as np
 import scipy.sparse as sp
 
-from imports import Direction, EDGE_TYPE
 from src.data.Data_gen_utils import generate_UIO, is_P_compatible, is_P_less, P_Des, words_from_orbit, shape_of_word, \
-    iter_shuffles, cluster_vertices
+    iter_shuffles, cluster_vertices, EDGE_TYPE, Direction
 from src.data.criterion import check_all_row_connected, is_good_P_1row_B
 
 
