@@ -3,7 +3,7 @@
 .idea*
 *.pyc
 *.pth
-*.json
+# *.json
 *.pickle
 *.DS_Store
 /tex/*
