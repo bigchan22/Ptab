@@ -755,7 +755,6 @@ def generate_data_PTabs_position_of_one(DIR_PATH,
     graph_sizes = []
     while N <= input_N:
         n_str = str(N)
-        TM_n = np.matrix(TM[n_str])
         for P in generate_UIO(N, connected=connected):
             for words in orbits_from_P(P, primitive):
                 gs = dict()
