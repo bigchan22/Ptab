@@ -3,7 +3,15 @@ import itertools
 import json
 import os
 from copy import deepcopy
-
+def conjugate(lamb):
+    conj = []
+    for i in range(1, lamb[0]+1):
+        cnt = 0
+        for part in lamb:
+            if part >= i:
+                cnt += 1
+        conj.append(cnt)
+    return conj
 
 def iter_UIO(n, connected=False):
     if n == 1:
@@ -142,6 +150,30 @@ def words_from_heap(P, word):
                     words.append(temp)
     return words
 
+def PTab_from_word(P, word):
+    shape = shape_of_word(P, word)
+    T = [[] for row in shape]
+    conj = conjugate(shape)
+    k = 0
+    for i in range(len(conj)):
+        for j in reversed(range(conj[i])):
+            T[j].append(word[k])
+            k += 1
+    return T
+
+def orbits_from_P(P, primitive=True):
+    orbs = []
+    word_list = []
+    if primitive == True:
+        words_domain = iter_shuffles(cluster_vertices(P))
+    else:
+        words_domain = Permutations(len(P))
+    for word in words_domain:
+        if word in word_list: continue
+        words = words_from_orbit(P, word)
+        orbs.append(words_from_orbit(P, word))
+        word_list.extend(words)
+    return orbs
 
 def words_from_orbit(P, word):
     ## Given a poset P and a word, return words which are equivalent to the input word w.r.t. Hwang's relations

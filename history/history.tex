@@ -1,0 +1,346 @@
+\documentclass[12pt,a4paper,reqno]{amsart}
+
+\newcommand\hmmax{0}
+\newcommand\bmmax{0}
+\usepackage{mathtools, mathrsfs, mathdots}
+\usepackage{amsmath, amsthm, amssymb, amsfonts, amscd}
+\usepackage{stmaryrd}
+\usepackage{tikz} 
+\usepackage{euscript}
+\usepackage{epsfig}
+\usepackage[a4paper,left=2.25cm,right=2.25cm,top=3cm,bottom=3cm,headsep=1cm]{geometry}
+\usepackage{blkarray}
+\usepackage{multirow}
+\usepackage{bm}
+\usepackage{ytableau}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{cases}
+\usepackage[shortlabels]{enumitem}
+
+\usepackage[mathbf]{euler} 
+\usepackage[normalem]{ulem}
+
+\usepackage{graphicx,subfigure}
+\renewcommand{\familydefault}{ppl}
+
+\setlength{\parskip}{1pt}
+\usepackage{hyperref}
+\setlength{\multlinegap}{0pt}
+\allowdisplaybreaks[1]
+\usetikzlibrary{decorations.markings}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{conj}[thm]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{exam}[thm]{Example}
+%% \theoremstyle{remark}
+\newtheorem{rmk}[thm]{Remark}
+\newtheorem{ques}[thm]{Question}
+\newtheorem{obsv}[thm]{Observation}
+\newtheorem{prob}[thm]{Problem}
+\theoremstyle{remark}
+\newtheorem*{notation}{Notations}
+
+\renewcommand\emptyset{\varnothing}
+
+%Blackboard bold letters.
+\renewcommand{\AA}{\mathbb{A}}
+\newcommand{\BB}{\mathbb{B}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\DD}{\mathbb{D}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\GG}{\mathbb{G}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\II}{\mathbb{I}}
+\newcommand{\JJ}{\mathbb{J}}
+\newcommand{\KK}{\mathbb{K}}
+\newcommand{\LL}{\mathbb{L}}
+\newcommand{\MM}{\mathbb{M}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\OO}{\mathbb{O}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\renewcommand{\SS}{\mathbb{S}}
+\newcommand{\TT}{\mathbb{T}}
+\newcommand{\UU}{\mathbb{U}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\WW}{\mathbb{W}}
+\newcommand{\XX}{\mathbb{X}}
+\newcommand{\YY}{\mathbb{Y}}
+\newcommand{\ZZ}{\mathbb{Z}}
+
+%Calligraphic letters
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cJ}{\mathcal{J}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cV}{\mathcal{V}}
+\newcommand{\cW}{\mathcal{W}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cY}{\mathcal{Y}}
+\newcommand{\cZ}{\mathcal{Z}}
+
+%Fraktur letters
+\newcommand{\fb}{\mathfrak{b}}
+\newcommand{\fg}{\mathfrak{g}}
+\newcommand{\fh}{\mathfrak{h}}
+\newcommand{\fm}{\mathfrak{m}}
+\newcommand{\fn}{\mathfrak{n}}
+\newcommand{\ft}{\mathfrak{t}}
+\newcommand{\fP}{\mathfrak{P}}
+\newcommand{\fQ}{\mathfrak{Q}}
+\newcommand{\fS}{\mathfrak{S}}
+
+%tilde letters
+\newcommand{\tS}{\widetilde{S}}
+\newcommand{\ts}{\widetilde{s}}
+\newcommand{\tA}{\widetilde{A}}
+\newcommand{\tG}{\widetilde{G}}
+\newcommand{\tR}{\widetilde{R}}
+\newcommand{\tPio}{\widetilde{\Pio}}
+
+%bold letters
+\newcommand\xx{\mathbf{x}}
+\newcommand\yy{\mathbf{y}}
+\newcommand\uu{\mathbf{u}}
+\newcommand\mm{\mathbf{m}}
+
+%sf letters
+\newcommand\ww{\mathsf{w}}
+\newcommand\vv{\mathsf{v}}
+\newcommand\zz{\mathsf{z}}
+
+
+
+\newcommand\asc{\operatorname{asc}}
+\newcommand\des{\operatorname{des}}
+\newcommand\inv{\operatorname{inv}}
+\newcommand\inc{\operatorname{inc}}
+\newcommand\sgn{\operatorname{sgn}}
+\newcommand\sh{\operatorname{sh}}
+\newcommand\row{\operatorname{row}}
+\newcommand\col{\operatorname{col}}
+\newcommand\ch{\operatorname{ch}}
+\newcommand\wt{\operatorname{wt}}
+
+\newcommand\Des{\operatorname{Des}}
+\newcommand\SYT{\operatorname{SYT}}
+\newcommand\SSYT{\operatorname{SSYT}}
+\newcommand\Par{\operatorname{Par}}
+\newcommand\Comp{\operatorname{Comp}}
+
+\newcommand\NSym{\mathsf{NSym}}
+\newcommand\Sym{\mathsf{Sym}}
+\newcommand\QSym{\mathsf{QSym}}
+
+\newcommand\gge{\succcurlyeq}
+\newcommand\lle{\preccurlyeq}
+\newcommand\trigeq{\unrhd}
+\newcommand\trileq{\unlhd}
+
+
+\newcommand\equivclass[1]{#1/{\sim}}
+\newcommand\qand{\quad\mbox{and}\quad}
+\newcommand\mand{\mbox{ \& }}
+
+\newcommand\CHK[1]{\textcolor{red}{#1}}
+
+\title{Good-Bad criterions and counter examples}
+% \author{Byung-Hak Hwang}
+% \address{Address and affiliation}
+% \email{byunghakhwang@gmail.com}
+\date{\today}
+%
+\begin{document}
+
+
+\maketitle
+% \tableofcontents
+
+\section{Introduction}
+In this note, I record our attempts and counter examples for them.
+
+\section*{Notation}
+Let \( P \) be a natural unit interval order on \( [n] \), and we write \( P \) as a Hessenberg
+function. For example, \( P=(2,3,3) \). Sometimes, we write \( h(P)_1 = 2, h(P)_2 = 3 \) and
+\( h(P)_3 = 3 \).
+
+Let \( T \) be a \( P \)-tableau of shape \( \lambda \).
+For \( 1\le i\le j\le \lambda_1 \), we denote by \( T^{[i,j]} \) the \( P \)-tableau
+obtained from by the \( k \)th column of \( T \) for \( k\in[i,j] \).
+
+For a subposet \( P'\subseteq P \), we denote by \( T[P] \) the collection of cells
+whose content belongs to \( P' \).
+
+\section{Backward connectedness criterion}
+We say \emph{\( T \) forms connected straight shape} if when we decompose \( P=P_1 \sqcup \dots \sqcup P_k \), each restriction \( T[P_i] \) forms a \( P \)-tableau. In other words, for each
+\( i \), the numbers of cells in each column of \( T[P_i] \) decreases.
+For example, let \( P=(2,3,3,5,6,7,7) \), and
+\[
+  T_1 = \ytableaushort{126,34,5,7} \qand T_2 = \ytableaushort{126,34,57}.
+\]
+Then \( T_1 \) forms connected straight shape while \( T_2 \) doesn't.
+
+A \( P \)-tableau \( T \) of shape \( \lambda \) is \emph{backward connected}
+if for each \( i=1,\dots,\lambda_1 \), each \( P \)-tableau \( T^{[i,\lambda_1]} \) forms
+connected straight shape.
+
+\begin{description}
+  \item[Criterion] For a \( P \)-tableau \( T \), we claim that \( T \) is good if and only if
+  \( T \) is backward connected.
+  \item[Observation] This criterion unifies the characterizations of good \( P \)-tableaux of
+  hook shapes and 2-column shapes. Also, this criterion is true for the extreme case \( P=(1,2,\dots,n) \).
+  \item[Counterexamples 1] The smallest counterexample.
+  Let \( P=(2,4,4,5,5) \) and \( \ww=\mathsf{32451} \). Then we have
+  \begin{align*}
+    F_{[\ww]}(\xx)
+      &= s_{3,1,1}(\xx) + 2 s_{3,2}(\xx) + 6 s_{4,1}(\xx) + 7 s_{5}(\xx) \\
+      &= h_{3,1,1}(\xx) + h_{3,2}(\xx) + 3 h_{4,1}(\xx) + 2 h_{5}(\xx).
+  \end{align*}
+  There are 3 \( P \)-tableaux of shape \( (3,1,1) \) or \( (3,2) \):
+  \[
+    \ytableaushort{124,3,5} \qquad \ytableaushort{124,35} \qquad \ytableaushort{123,45}.
+  \]
+  All of them are backward connected, but the coefficients of \( h_{3,1,1}(\xx) \) and \( h_{3,2}(\xx)
+  \) are \( 1 \) and \( 1 \). Hence the second or the third one should be bad.
+  \item[Counterexamples 2] Let \( P=(2,5,5,5,6,6) \) and \( \ww=\mathsf{623451} \).
+  Then we have
+  \begin{align*}
+    F_{[\ww]}(\xx)
+      &= s_{4,1,1}(\xx) + s_{4,2}(\xx) + 4 s_{5,1}(\xx) + 4 s_{6}(\xx) \\
+      &= h_{4,1,1}(\xx) + 2 h_{5,1}(\xx) + h_{6}(\xx).
+  \end{align*}
+  Let us observe the \( P \)-tableaux:
+  \[
+    \ytableaushort{1245,3,6} \qquad \ytableaushort{1245,36}.
+  \]
+  They are backward connected, but the second one should be bad.
+  \item[Counterexamples 3] Let \( P=(2, 5, 5, 5, 6, 7, 7) \) and \( \ww=\mathsf{6723451} \).
+  Then we have
+  \begin{align*}
+    F_{[\ww]}(\xx)
+      &= s_{4,2,1}(\xx) + s_{4,3}(\xx) + 2 s_{5,1,1}(\xx) + 4 s_{5,2}(\xx) + 7 s_{6,1}(\xx) + 6 s_{7}(\xx) \\
+      &= h_{4,2,1}(\xx) + h_{5,1,1}(\xx) + h_{5,2}(\xx) + 2 h_{6,1}(\xx) + h_{7}(\xx).
+  \end{align*}
+  Let us see the \( P \)-tableaux:
+  \[
+    \ytableaushort{1245,37,6} \qquad \ytableaushort{1245,367}.
+  \]
+  The second one should be bad while it is backward connected.
+  \item[Counterexamples 4] Let \( P=(2, 5, 5, 5, 6, 7, 7) \) and \( \ww=\mathsf{6532471} \).
+  Then we have
+  \begin{align*}
+    F_{[\ww]}(\xx)
+      &= s_{4,2,1}(\xx) + s_{4,3}(\xx) + 2 s_{5,1,1}(\xx) + 4 s_{5,2}(\xx) + 7 s_{6,1}(\xx) + 6 s_{7}(\xx) \\
+      &= h_{4,2,1}(\xx) + h_{5,1,1}(\xx) + h_{5,2}(\xx) + 2 h_{6,1}(\xx) + h_{7}(\xx).
+  \end{align*}
+  Let us see the \( P \)-tableaux:
+  \[
+    \ytableaushort{1342,56,7} \qquad \ytableaushort{1342,576}.
+  \]
+  The second one should be bad while it is backward connected.
+  \item[Counterexamples 5] Let \( P=(2, 5, 5, 5, 6, 7, 8, 8) \) and \( \ww=\mathsf{53421678} \).
+  Then we have
+  \begin{align*}
+    F_{[\ww]}(\xx)
+      &= s_{4,2,1,1}(\xx) + s_{4,2,2}(\xx) + 5 s_{4,3,1}(\xx) + 5 s_{4,4}(\xx) + s_{5,1,1,1}(\xx) + 12 s_{5,2,1}(\xx)\\
+        &\qquad + 21 s_{5,3}(\xx) + 13 s_{6,1,1}(\xx) + 34 s_{6,2}(\xx) + 40 s_{7,1}(\xx) + 31 s_{8}(\xx) \\
+      &= h_{4,2,1,1}(\xx) + 3 h_{4,3,1}(\xx) + h_{4,4}(\xx) + 5 h_{5,2,1}(\xx) \\
+        &\qquad + 6 h_{5,3}(\xx) + 2 h_{6,1,1}(\xx) + 5 h_{6,2}(\xx) + 5 h_{7,1}(\xx) + 3 h_{8}(\xx).
+  \end{align*}
+  Let us see the \( P \)-tableaux:
+  \[
+    \ytableaushort{1542,37,6,8} \qquad \ytableaushort{1342,56,78}.
+  \]
+  The second one should be bad while it is backward connected.
+  \item[Overall] By SAGE, the number of backward connected \( P \)-tableaux are always greater than
+  or equal to the number of good \( P \)-tableaux in the case \( n\le 8 \). Then I think that
+  the backward connectedness criterion is a great necessary condition for goodness.
+\end{description}
+
+\section{Flippability criterion}
+Since \( P \)-tableaux give the Schur expansion of the chromatic quasisymmetric function, and 
+the transition matrix between \( \{s_\lambda(\xx)\} \) and \( \{h_\lambda(\xx)\} \) is
+unitriangular with respect to the dominant order, we believe that good \( P \)-tableaux are
+`compact' in some sense. So if there is a flippable sequence in adjacent columns,
+we'd like to flip it to make the tableau more compact.
+
+Let \( T \) be a \( P \)-tableau. A \emph{flippable ladder} is a odd-length sequence
+\( (a_1,\dots,a_{2k+1}) \) of entries in \( T \) satisfying the following conditions:
+\begin{enumerate}[label=(\roman*)]
+  \item \( a_i \) and \( a_{i+1} \) are incomparable in \( P \) for all \( i \);
+  \item \( a_i \le_P a_{i+2} \) for all \( i \); and
+  \item they are concentrated in two adjacent columns.
+\end{enumerate}
+For \( k=1,\dots,\lambda_1 \), let \( C_k \) denote the \( k \)th column of \( T \).
+It is easy to check that if a flippable ladder \( L \) lies on \( C_k \) and \( C_{k+1} \) for some
+\( k \), then \( L\cap C_k = \{a_1,a_3,\dots,a_{2k+1}\} \) and \( L\cap C_{k+1} =
+\{a_2,a_4,\dots,a_{2k}\} \), or vice versa. Furthermore, \( L\cap C_k \) and \( L\cap C_{k+1} \)
+appear consecutively in \( C_k \) and \( C_{k+1} \) respectively.
+A flippable ladder \( L \) is \emph{of type \( M \)} if \( L \cap C_k = \{a_1,a_3,\dots,a_{2k+1}\} \),
+and \emph{of type \( W \)} otherwise.
+
+Let \( L \) be a flippable ladder of type \( W \) lying on \( C_k \) and \( C_{k+1} \).
+
+
+
+A \( P \)-tableau \( T \) is \emph{ladder-compact} if \( T \) contains no maximal flippable ladder
+of type \( W \).
+
+\begin{description}
+  \item[Criterion] For a \( P \)-tableau \( T \), we claim that \( T \) is good if and only if
+  \( T \) is ladder-compact.
+  \item[Observation] This criterion generalize the characterization of good \( P \)-tableaux of
+  2-colum shape. Also, this criterion is true for the extreme case \( P=(1,2,\dots,n) \).
+  \item[Counterexamples 0] Let \( P=(2,3,3) \). Then we already have that the \( P \)-tableau
+  \[
+    \ytableaushort{132}
+  \]
+  is good, but the criterion says the tableau is bad. To avoid this case, we modify the criterion
+  somewhat artificially such that compactification (flipping a ladder) on the first row is forbidden.
+  \item[Counterexamples 1] The smallest counterexample. Let \( P=(2,3,4,5,5) \) and
+  \( \ww=\mathsf{34521} \). Then we have
+  \begin{align*}
+    F_{[\ww]}(\xx)
+      &= s_{2,2,1}(\xx) + s_{3,1,1}(\xx) + 5 s_{3,2}(\xx) + 6 s_{4,1}(\xx) + 6 s_5(\xx) \\
+      &= h_{2,2,1}(\xx) + 3 h_{3,2}(\xx) + h_{4,1}(\xx) + h_5(\xx).
+  \end{align*}
+  Let us observe \( P \)-tableaux of shape \( (3,2) \):
+  \[
+    \ytableaushort{124,35} \qquad \ytableaushort{215,43} \qquad \ytableaushort{213,45}
+  \]
+  \[
+    \ytableaushort{132,45} \qquad \ytableaushort{123,54}.
+  \]
+  The first three tableaux are not ladder-compact, and the last two tableaux are ladder-compact.
+  But there should exist 3 good \( P \)-tableaux.
+  Note that the backward connectedness criterion says that the second and third tableaux in the
+  first row are bad.
+  \item[Counterexamples 2] 
+\end{description}
+
+\end{document}

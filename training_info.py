@@ -2,18 +2,19 @@ import os
 from src.data.feature_functions import constant_feature,column_indicator, normalized_column_indicator, normalized_column_rev_indicator
 
 GPU_NUM = "1"
-num_epochs = 100
+num_epochs = 3000
 batch_size = 8192
 
 # GCN_multi_stack = "sum"
 GCN_multi_stack = "conv"
 
 use_ppath = False
-# column_info = "column_direction"
-# column_info = "column_direc_column_same"
+use_position_of_one = True
+#column_info = "column_direction"
+#column_info = "column_direc_column_same"
 column_info = "original"
-graph_deg = 8
-# num_layers = graph_deg
+graph_deg = 7
+#num_layers = graph_deg
 num_layers = 4
 num_features = 256
 feature_list = {
@@ -28,8 +29,8 @@ UPTO = True
 direction = "222"
 
 shape_indicator = {
-    'all_with_all_row_connectedness_criterion': (True,),
-    'all_with_inductive_connectedness_criterion': (False,),
+    'all_with_all_row_connectedness_criterion': (False,),
+    'all_with_inductive_connectedness_criterion': (True,),
     '2row_less': (False,),
     '2row_less_with_all_row_connectedness_criterion': (False,),
     '2row_less_with_inductive_connectedness_criterion': (False,),
@@ -53,8 +54,9 @@ save_trained_weights = True
 step_size = 0.001
 train_fraction = .8
 
-DIR_PATH = f'Data/n={graph_deg}'
-MODEL_DIR = 'models/trained_models'
+DIR_PATH = f'/Data/Ptab/n={graph_deg}'
+DIR_PATH = f'./Data/n={graph_deg}'
+MODEL_DIR = './trained_models'
 MODEL_FILE = os.path.join(MODEL_DIR, f'parameters_{graph_deg}_{num_layers}_{num_features}')
 
 for key in shape_indicator:
@@ -77,7 +79,9 @@ if not column_info == "original":
 if use_ppath:
     DIR_PATH += "_ppath"
     MODEL_FILE += "_ppath"
-
+if use_position_of_one:
+    DIR_PATH += f"_positionone"
+    MODEL_FILE += "_positionone"
 for key in feature_list.keys():
     if feature_list[key][0]:
         MODEL_FILE += f'_{key}'

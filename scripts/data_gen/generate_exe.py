@@ -9,7 +9,7 @@ import yaml
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.insert(0, project_root)
 
-from src.data.generate_data import  generate_data_PTabs_ppath, generate_data_PTabs
+from src.data.generate_data import  generate_data_PTabs_ppath, generate_data_PTabs, generate_data_PTabs_position_of_one
 from src.data.shapes import is_2row_less, is_3row_less, is_hook, is_3col_less, any_shape
 from src.data.criterion import check_all_row_connected
 from src.data.criterion import check_inductive_disconnectedness_criterion
@@ -24,6 +24,7 @@ N = config["N"]
 UPTO = config["UPTO"]
 column_info = config["column_info"]
 use_ppath = config["use_ppath"]
+use_position_of_one = config["use_position_of_one"]
 data_dir = config["data_dir"]
 shapes = config['shapes']
 filters = config['filters']
@@ -72,6 +73,19 @@ for shape in config['shapes']:
                     primitive=True,
                     connected=CONNECTED_MAP[connect],
                     UPTO_N=UPTO
+                )
+            elif use_position_of_one:
+                DIR_PATH += f"_positionone"
+                print("Generating in:", DIR_PATH)
+                os.makedirs(DIR_PATH, exist_ok=True)
+                generate_data_PTabs_position_of_one(DIR_PATH,
+                   N,
+                   [SHAPES_MAP[shape]],
+
+                   primitive=True,
+                   connected=CONNECTED_MAP[connect],
+                   column_info=column_info,
+                   UPTO_N=UPTO
                 )
             else:
                 print("Generating in:", DIR_PATH)

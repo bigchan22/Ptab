@@ -1,8 +1,7 @@
-N: 6
+N: 5
 UPTO: true
 column_info: "original"
 use_ppath: false
-use_position_of_one: True
 data_dir: "./Data"
 
 # List of shapes to use – the strings must match keys in SHAPES_MAP.
@@ -21,4 +20,4 @@ filters:
 # List of connectedness options – the strings must match keys in CONNECTED_MAP.
 connectedness:
   - "connected"
-  # - "disconnected"
+    #- "disconnected"

@@ -7,7 +7,7 @@ import numpy as np
 import scipy.sparse as sp
 
 from src.data.Data_gen_utils import generate_UIO, is_P_compatible, is_P_less, P_Des, words_from_orbit, shape_of_word, \
-    iter_shuffles, cluster_vertices, EDGE_TYPE, Direction
+    iter_shuffles, cluster_vertices, EDGE_TYPE, Direction, orbits_from_P, PTab_from_word
 from src.data.criterion import check_all_row_connected, is_good_P_1row_B
 
 
@@ -278,7 +278,90 @@ def generate_data_PTabs(DIR_PATH,
         json.dump(shuffled_labels, f)
     with open(os.path.join(DIR_PATH, f"graph_sizes.json"), 'w') as f:
         json.dump(shuffled_graph_sizes, f)
-
+        
+def generate_data_PTabs_position_of_one(DIR_PATH,
+                        input_N,
+                        shape_checkers,
+                        primitive = True,
+                        connected = False,
+                        UPTO_N = False,
+                        json_path = "src/data/json/",
+                        column_info = 'original'):
+    with open(os.path.join(json_path, "Partitions.json")) as f:
+        Partitions = json.load(f)
+    with open(os.path.join(json_path, "PartitionIndex.json")) as f:
+        PartitionIndex = json.load(f)
+    with open(os.path.join(json_path, "TransitionMatrix_btw_s_h.json")) as f:
+        TM = json.load(f)
+    
+    if UPTO_N:
+        N = 1
+    else:
+        N = input_N
+    graphs = []
+    labels = []
+    graph_sizes = []
+    while N <= input_N:
+        n_str = str(N)
+        for P in generate_UIO(N, connected=connected):
+            for words in orbits_from_P(P, primitive):
+                gs = dict()
+                s_vec = dict()
+                for k in range(1, N+1):
+                    s_vec[k] = dict()
+                    gs[k] = dict()
+                    for lamb in Partitions[n_str]:
+                        lamb_str = str(lamb)
+                        gs[k][lamb_str] = sp.coo_matrix(([], ([], [])), shape=(0,0), dtype=np.int16)
+                        s_vec[k][lamb_str] = 0
+                for word in words:
+                    shape = shape_of_word(P, word)
+                    if shape == None: continue
+                    T = PTab_from_word(P, word)
+                    k = T[0].index(1) + 1
+                    s_vec[k][str(shape)] += 1
+                    if all(shape_checker(shape) == False for shape_checker in shape_checkers): continue
+                    if column_info == "original":
+                        g = make_matrix_from_T(P, word)
+                    elif column_info == "column_direction":
+                        g = make_matrix_from_T_col_info(P, word)
+                    elif column_info == "column_direc_column_same":
+                        g = make_matrix_from_T_col_info(P, word,
+                                                        direction=(Direction.FORWARD, Direction.BOTH, Direction.FORWARD))
+                    
+                    gs[k][str(shape)] = sp.block_diag((gs[k][str(shape)], g))
+                
+                for k in s_vec.keys():
+                    for lamb in Partitions[n_str]:
+                        lamb_str = str(lamb)
+                        if gs[k][lamb_str].size == 0: continue
+                        for shape_checker in shape_checkers:
+                            if shape_checker(lamb) == True:
+                                h_coeff = 0
+                                for mu in Partitions[n_str]:
+                                    mu_str = str(mu)
+                                    h_coeff += TM[n_str][mu_str][lamb_str] * s_vec[k][mu_str]
+                                if h_coeff < 0:
+                                    print("It is not positive!!!!")
+                                    print(P, word, k, lamb, h_coeff)
+                                    raise Exception(f"{P}, {word}, {k}, {lamb}, {h_coeff}: not positivie")
+                                graphs.append(gs[k][lamb_str])
+                                labels.append(h_coeff)
+                                graph_sizes.append(N)
+                                break
+        N += 1
+    indices = np.arange(len(graphs))
+    np.random.shuffle(indices)
+    shuffled_labels = [int(labels[indices[i]]) for i in range(len(graphs))]
+    shuffled_graph_sizes = [int(graph_sizes[indices[i]]) for i in range(len(graphs))]
+    
+    for i in range(len(indices)):
+        file_path = os.path.join(DIR_PATH, f"graph_{i:05d}.npz")
+        sp.save_npz(file_path, graphs[indices[i]])
+    with open(os.path.join(DIR_PATH, f"labels.json"), 'w') as f:
+        json.dump(shuffled_labels, f)
+    with open(os.path.join(DIR_PATH, f"graph_sizes.json"), 'w') as f:
+        json.dump(shuffled_graph_sizes, f)
 
 def generate_data_PTabs_ppath(DIR_PATH,
                               input_N,
