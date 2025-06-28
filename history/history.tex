@@ -1,50 +1,74 @@
-\documentclass[12pt,a4paper,reqno]{amsart}
+\documentclass[11pt,reqno]{amsart}
 
-\newcommand\hmmax{0}
-\newcommand\bmmax{0}
 \usepackage{mathtools, mathrsfs, mathdots}
 \usepackage{amsmath, amsthm, amssymb, amsfonts, amscd}
 \usepackage{stmaryrd}
-\usepackage{tikz} 
-\usepackage{euscript}
+\usepackage[mathscr]{euscript}
+\usepackage{dsfont}
+\usepackage{hyperref}
 \usepackage{epsfig}
-\usepackage[a4paper,left=2.25cm,right=2.25cm,top=3cm,bottom=3cm,headsep=1cm]{geometry}
-\usepackage{blkarray}
-\usepackage{multirow}
-\usepackage{bm}
+
+% \usepackage[a4paper,left=2.85cm,right=2.85cm,top=3cm,bottom=3cm,headsep=1.2cm]{geometry}
+
+\usepackage{todonotes}
+\usepackage{tikz} 
+\usepackage{tikz-cd}
 \usepackage{ytableau}
 \usepackage{caption}
-\usepackage{hyperref}
-\usepackage{cases}
-\usepackage[shortlabels]{enumitem}
 
-\usepackage[mathbf]{euler} 
+\usepackage[all]{xy}
+
+\usepackage{latexsym}
+\usepackage{palatino}
+\usepackage{enumitem}
+
 \usepackage[normalem]{ulem}
+\usepackage{upgreek}
+\usepackage{mathpazo}
+
+\usepackage{cleveref}
+\usepackage{refcheck}
 
 \usepackage{graphicx,subfigure}
-\renewcommand{\familydefault}{ppl}
+\usepackage{setspace}
 
-\setlength{\parskip}{1pt}
-\usepackage{hyperref}
-\setlength{\multlinegap}{0pt}
-\allowdisplaybreaks[1]
-\usetikzlibrary{decorations.markings}
+% \spacing{1.05}
+
+\linespread{1.2}
+
+\oddsidemargin=0in
+\evensidemargin=0in
+\textwidth=6.50in             % paper is 8.50in wide
+
+% 1in margins at top and bottom
+\headheight=10pt
+\headsep=10pt
+\topmargin=.25in
+\textheight=8in
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{prop}[thm]{Proposition}
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{cor}[thm]{Corollary}
 \newtheorem{conj}[thm]{Conjecture}
+\newtheorem{prob}[thm]{Problem}
+\newtheorem{ques}[thm]{Question}
 \theoremstyle{definition}
 \newtheorem{defn}[thm]{Definition}
 \newtheorem{exam}[thm]{Example}
 %% \theoremstyle{remark}
 \newtheorem{rmk}[thm]{Remark}
-\newtheorem{ques}[thm]{Question}
 \newtheorem{obsv}[thm]{Observation}
-\newtheorem{prob}[thm]{Problem}
 \theoremstyle{remark}
 \newtheorem*{notation}{Notations}
+
+\numberwithin{equation}{section}
 
 \renewcommand\emptyset{\varnothing}
 
@@ -161,6 +185,8 @@
 \newcommand\lle{\preccurlyeq}
 \newcommand\trigeq{\unrhd}
 \newcommand\trileq{\unlhd}
+
+\newcommand\PTab{\operatorname{PTab}}
 
 
 \newcommand\equivclass[1]{#1/{\sim}}
@@ -342,5 +368,54 @@ of type \( W \).
   first row are bad.
   \item[Counterexamples 2] 
 \end{description}
+
+
+\section{Refinement via the first entry of \( P \)-tableaux}
+Let \( \gamma \) be an equivalence class of words under the flip equivalences.
+Let \( \PTab(\delta) \) be the set of \( P \)-tableaux whose column words belong to \( \gamma \).
+For \( k=1,\dots, n \), let
+\[
+  F_{\gamma}^{(k)}(\xx) = \sum_{\substack{T\in\PTab(\gamma) \\ T(1,1)=k}} s_{\lambda(T)}(\xx).
+\]
+We verified that for each \( \gamma \) and \( k \), \( F_\gamma^{(k)}(\xx) \) is \( h \)-positive
+up to \( n=8 \).
+Furthermore, the forward connectivity criterion
+(\( \mathtt{check\_inductive\_disconnectedness\_criterion\_forward} \)) plays a valid filter
+for \( F_\gamma^{(k)}(\xx) \).
+In contrast, other criterions are not valid, e.g.,
+\( \mathtt{check\_inductive\_disconnectedness\_criterion} \),
+\( \mathtt{check\_all\_row\_connected(P, word, 'F')} \), and
+\( \mathtt{check\_all\_row\_connected(P, word, 'B')} \).
+The following is a counterexample for \( \mathtt{check\_all\_row\_connected(P, word, 'F')} \):
+let \( P= (2, 4, 4, 6, 6, 8, 8, 8) \), \( \ww = \mathsf{12378654} \) and \( \gamma=[\ww] \).
+Then the following is the list of \( P \)-tableaux of shape \( (4,4) \) in \( \PTab(\gamma) \)
+whose first entry is \( 3 \):
+\begin{align*}
+  T_1 = \ytableaushort{3215,7648}\qquad
+  T_2 = \ytableaushort{3214,6578}\qquad
+  T_3 = \ytableaushort{3214,5768}.
+\end{align*}
+The coefficient of \( h_{4,4}(\xx) \) in \( F_\gamma^{(k)}(\xx) \) is equal to \( 2 \).
+The criterions give the following result:
+\[
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    criterion & \( T_1 \) & \( T_2 \) & \( T_3 \) \\
+    \hline \hline
+    \( \mathtt{check\_inductive\_disconnectedness\_criterion\_forward} \) & T & T & F \\
+    \hline
+    \( \mathtt{check\_inductive\_disconnectedness\_criterion} \) & F & F & F \\
+    \hline
+    \( \mathtt{check\_all\_row\_connected(P, word, 'F')} \) & F & T & F \\
+    \hline
+    \( \mathtt{check\_all\_row\_connected(P, word, 'B')} \) & F & F & F \\
+    \hline
+  \end{tabular}
+\]
+Only the first criterion gives two True.
+
+Note that there are 5 counterexamples for \( \mathtt{check\_all\_row\_connected(P, word, 'F')} \)
+in the case \( n=8 \). The all counterexamples are the case where the shape of incorrect tableaux
+is \( (4,4) \) and \( k = 3 \).
 
 \end{document}
