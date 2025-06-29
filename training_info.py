@@ -13,7 +13,7 @@ use_position_of_one = True
 #column_info = "column_direction"
 #column_info = "column_direc_column_same"
 column_info = "original"
-graph_deg = 7
+graph_deg = 8
 #num_layers = graph_deg
 num_layers = 4
 num_features = 256
@@ -29,8 +29,8 @@ UPTO = True
 direction = "222"
 
 shape_indicator = {
-    'all_with_all_row_connectedness_criterion': (False,),
-    'all_with_inductive_connectedness_criterion': (True,),
+    'all_with_all_row_connectedness_criterion': (True,),
+    'all_with_inductive_connectedness_criterion': (False,),
     '2row_less': (False,),
     '2row_less_with_all_row_connectedness_criterion': (False,),
     '2row_less_with_inductive_connectedness_criterion': (False,),
