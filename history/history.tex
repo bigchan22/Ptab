@@ -372,7 +372,7 @@ of type \( W \).
 
 \section{Refinement via the first entry of \( P \)-tableaux}
 Let \( \gamma \) be an equivalence class of words under the flip equivalences.
-Let \( \PTab(\delta) \) be the set of \( P \)-tableaux whose column words belong to \( \gamma \).
+Let \( \PTab(\gamma) \) be the set of \( P \)-tableaux whose column words belong to \( \gamma \).
 For \( k=1,\dots, n \), let
 \[
   F_{\gamma}^{(k)}(\xx) = \sum_{\substack{T\in\PTab(\gamma) \\ T(1,1)=k}} s_{\lambda(T)}(\xx).
@@ -387,7 +387,8 @@ In contrast, other criterions are not valid, e.g.,
 \( \mathtt{check\_all\_row\_connected(P, word, 'F')} \), and
 \( \mathtt{check\_all\_row\_connected(P, word, 'B')} \).
 The following is a counterexample for \( \mathtt{check\_all\_row\_connected(P, word, 'F')} \):
-let \( P= (2, 4, 4, 6, 6, 8, 8, 8) \), \( \ww = \mathsf{12378654} \) and \( \gamma=[\ww] \).
+
+Let \( P= (2, 4, 4, 6, 6, 8, 8, 8) \), \( \ww = \mathsf{12378654} \) and \( \gamma=[\ww] \).
 Then the following is the list of \( P \)-tableaux of shape \( (4,4) \) in \( \PTab(\gamma) \)
 whose first entry is \( 3 \):
 \begin{align*}
@@ -412,10 +413,11 @@ The criterions give the following result:
     \hline
   \end{tabular}
 \]
-Only the first criterion gives two True.
+Only the first criterion gives two `True's.
 
 Note that there are 5 counterexamples for \( \mathtt{check\_all\_row\_connected(P, word, 'F')} \)
 in the case \( n=8 \). The all counterexamples are the case where the shape of incorrect tableaux
 is \( (4,4) \) and \( k = 3 \).
 
 \end{document}
+
