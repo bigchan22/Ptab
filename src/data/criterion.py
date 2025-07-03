@@ -1,5 +1,7 @@
 from src.data.Data_gen_utils import is_P_compatible, P_Des, has_rl_P_min, has_lr_P_max, shape_of_word, concatenating
 
+def trivial_criterion(P, word):
+    return 'UNKNOWN'
 
 def is_good_P_1row_B(P, word):
     return not has_rl_P_min(P, word) and P_Des(P, word) == [len(word)]
@@ -105,6 +107,16 @@ def check_inductive_disconnectedness_criterion(P, word):  ####'with_inductive_co
             return 'BAD'
     return 'UNKNOWN'
 
+def check_inductive_disconnectedness_criterion_forward(P, word):  ####'with_inductive_connectedness_criterion':(False,),
+    shape = shape_of_word(P, word)
+    conj = conjugate(shape)
+    k = 0
+    for c in range(shape[0]):
+        k += conj[c]
+        res_P, res_word = restricted_P_word(P, word[:k])
+        if check_disconnectedness_criterion_for_inductive_argument(res_P, res_word) == False:
+            return 'BAD'
+    return 'UNKNOWN'
 
 def check_disconnectedness_criterion_for_inductive_argument(P, word):
     shape = shape_of_word(P, word)
