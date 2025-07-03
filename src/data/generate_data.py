@@ -16,7 +16,7 @@ from src.data.shapes import *
 ## Given a poset P and a word (which is a column word of some P-tableau), return the graph model of the input tableau as a scipy matrix.
 ## The additional parameter 'direction' determines directions of edges, but at this moment, we do not use this parameter.
 ## This version of make_matrix_from_T is old, which means that the matrix has 3 types of edges (DASHED_ARROW, DASHED_ARROW, DOUBLE_ARROW)
-def make_matrix_from_T(P, word, direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
+def make_matrix_from_T(P, word, direction=(Direction.BOTH, Direction.BOTH, Direction.BOTH)):
     n = len(word)
     row = []
     col = []
