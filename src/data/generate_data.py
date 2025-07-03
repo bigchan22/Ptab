@@ -391,6 +391,7 @@ def generate_data_PTabs_decomposed_via_first_entry(DIR_PATH,
     graph_sizes = []
     while N <= input_N:
         n_str = str(N)
+        Nchoose2 = N * (N-1) / 2
         for P in generate_UIO(N, connected=connected):
             for words in orbits_from_P(P, primitive):
                 gs = dict()
@@ -450,7 +451,7 @@ def generate_data_PTabs_decomposed_via_first_entry(DIR_PATH,
                                     print("It is not positive!!!!")
                                     print(P, word, k, lamb, h_coeff)
                                     raise Exception(f"{P}, {word}, {k}, {lamb}, {h_coeff}: not positive")
-                                if int(gs[k][lamb_str].size / N) < h_coeff - pre_calculated[k][lamb_str]:
+                                if int(gs[k][lamb_str].size / Nchoose2) < h_coeff - pre_calculated[k][lamb_str]:
                                     print("The filter is not a valid filter!!!!")
                                     print(P, word, k, lamb, h_coeff)
                                     raise Exception(f"{P}, {word}, {k}, {lamb}, {h_coeff}: not valid filter")
