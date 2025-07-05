@@ -1,7 +1,7 @@
 import os
 from src.data.feature_functions import constant_feature,column_indicator, normalized_column_indicator, normalized_column_rev_indicator
 
-GPU_NUM = "1"
+GPU_NUM = "0"
 num_epochs = 3000
 batch_size = 8192
 
@@ -10,6 +10,10 @@ GCN_multi_stack = "conv"
 
 use_ppath = False
 use_position_of_one = True
+
+#####"decomp", vanilla, position_one, ppath
+mode = "position_one"
+
 #column_info = "column_direction"
 #column_info = "column_direc_column_same"
 column_info = "original"
@@ -76,12 +80,19 @@ if UPTO:
 if not column_info == "original":
     DIR_PATH += column_info
     MODEL_FILE += column_info
-if use_ppath:
+if mode == "ppath":
     DIR_PATH += "_ppath"
     MODEL_FILE += "_ppath"
-if use_position_of_one:
+elif mode == "position_one":
     DIR_PATH += f"_positionone"
     MODEL_FILE += "_positionone"
+elif mode == "decomp":
+    DIR_PATH += f"_decomp"
+    MODEL_FILE += "_decomp"
+elif mode=="vanilla":
+    _
+else: 
+    raise ValueError
 for key in feature_list.keys():
     if feature_list[key][0]:
         MODEL_FILE += f'_{key}'

@@ -18,8 +18,7 @@ shapes:
 
 # List of filters to use – the strings must match keys in FILTERS_MAP.
 filters:
-  - "with_inductive_connectedness_criterion_forward"
-#  - "with_inductive_connectedness_criterion"
+  - "with_inductive_connectedness_criterion"
 #   - "with_all_row_connectedness_criterion"
 
 # List of connectedness options – the strings must match keys in CONNECTED_MAP.

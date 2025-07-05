@@ -12,7 +12,7 @@ sys.path.insert(0, project_root)
 from src.data.generate_data import  generate_data_PTabs_ppath, generate_data_PTabs, generate_data_PTabs_position_of_one
 from src.data.shapes import is_2row_less, is_3row_less, is_hook, is_3col_less, any_shape
 from src.data.criterion import check_all_row_connected
-from src.data.criterion import check_inductive_disconnectedness_criterion
+from src.data.criterion import check_inductive_disconnectedness_criterion,check_inductive_disconnectedness_criterion_forward
 
 print('start_time', time.strftime('%c'))
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -25,6 +25,7 @@ UPTO = config["UPTO"]
 column_info = config["column_info"]
 use_ppath = config["use_ppath"]
 use_position_of_one = config["use_position_of_one"]
+mode = config["generate_mode"]
 data_dir = config["data_dir"]
 shapes = config['shapes']
 filters = config['filters']
@@ -39,7 +40,8 @@ SHAPES_MAP = {
 }
 FILTERS_MAP = {
     "with_all_row_connectedness_criterion": check_all_row_connected,
-    'with_inductive_connectedness_criterion': check_inductive_disconnectedness_criterion
+    'with_inductive_connectedness_criterion': check_inductive_disconnectedness_criterion,
+    'with_inductive_connectedness_criterion_forward': check_inductive_disconnectedness_criterion_forward
 }
 CONNECTED_MAP = {
     "connected": True,
@@ -59,12 +61,12 @@ for shape in config['shapes']:
                 DIR_PATH += "_UPTO"
             if column_info != 'original':
                 DIR_PATH += f"_{column_info}"
-            os.makedirs(DIR_PATH, exist_ok=True)
+#             os.makedirs(DIR_PATH, exist_ok=True)
 
-            if use_ppath:
-                DIR_PATH_ppath = DIR_PATH + "_ppath"
+            if mode == "ppath":
+                DIR_PATH = DIR_PATH + "_ppath"
                 print("Generating in:", DIR_PATH_ppath)
-                os.makedirs(DIR_PATH_ppath, exist_ok=True)
+                os.makedirs(DIR_PATH, exist_ok=True)
                 generate_data_PTabs_ppath(
                     DIR_PATH_ppath,
                     N,
@@ -74,7 +76,7 @@ for shape in config['shapes']:
                     connected=CONNECTED_MAP[connect],
                     UPTO_N=UPTO
                 )
-            elif use_position_of_one:
+            elif mode == "position_one":
                 DIR_PATH += f"_positionone"
                 print("Generating in:", DIR_PATH)
                 os.makedirs(DIR_PATH, exist_ok=True)
@@ -87,7 +89,7 @@ for shape in config['shapes']:
                    column_info=column_info,
                    UPTO_N=UPTO
                 )
-            else:
+            elif mode == "vanilla":
                 print("Generating in:", DIR_PATH)
                 os.makedirs(DIR_PATH, exist_ok=True)
                 generate_data_PTabs(
@@ -100,6 +102,22 @@ for shape in config['shapes']:
                     column_info=column_info,
                     UPTO_N=UPTO
                 )
+            elif mode == "decomp":
+                DIR_PATH += f"_decomp"
+                print("Generating in:", DIR_PATH)
+                os.makedirs(DIR_PATH, exist_ok=True)
+                generate_data_PTabs(
+                    DIR_PATH,
+                    N,
+                    [SHAPES_MAP[shape]],
+                    [FILTERS_MAP[filter]],
+                    primitive=True,
+                    connected=CONNECTED_MAP[connect],
+                    column_info=column_info,
+                    UPTO_N=UPTO
+                )
+            else:
+                raise ValueError()
 
 print('end_time', time.strftime('%c'))
 shutil.copy(config_path, DIR_PATH)

@@ -18,7 +18,7 @@ print("Loading input data...")
 full_dataset, train_dataset, test_dataset = load_input_data(DIR_PATH)
 
 node_dim = num_features
-edge_dim = 8
+edge_dim = 4
 graph_deg = graph_deg
 depth = num_layers
 
