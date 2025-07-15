@@ -17,8 +17,7 @@ shapes:
   # - "hook"
 
 # List of filters to use – the strings must match keys in FILTERS_MAP.
-filters:
-  - "with_inductive_connectedness_criterion_forward"
+filters: "with_inductive_connectedness_criterion_forward"
 #  - "with_inductive_connectedness_criterion"
 #   - "with_all_row_connectedness_criterion"
 

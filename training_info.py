@@ -1,7 +1,7 @@
 import os
 from src.data.feature_functions import constant_feature,column_indicator, normalized_column_indicator, normalized_column_rev_indicator
 
-GPU_NUM = "0"
+GPU_NUM = "1"
 num_epochs = 3000
 batch_size = 8192
 
@@ -9,16 +9,16 @@ batch_size = 8192
 GCN_multi_stack = "conv"
 
 use_ppath = False
-use_position_of_one = True
+use_position_of_one = False
 
 #####"decomp", vanilla, position_one, ppath
-mode = "position_one"
+mode = "vanilla"
 
 #column_info = "column_direction"
 #column_info = "column_direc_column_same"
 column_info = "original"
 graph_deg = 8
-#num_layers = graph_deg
+# num_layers = graph_deg
 num_layers = 4
 num_features = 256
 feature_list = {
@@ -33,8 +33,10 @@ UPTO = True
 direction = "222"
 
 shape_indicator = {
+    'all': (False, ),
     'all_with_all_row_connectedness_criterion': (True,),
     'all_with_inductive_connectedness_criterion': (False,),
+    'all_with_inductive_connectedness_criterion_forward': (False,),
     '2row_less': (False,),
     '2row_less_with_all_row_connectedness_criterion': (False,),
     '2row_less_with_inductive_connectedness_criterion': (False,),
@@ -42,15 +44,15 @@ shape_indicator = {
     '3col_less_with_inductive_connectedness_criterion': (False,),
 }
 
-shape = {
-    'all': (False,),  # 3개다
-    '2row_less': (True,),
-    '3row_less': (False,),
-}
-filter_indicator = {
-    'with_all_row_connectedness_criterion': (False,),
-    'with_inductive_connectedness_criterion': (False,),
-}
+# shape = {
+#     'all': (False,),  # 3개다
+#     '2row_less': (True,),
+#     '3row_less': (False,),
+# }
+# filter_indicator = {
+#     'with_all_row_connectedness_criterion': (False,),
+#     'with_inductive_connectedness_criterion': (False,),
+# }
 
 use_pretrained_weights = False
 save_trained_weights = True
@@ -90,7 +92,7 @@ elif mode == "decomp":
     DIR_PATH += f"_decomp"
     MODEL_FILE += "_decomp"
 elif mode=="vanilla":
-    _
+    print("vanilla")
 else: 
     raise ValueError
 for key in feature_list.keys():

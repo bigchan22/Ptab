@@ -60,7 +60,7 @@ def make_matrix_from_T(P, word, direction=(Direction.BOTH, Direction.BOTH, Direc
     return sp.coo_matrix((edge_type, (row, col)), shape=(n, n))
 
 
-def make_matrix_from_T_col_info(P, word, direction=(Direction.FORWARD, Direction.FORWARD, Direction.FORWARD)):
+def make_matrix_from_T_col_info(P, word, direction=(Direction.BOTH, Direction.BOTH, Direction.BOTH)):
     n = len(word)
     row = []
     col = []

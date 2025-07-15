@@ -52,11 +52,11 @@ if GCN_multi_stack == "conv":
 if GCN_multi_stack == 'sum':
     loss_function = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=step_size, weight_decay=5e-4)
-# scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer=optimizer,
-#                                               lr_lambda=lambda epoch: 0.993 ** epoch,
-#                                               last_epoch=-1,
-#                                               verbose=False)
-scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs/4, eta_min=1e-6)
+scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer=optimizer,
+                                              lr_lambda=lambda epoch: 0.993 ** epoch,
+                                              last_epoch=-1,
+                                              verbose=False)
+# scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs/4, eta_min=1e-6)
 for epoch in range(num_epochs):
     # Training phase
     model.train()
