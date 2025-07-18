@@ -161,46 +161,112 @@ def PTab_from_word(P, word):
             k += 1
     return T
 
+# def orbits_from_P(P, primitive=True):
+#     orbs = []
+#     word_list = []
+#     if primitive == True:
+#         words_domain = iter_shuffles(cluster_vertices(P))
+#     else:
+#         words_domain = Permutations(len(P))
+#     for word in words_domain:
+#         if word in word_list: continue
+#         words = words_from_orbit(P, word)
+#         orbs.append(words_from_orbit(P, word))
+#         word_list.extend(words)
+#         print(len(word_list))
+#     return orbs
 def orbits_from_P(P, primitive=True):
+    seen_words = set()
     orbs = []
-    word_list = []
-    if primitive == True:
+
+    if primitive:
         words_domain = iter_shuffles(cluster_vertices(P))
     else:
         words_domain = Permutations(len(P))
-    for word in words_domain:
-        if word in word_list: continue
-        words = words_from_orbit(P, word)
-        orbs.append(words_from_orbit(P, word))
-        word_list.extend(words)
-    return orbs
 
+    for word in words_domain:
+        word_tuple = tuple(word)
+        if word_tuple in seen_words:
+            continue
+        orbit = words_from_orbit(P, word)
+        for w in orbit:
+            seen_words.add(tuple(w))
+        orbs.append(orbit)
+#         print(len(seen_words))
+    return orbs
+# def words_from_orbit(P, word):
+#     ## Given a poset P and a word, return words which are equivalent to the input word w.r.t. Hwang's relations
+#     words = [list(word)]
+#     for word in words:
+#         for i in range(len(word) - 1):
+#             if is_P_compatible(P, word[i], word[i + 1]):
+#                 temp = word[:i] + [word[i + 1], word[i]] + word[i + 2:]
+#                 if not temp in words:
+#                     words.append(temp)
+#         for i in range(1, len(word) - 1):
+#             if word[i] < word[i - 1] < word[i + 1] and is_P_less(P, word[i], word[i + 1]) and not is_P_less(P, word[i],
+#                                                                                                             word[
+#                                                                                                                 i - 1]) and not is_P_less(
+#                 P, word[i - 1], word[i + 1]):
+#                 temp = word[:i - 1] + [word[i], word[i + 1], word[i - 1]] + word[i + 2:]
+#                 if not temp in words:
+#                     words.append(temp)
+#             if word[i] > word[i + 1] > word[i - 1] and is_P_less(P, word[i - 1], word[i]) and not is_P_less(P,
+#                                                                                                             word[i - 1],
+#                                                                                                             word[
+#                                                                                                                 i + 1]) and not is_P_less(
+#                 P, word[i + 1], word[i]):
+#                 temp = word[:i - 1] + [word[i + 1], word[i - 1], word[i]] + word[i + 2:]
+#                 if not temp in words:
+#                     words.append(temp)
+#     return words
+#######################################################################################New version
 def words_from_orbit(P, word):
-    ## Given a poset P and a word, return words which are equivalent to the input word w.r.t. Hwang's relations
-    words = [list(word)]
-    for word in words:
-        for i in range(len(word) - 1):
-            if is_P_compatible(P, word[i], word[i + 1]):
-                temp = word[:i] + [word[i + 1], word[i]] + word[i + 2:]
-                if not temp in words:
-                    words.append(temp)
-        for i in range(1, len(word) - 1):
-            if word[i] < word[i - 1] < word[i + 1] and is_P_less(P, word[i], word[i + 1]) and not is_P_less(P, word[i],
-                                                                                                            word[
-                                                                                                                i - 1]) and not is_P_less(
-                P, word[i - 1], word[i + 1]):
-                temp = word[:i - 1] + [word[i], word[i + 1], word[i - 1]] + word[i + 2:]
-                if not temp in words:
-                    words.append(temp)
-            if word[i] > word[i + 1] > word[i - 1] and is_P_less(P, word[i - 1], word[i]) and not is_P_less(P,
-                                                                                                            word[i - 1],
-                                                                                                            word[
-                                                                                                                i + 1]) and not is_P_less(
-                P, word[i + 1], word[i]):
-                temp = word[:i - 1] + [word[i + 1], word[i - 1], word[i]] + word[i + 2:]
-                if not temp in words:
-                    words.append(temp)
-    return words
+    """
+    Given a poset P and a word, return the orbit under Hwang's relations.
+    """
+    from collections import deque
+
+    seen = set()
+    queue = deque()
+    
+    word_tuple = tuple(word)
+    queue.append(word_tuple)
+    seen.add(word_tuple)
+
+    while queue:
+        current = list(queue.popleft())
+        
+        # Local swaps
+        for i in range(len(current) - 1):
+            if is_P_compatible(P, current[i], current[i + 1]):
+                temp = current[:i] + [current[i + 1], current[i]] + current[i + 2:]
+                temp_tuple = tuple(temp)
+                if temp_tuple not in seen:
+                    seen.add(temp_tuple)
+                    queue.append(temp_tuple)
+
+        # Hwang's ternary rules
+        for i in range(1, len(current) - 1):
+            a, b, c = current[i - 1], current[i], current[i + 1]
+
+            # Rule 1
+            if b < a < c and is_P_less(P, b, c) and not is_P_less(P, b, a) and not is_P_less(P, a, c):
+                temp = current[:i - 1] + [b, c, a] + current[i + 2:]
+                temp_tuple = tuple(temp)
+                if temp_tuple not in seen:
+                    seen.add(temp_tuple)
+                    queue.append(temp_tuple)
+
+            # Rule 2
+            if b > c > a and is_P_less(P, a, b) and not is_P_less(P, a, c) and not is_P_less(P, c, b):
+                temp = current[:i - 1] + [c, a, b] + current[i + 2:]
+                temp_tuple = tuple(temp)
+                if temp_tuple not in seen:
+                    seen.add(temp_tuple)
+                    queue.append(temp_tuple)
+
+    return [list(w) for w in seen]
 
 
 def words_from_Blasiak_orbit(P, word):

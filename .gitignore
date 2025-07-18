@@ -12,6 +12,7 @@
 src/data/__pycache__/
 /BH/__pycache__/
 BH/__pycache__/
+/Data
 *.aux
 *.fdb_latexmk
 *.fls
