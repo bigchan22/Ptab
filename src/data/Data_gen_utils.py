@@ -175,7 +175,7 @@ def PTab_from_word(P, word):
 #         word_list.extend(words)
 #         print(len(word_list))
 #     return orbs
-def orbits_from_P(P, primitive=True):
+def orbits_from_P(P, PtabOnly = True, primitive=True):
     seen_words = set()
     orbs = []
 
@@ -185,10 +185,12 @@ def orbits_from_P(P, primitive=True):
         words_domain = Permutations(len(P))
 
     for word in words_domain:
+        if PtabOnly and shape_of_word(P, word) is None:
+            continue
         word_tuple = tuple(word)
         if word_tuple in seen_words:
             continue
-        orbit = words_from_orbit(P, word)
+        orbit = words_from_orbit(P, word, PtabOnly)
         for w in orbit:
             seen_words.add(tuple(w))
         orbs.append(orbit)
@@ -221,7 +223,7 @@ def orbits_from_P(P, primitive=True):
 #                     words.append(temp)
 #     return words
 #######################################################################################New version
-def words_from_orbit(P, word):
+def words_from_orbit(P, word,PtabOnly = True):
     """
     Given a poset P and a word, return the orbit under Hwang's relations.
     """
@@ -266,7 +268,11 @@ def words_from_orbit(P, word):
                     seen.add(temp_tuple)
                     queue.append(temp_tuple)
 
-    return [list(w) for w in seen]
+#     return [list(w) for w in seen]
+    if PtabOnly:
+        return [list(w) for w in seen if shape_of_word(P, w) is not None]
+    else:
+        return [list(w) for w in seen]
 
 
 def words_from_Blasiak_orbit(P, word):

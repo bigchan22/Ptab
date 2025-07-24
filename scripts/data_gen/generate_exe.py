@@ -31,6 +31,7 @@ data_dir = config["data_dir"]
 shapes = config['shapes']
 filters = config['filters']
 connectedness = config['connectedness']
+donotsave = config['donotsave']
 
 SHAPES_MAP = {
     "2row_less": is_2row_less,
@@ -77,7 +78,8 @@ for connect in config['connectedness']:
         connected=CONNECTED_MAP[connect],
         column_info=column_info,
         UPTO_N=UPTO,
-        mode = mode
+        mode = mode,
+        donotsave = donotsave
     )    
 #         if mode == "test":
 #             DIR_PATH += f"_test"

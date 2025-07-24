@@ -1,8 +1,9 @@
-N: 7
+N: 10
 UPTO: False
 column_info: "original"
 use_ppath: false
 use_position_of_one: False
+donotsave: True
 data_dir: "./Data"
 
 ############choose among "ppath", "decomp", "position_one", "vanilla", "test"

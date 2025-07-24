@@ -12,12 +12,12 @@ use_ppath = False
 use_position_of_one = False
 
 #####"decomp", vanilla, position_one, ppath
-mode = "vanilla"
+mode = "decomp"
 
 #column_info = "column_direction"
 #column_info = "column_direc_column_same"
 column_info = "original"
-graph_deg = 8
+graph_deg = 9
 # num_layers = graph_deg
 num_layers = 4
 num_features = 256
@@ -28,15 +28,15 @@ feature_list = {
     'norm_column_rev': (False, normalized_column_rev_indicator),
 }
 connected = True
-UPTO = True
+UPTO = False
 
 direction = "222"
 
 shape_indicator = {
     'all': (False, ),
-    'all_with_all_row_connectedness_criterion': (True,),
+    'all_with_all_row_connectedness_criterion': (False,),
     'all_with_inductive_connectedness_criterion': (False,),
-    'all_with_inductive_connectedness_criterion_forward': (False,),
+    'all_with_inductive_connectedness_criterion_forward': (True,),
     '2row_less': (False,),
     '2row_less_with_all_row_connectedness_criterion': (False,),
     '2row_less_with_inductive_connectedness_criterion': (False,),
