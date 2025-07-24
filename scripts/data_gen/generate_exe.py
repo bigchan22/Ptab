@@ -13,7 +13,7 @@ sys.path.insert(0, project_root)
 from src.data.generate_data import generate_data_PTabs
 from src.data.shapes import is_2row_less, is_3row_less, is_hook, is_3col_less, any_shape
 from src.data.criterion import check_all_row_connected
-from src.data.criterion import check_inductive_disconnectedness_criterion,check_inductive_disconnectedness_criterion_forward
+from src.data.criterion import check_inductive_disconnectedness_criterion,check_inductive_disconnectedness_criterion_forward, trivial_criterion
 
 print('start_time', time.strftime('%c'))
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -45,7 +45,8 @@ SHAPES_FT = [SHAPES_MAP[shape] for shape in shapes]
 FILTERS_MAP = {
     "with_all_row_connectedness_criterion": check_all_row_connected,
     'with_inductive_connectedness_criterion': check_inductive_disconnectedness_criterion,
-    'with_inductive_connectedness_criterion_forward': check_inductive_disconnectedness_criterion_forward
+    'with_inductive_connectedness_criterion_forward': check_inductive_disconnectedness_criterion_forward,
+    'trivial_criterion':trivial_criterion
 }
 CONNECTED_MAP = {
     "connected": True,
