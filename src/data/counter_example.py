@@ -49,8 +49,8 @@ def generate_counter_examples(upto_N="8",
     good_filter = "backward-weak-connectivity"
     upto_N = 5
 
-    FILE_NAME = f"./counter-examples/counter-examples-{good_filter}-upto_{upto_N}.sobj"
-    FILE_NAME = f"./{necess_suff}-counter-examples/counter-examples-shape_{shape_filter}-good_{good_filter}-upto_{upto_N}.sobj"
+    FILE_NAME = f"./counter-examples/counter-examples-{good_filter}-upto_{upto_N}.json"
+    FILE_NAME = f"./{necess_suff}-counter-examples/counter-examples-shape_{shape_filter}-good_{good_filter}-upto_{upto_N}.json"
     counter_examples = []
 
     with open(os.path.join(json_path, "Partitions.json")) as f:
