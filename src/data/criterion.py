@@ -215,6 +215,33 @@ def check_all_row_connected(P, word, direction='B'):  ###'with_all_row_connected
         return 'UNKNOWN'
     return 'BAD'
 
+def check_all_row_connected_forward(P, word, direction='F'):  ###'with_all_row_connectedness_criterion':(False,),
+    if direction == 'B':
+        row_checker = is_good_P_1row_B
+    elif direction == 'F':
+        row_checker = is_good_P_1row_F
+    else:
+        print("Check the parameter for 'direction'")
+        return
+
+    T = PTab_from_word(P, word)
+    shape = shape_of_word(P, word)
+    shape_of_pieces = []
+    pieces = [[] for i in range(len(shape))]
+    prev = 0
+    for k in reversed(range(len(shape))):
+        if shape[k] > prev:
+            shape_of_pieces.append(k + 1)
+            for i in range(k + 1):
+                pieces[i].append(T[i][prev:shape[k]])
+            prev = shape[k]
+    base_words = []
+    for i in range(len(pieces)):
+        base_words.append(list(pieces[i][0]))
+    if concatenating(P, shape_of_pieces, list(range(shape_of_pieces[0])), 1, pieces, base_words, row_checker) == True:
+        return 'UNKNOWN'
+    return 'BAD'
+
 
 def is_good_P_1row_F(P, word):
     return not has_lr_P_max(P, word) and P_Des(P, word) == [len(word)]
