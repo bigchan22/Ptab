@@ -11,7 +11,7 @@ from src.data.Data_gen_utils import generate_UIO, is_P_compatible, is_P_less, P_
 from src.data.criterion import *
 from src.data.shapes import *
 
-def generate_counter_examples(upto_N="8",
+def generate_counter_examples(upto_N=8,
                               good_filter="backward-weak-connectivity",
                               shape_filter="all",
                               necess_suff="n",
@@ -35,8 +35,6 @@ def generate_counter_examples(upto_N="8",
                     "backward-strong-connectivity" : check_all_row_connected,
                     "forward-strong-connectivity" : check_all_row_connected_forward,
                 }
-    necess_suff = "ns"
-    necess_suff = necess_suff.lower()
 
     if necess_suff in ["n", "necess", "necessary", "necessity", "necessary-condition", "necessary_condition", "necessary condition"]:
         necess_suff = "necessary-condition"
@@ -44,10 +42,6 @@ def generate_counter_examples(upto_N="8",
         necess_suff = "sufficient-condition"
     else:
         necess_suff = "necessary-sufficient-condition"
-
-    shape_filter = "all"
-    good_filter = "backward-weak-connectivity"
-    upto_N = 5
 
     FILE_NAME = f"./counter-examples/counter-examples-{good_filter}-upto_{upto_N}.json"
     FILE_NAME = f"./counter-examples/{necess_suff}/counter-examples-shape_{shape_filter}-good_{good_filter}-upto_{upto_N}.json"
