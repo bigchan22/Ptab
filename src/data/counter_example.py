@@ -43,16 +43,16 @@ def generate_counter_examples(upto_N=8,
     else:
         necess_suff = "necessary-sufficient-condition"
 
-    FILE_NAME = f"./counter-examples/counter-examples-{good_filter}-upto_{upto_N}.json"
-    FILE_NAME = f"./counter-examples/{necess_suff}/counter-examples-shape_{shape_filter}-good_{good_filter}-upto_{upto_N}.json"
-    counter_examples = []
-
     with open(os.path.join(json_path, "Partitions.json")) as f:
         Partitions = json.load(f)
     with open(os.path.join(json_path, "TransitionMatrix_btw_s_h.json")) as f:
         TM = json.load(f)
 
     for n in range(2, upto_N+1):
+        FILE_NAME = f"./counter-examples/counter-examples-{good_filter}-{n}.json"
+        FILE_NAME = f"./counter-examples/{necess_suff}/counter-examples_shape={shape_filter}_good={good_filter}_n={n}.json"
+        counter_examples = []
+        
         n_str = str(n)
         part_dict = {}
         for lamb in Partitions[n_str]:
@@ -98,5 +98,5 @@ def generate_counter_examples(upto_N=8,
                         counter_examples[-1]["coeff_of_lamb"] = coeff1
                         counter_examples[-1]["number_of_good"] = coeff2
 
-    with open(FILE_NAME, "w") as f:
-        json.dump(counter_examples, f)
+        with open(FILE_NAME, "w") as f:
+            json.dump(counter_examples, f)
