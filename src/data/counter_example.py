@@ -100,3 +100,4 @@ def generate_counter_examples(upto_N=8,
 
         with open(FILE_NAME, "w") as f:
             json.dump(counter_examples, f)
+        print("{n} Done")
