@@ -11,7 +11,7 @@ from src.data.Data_gen_utils import generate_UIO, is_P_compatible, is_P_less, P_
 from src.data.criterion import *
 from src.data.shapes import *
 
-def generate_counter_examples(upto_N=8,
+def generate_counter_examples(Ns=[2,3,4,5,6,7,8],
                               good_filter="backward-weak-connectivity",
                               shape_filter="all",
                               necess_suff="n",
@@ -48,7 +48,7 @@ def generate_counter_examples(upto_N=8,
     with open(os.path.join(json_path, "TransitionMatrix_btw_s_h.json")) as f:
         TM = json.load(f)
 
-    for n in range(2, upto_N+1):
+    for n in Ns:
         FILE_NAME = f"./counter-examples/counter-examples-{good_filter}-{n}.json"
         FILE_NAME = f"./counter-examples/{necess_suff}/counter-examples_shape={shape_filter}_good={good_filter}_n={n}.json"
         counter_examples = []
