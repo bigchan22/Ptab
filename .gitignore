@@ -3,7 +3,6 @@
 .idea*
 *.pyc
 *.pth
-# *.json
 *.pickle
 *.DS_Store
 /tex/*
@@ -20,3 +19,13 @@ BH/__pycache__/
 *.out
 *.pdf
 *.synctex.gz
+*.err
+*.sh
+
+
+
+
+
+
+
+*.json
